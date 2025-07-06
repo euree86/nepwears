@@ -16,6 +16,9 @@ export default function EmailLogin() {
     //STATES 
     const [showPassword, setShowPassword] = useState(false);
 
+    const [showconfirmPassword, setshowconfirmPassword] = useState(false);
+
+
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [emailFocused, setEmailFocused] = useState(false);
@@ -26,15 +29,17 @@ export default function EmailLogin() {
 
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
+    const [confirmpasswordFocused, setconfirmpasswordFocused] = useState(false);
+
 
     const [isChecked, setChecked] = useState(false);      // ✅ real checkbox state
     const [checkboxError, setCheckboxError] = useState('');
 
     const [loginSuccess, setLoginSuccess] = useState(false);
 
-    //  REGEX 
     const emailRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d._%+-]+@gmail\.com$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 
     //  VALIDATORS 
     const validateEmail = () => {
@@ -189,7 +194,7 @@ export default function EmailLogin() {
                         <View style={instyles.passwordWrapper}>
                             <TextInput
                                 placeholder="Re-enter your password"
-                                secureTextEntry={!showPassword}
+                                secureTextEntry={!showconfirmPassword}
                                 value={confirmPassword}
                                 onChangeText={text => {
                                     setConfirmPassword(text);
@@ -201,23 +206,23 @@ export default function EmailLogin() {
                                     {
                                         borderColor: confirmPasswordError
                                             ? 'red'
-                                            : passwordFocused
+                                            : confirmpasswordFocused
                                                 ? '#FC0079'
                                                 : '#C8C7CD',
                                     },
                                 ]}
-                                onFocus={() => setPasswordFocused(true)}
+                                onFocus={() => setconfirmpasswordFocused(true)}
                                 onBlur={() => {
-                                    setPasswordFocused(false);
+                                    setconfirmpasswordFocused(false);
                                     validateConfirmPassword();
                                 }}
                             />
                             <TouchableOpacity
                                 style={instyles.eyeIcon}
-                                onPress={() => setShowPassword(!showPassword)}
+                                onPress={() => setshowconfirmPassword(!showconfirmPassword)}
                             >
                                 <MaterialCommunityIcons
-                                    name={showPassword ? 'eye-off' : 'eye'}
+                                    name={showconfirmPassword ? 'eye-off' : 'eye'}
                                     size={22}
                                     color="#888"
                                 />
@@ -240,7 +245,7 @@ export default function EmailLogin() {
                             }}
                             color={isChecked ? '#FC0079' : 'black'}
                         />
-                        <Text> Agree with </Text>
+                        <Text> Agree with</Text>
                         <TouchableOpacity>
                             <Text style={instyles.signup}>Terms & Condition</Text>
                         </TouchableOpacity>
