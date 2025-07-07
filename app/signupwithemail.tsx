@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
+import React, { useState } from 'react';
 import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
     KeyboardAvoidingView,
     Platform,
     StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from '../styles';
 
 export default function EmailLogin() {

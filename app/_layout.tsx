@@ -9,6 +9,7 @@ export default function RootLayout() {
       <Stack.Screen name="loginwithemail" options={{ title: "Emaillogin" }} />
       <Stack.Screen name="signup" options={{ title: "Signup" }} />
       <Stack.Screen name="signupwithemail" options={{ title: "Signupwithemail" }} />
+      <Stack.Screen name ="home" options={{title:"Home"}}/>
     </Stack>
   );
 
