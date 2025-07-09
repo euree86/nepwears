@@ -7,8 +7,20 @@ import {
     StyleSheet,
 } from 'react-native';
 
+// Types
+type NotificationItem = {
+    icon: string;
+    title: string;
+    subtitle: string;
+};
+
+type NotificationSection = {
+    section: string;
+    items: NotificationItem[];
+};
+
 const NotificationsScreen = () => {
-    const notifications = [
+    const notifications: NotificationSection[] = [
         {
             section: 'Today',
             items: [
@@ -53,11 +65,11 @@ const NotificationsScreen = () => {
 
     return (
         <ScrollView style={styles.container}>
-            {notifications.map((section, sectionIndex) => (
+            {notifications.map((section: NotificationSection, sectionIndex: number) => (
                 <View key={sectionIndex} style={styles.section}>
                     <Text style={styles.sectionTitle}>{section.section}</Text>
 
-                    {section.items.map((item, itemIndex) => (
+                    {section.items.map((item: NotificationItem, itemIndex: number) => (
                         <View key={itemIndex}>
                             <View style={styles.notificationItem}>
                                 <MaterialCommunityIcons name={item.icon} size={24} color="#333" style={styles.icon} />

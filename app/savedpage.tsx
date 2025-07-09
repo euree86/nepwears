@@ -12,8 +12,8 @@ import {
 
 const { width } = Dimensions.get('window');
 
-// Type for a product item
-type Product = {
+// Type for a Saved item
+type Saved = {
     id: number;
     title: string;
     price: string;
@@ -22,7 +22,7 @@ type Product = {
     image: string;
 };
 
-const ProductGrid = () => {
+const SavedGrid = () => {
     const [favorites, setFavorites] = useState<number[]>([]);
 
     const toggleFavorite = (id: number) => {
@@ -33,7 +33,7 @@ const ProductGrid = () => {
         }
     };
 
-    const products: Product[] = [
+    const Saveds: Saved[] = [
         {
             id: 1,
             title: 'Summer Dress',
@@ -84,7 +84,7 @@ const ProductGrid = () => {
         },
     ];
 
-    const renderCard = (item: Product) => {
+    const renderCard = (item: Saved) => {
         const isFavorite = favorites.includes(item.id);
 
         return (
@@ -124,7 +124,7 @@ const ProductGrid = () => {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.grid}>
-                {products.map(renderCard)}
+                {Saveds.map(renderCard)}
             </View>
         </ScrollView>
     );
@@ -204,4 +204,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ProductGrid;
+export default SavedGrid;

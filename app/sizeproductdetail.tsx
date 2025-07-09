@@ -14,6 +14,7 @@ const { width } = Dimensions.get("window");
 
 const ProductDetailScreen = () => {
     const colors = ["#FF6B6B", "#8B5CF6", "#1F2937", "#3B82F6", "#EC4899"];
+    const sizes = ["S", "M", "L", "XL", "XXL"];
     const thumbnails = Array(5).fill(
         "https://cdn.pixabay.com/photo/2020/10/23/16/50/woman-5679284_640.jpg"
     );
@@ -21,6 +22,7 @@ const ProductDetailScreen = () => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
     const [showSavedBox, setShowSavedBox] = useState(false);
+    const [selectedSize, setSelectedSize] = useState("L");
 
     const fullDescription = `Enjoy an improved audio experience compared to any previous Echo Dot with Alexa for clearer vocals, deeper bass and vibrant sound in any room. Smart voice control, connect to all your smart devices. Designed for style, performance, and comfort — all in one. Comes in vibrant colors for all personalities and fits perfectly with any outfit or setting.`;
 
@@ -97,9 +99,32 @@ const ProductDetailScreen = () => {
                     </Text>
                 </TouchableOpacity>
 
-                <Text style={styles.colorTitle}>Select Color: Black</Text>
+                {/* Select Size */}
+                <Text style={styles.sectionTitle}>Select Size</Text>
+                <View style={styles.sizeContainer}>
+                    {sizes.map((size) => (
+                        <TouchableOpacity
+                            key={size}
+                            onPress={() => setSelectedSize(size)}
+                            style={[
+                                styles.sizeOption,
+                                selectedSize === size && styles.selectedSizeOption,
+                            ]}
+                        >
+                            <Text
+                                style={[
+                                    styles.sizeText,
+                                    selectedSize === size && styles.selectedSizeText,
+                                ]}
+                            >
+                                {size}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
 
-                {/* Color Options */}
+                {/* Select Color */}
+                <Text style={styles.colorTitle}>Select Color: Black</Text>
                 <View style={styles.colorContainer}>
                     {colors.map((color, index) => (
                         <TouchableOpacity
@@ -109,7 +134,7 @@ const ProductDetailScreen = () => {
                     ))}
                 </View>
 
-                {/* Add to Cart Button */}
+                {/* Add to Cart */}
                 <TouchableOpacity
                     style={styles.addToCartButton}
                     onPress={() => setShowSavedBox(true)}
@@ -239,6 +264,33 @@ const styles = StyleSheet.create({
         color: "#FC0079",
         fontWeight: "500",
         marginBottom: 20,
+    },
+   
+    sizeContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginBottom: 25,
+    },
+    sizeOption: {
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 6,
+        marginRight: 10,
+        marginBottom: 10,
+    },
+    selectedSizeOption: {
+        backgroundColor: "#FC0079",
+        borderColor: "#FC0079",
+    },
+    sizeText: {
+        fontSize: 14,
+        color: "#333",
+    },
+    selectedSizeText: {
+        color: "#fff",
+        fontWeight: "600",
     },
     colorTitle: {
         fontSize: 16,

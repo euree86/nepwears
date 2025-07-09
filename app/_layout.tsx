@@ -13,6 +13,16 @@ export default function RootLayout() {
       <Stack.Screen name="notification" options={{ title: "Notification" }} />
       <Stack.Screen name="productdetail" options={{ title: "Product Detail" }} />
       <Stack.Screen name="product" options={{ title: "Product" }} />
+      <Stack.Screen name="sizeproduct" options={{ title: "Size" }} />
+      <Stack.Screen name="rating" options={{ title: "Rating" }} />
+      <Stack.Screen name="Notification" options={{ title: "Notification" }} />
+      <Stack.Screen name="Alert" options={{ title: "Alert" }} />
+      <Stack.Screen name="Saved" options={{ title: "Saved" }} />
+
+
+
+
+
 
 
     </Stack>
