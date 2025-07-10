@@ -1,18 +1,18 @@
+import { EvilIcons } from "@expo/vector-icons";
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from 'react-native';
 
-const EmptyNotificationsScreen = () => {
+const EmptyCartScreen = () => {
     return (
         <View style={styles.container}>
             <EvilIcons
-                name="bell"
+                name="cart"
                 size={90}
                 color="#9E9E9E"
 
             />
-            <Text style={styles.title}>You haven't gotten any notifications yet!</Text>
-            <Text style={styles.subtitle}>We'll alert you when something cool happens.</Text>
+            <Text style={styles.title}>Your Cart Is Empty!</Text>
+            <Text style={styles.subtitle}>When you add products, they will appear here.</Text>
         </View>
     );
 };
@@ -35,11 +35,11 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     subtitle: {
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         color: '#666',
-        paddingHorizontal: 40,
+        paddingHorizontal: 10,
     },
 });
 
-export default EmptyNotificationsScreen;
+export default EmptyCartScreen;

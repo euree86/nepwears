@@ -18,6 +18,12 @@ export default function RootLayout() {
       <Stack.Screen name="Notification" options={{ title: "Notification" }} />
       <Stack.Screen name="Alert" options={{ title: "Alert" }} />
       <Stack.Screen name="Saved" options={{ title: "Saved" }} />
+      <Stack.Screen name="NoSaved" options={{ title: "Saved Items" }} />
+      <Stack.Screen name="emptycart" options={{ title: "My Cart" }} />
+      <Stack.Screen name="mycart" options={{ title: "My Cart" }} />
+
+
+
 
 
 

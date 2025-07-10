@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 
-const NotificationPermissionPopup = () => {
+const NotificationPopup = () => {
     const [isVisible, setIsVisible] = useState(true);
 
     const handleAllow = () => {
         setIsVisible(false);
-        console.log('Notification permission allowed');
-        // Add your notification permission logic here
+        console.log('Notification  allowed');
+        // Add your notification  logic here
     };
 
     const handleDeny = () => {
         setIsVisible(false);
-        console.log('Notification permission denied');
+        console.log('Notification  denied');
     };
 
     return (
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default NotificationPermissionPopup;
+export default NotificationPopup;
