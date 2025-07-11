@@ -6,10 +6,12 @@ import {
     ScrollView,
     StyleSheet,
 } from 'react-native';
+type MaterialCommunityIconName = keyof typeof MaterialCommunityIcons.glyphMap;
+
 
 // Types
 type NotificationItem = {
-    icon: string;
+    icon: MaterialCommunityIconName; // ✅ This ensures icon is a valid name
     title: string;
     subtitle: string;
 };

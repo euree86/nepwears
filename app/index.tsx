@@ -34,7 +34,7 @@ const instyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    paddingHorizontal: 20,
+    paddingHorizontal: 18,
     justifyContent: "flex-start",
     paddingVertical: 60,
   },
@@ -44,7 +44,7 @@ const instyles = StyleSheet.create({
     alignSelf: "center",
   },
   heading: {
-    fontSize: 30,
+    fontSize: 28,
     color: "#323135",
     fontWeight: 700,
     textAlign: "center",

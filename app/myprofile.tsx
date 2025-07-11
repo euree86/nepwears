@@ -137,7 +137,7 @@ const ProfileEditScreen = () => {
                         style={[styles.input, errors.email && styles.inputError]}
                         value={email}
                         onChangeText={setEmail}
-                        placeholder="Enter your email (e.g., user@example.com)"
+                        placeholder="Enter your email address"
                         placeholderTextColor="#999999"
                         keyboardType="email-address"
                         autoCapitalize="none"
@@ -252,7 +252,7 @@ const ProfileEditScreen = () => {
                                     {option}
                                 </Text>
                                 {gender === option && (
-                                    <MaterialCommunityIcons name="check" size={20} color="#8B5CF6" />
+                                    <MaterialCommunityIcons name="check" size={20} color="black" />
                                 )}
                             </TouchableOpacity>
                         ))}
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '500',
         color: 'black',
-        marginBottom: 8,
+        marginBottom: 4,
     },
     input: {
         borderWidth: 1,
@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
         color: '#333333',
     },
     selectedGenderOptionText: {
-        color: '#8B5CF6',
+        color: 'black',
         fontWeight: '500',
     },
     datePickerContainer: {
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     selectedPickerItem: {
-        backgroundColor: '#8B5CF6',
+        backgroundColor: '#A7A5AF',
     },
     pickerItemText: {
         fontSize: 16,

@@ -1,28 +1,40 @@
+import { MaterialIcons } from '@expo/vector-icons';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
+
 import {
-    View,
-    Text,
-    TouchableOpacity,
-    StyleSheet,
+    Alert,
     SafeAreaView,
     StatusBar,
-    Alert,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { MaterialIcons } from '@expo/vector-icons';
 
-// Define your stack param list with screen names and their params
+
+
+type MaterialIconName = keyof typeof MaterialIcons.glyphMap;
+
+type MenuItemType = {
+    id: string;
+    title: string;
+    icon: MaterialIconName;
+    onPress: () => void;
+};
+
+
 type RootStackParamList = {
     ProfileMenu: undefined;
     ProfileEdit: undefined;
-    // Add other screens here if you have them
+
 };
 
 // Define props type for this screen
 type Props = NativeStackScreenProps<RootStackParamList, 'ProfileMenu'>;
 
 const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
-    const menuItems = [
+    const menuItems: MenuItemType[] = [
         {
             id: 'profile',
             title: 'Your Profile',
@@ -95,7 +107,7 @@ const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
                 <MaterialIcons
                     name={item.icon}
                     size={24}
-                    color="#666666"
+                    color="black"
                     style={styles.menuIcon}
                 />
                 <Text style={styles.menuText}>{item.title}</Text>
@@ -163,7 +175,7 @@ const styles = StyleSheet.create({
     menuText: {
         fontSize: 16,
         color: 'black',
-        fontWeight: '500',
+        fontWeight: '400',
     },
     logoutItem: {
         flexDirection: 'row',

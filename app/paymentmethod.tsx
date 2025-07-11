@@ -39,16 +39,16 @@ const PaymentMethod = () => {
         },
     ];
 
-    const RadioButton = ({ selected }) => (
+    const RadioButton = ({ selected }: { selected: boolean }) => (
         <View style={[styles.radioButton, selected && styles.radioButtonSelected]}>
             {selected && <View style={styles.radioButtonInner} />}
         </View>
     );
 
-    const handleCardSelect = (cardId) => {
+
+    const handleCardSelect = (cardId: string) => {
         setSelectedCard(cardId);
     };
-
     const handleAddNewCard = () => {
         console.log('Add new card pressed');
     };
