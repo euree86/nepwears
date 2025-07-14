@@ -22,6 +22,8 @@ export default function RootLayout() {
       <Stack.Screen name="emptycart" options={{ title: "My Cart" }} />
       <Stack.Screen name="mycart" options={{ title: "My Cart" }} />
 
+      <Stack.Screen name="locationsearch" options={{ title: "Enter your location" }} />
+
 
 
 
