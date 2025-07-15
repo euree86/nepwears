@@ -42,7 +42,9 @@ export default function LoginScreen() {
             {/* Signup Prompt */}
             <View style={instyles.signupContainer}>
                 <Text style={instyles.orText}>Don't have any account yet?</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => router.push("./signup")}>
+
                     <Text style={instyles.signup}> Signup</Text>
                 </TouchableOpacity>
             </View>

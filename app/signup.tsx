@@ -41,9 +41,9 @@ export default function LoginScreen() {
 
             {/* Signup Prompt */}
             <View style={instyles.signupContainer}>
-                <Text style={instyles.orText}>Don't have any account yet?</Text>
+                <Text style={instyles.orText}>Already have an account?</Text>
                 <TouchableOpacity>
-                    <Text style={instyles.signup}> Login</Text>
+                    <Text style={instyles.signup}>Login</Text>
                 </TouchableOpacity>
             </View>
         </View>

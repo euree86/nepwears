@@ -1,279 +1,119 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect, use } from 'react';
+import { useRouter } from 'expo-router';
 import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
+  View,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
-  Modal,
-  Image,
+  StyleSheet,
+  SafeAreaView,
 } from 'react-native';
-import { styles } from '../styles'; // assuming you have global styles
 
-export default function EmailLogin() {
-  // STATES
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+export default function VerificationScreen() {
+  const router = useRouter();
+  const [code, setCode] = useState(['', '', '', '']);
+  const [timer, setTimer] = useState(59);
 
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordFocused, setPasswordFocused] = useState(false);
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
 
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState('');
-  const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
+    return () => clearInterval(countdown);
+  }, []);
 
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-  // VALIDATORS
-  const validatePassword = () => {
-    if (!password.trim()) {
-      setPasswordError('Password is required');
-      return false;
-    }
-    if (!passwordRegex.test(password)) {
-      setPasswordError(
-        'Password must contain uppercase, lowercase, number, and special character'
-      );
-      return false;
-    }
-    setPasswordError('');
-    return true;
-  };
-
-  const validateConfirmPassword = () => {
-    if (!confirmPassword.trim()) {
-      setConfirmPasswordError('Confirm password is required');
-      return false;
-    }
-    if (password !== confirmPassword) {
-      setConfirmPasswordError('Passwords do not match');
-      return false;
-    }
-    setConfirmPasswordError('');
-    return true;
-  };
-
-  // MAIN HANDLER
-  const handleLogin = () => {
-    const isPasswordValid = validatePassword();
-    const isConfirmValid = validateConfirmPassword();
-
-    if (isPasswordValid && isConfirmValid) {
-      setModalVisible(true);
-    }
+  const handleChange = (text: string, index: number) => {
+    const newCode = [...code];
+    newCode[index] = text;
+    setCode(newCode);
   };
 
   return (
-    <KeyboardAvoidingView
-      style={instyles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <View style={instyles.main}>
-        <Text style={styles.title}>Create New Password</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Enter 4 Digit Code</Text>
+      <Text style={styles.subtitle}>
+        Enter 4 digit code that your receive on your{'\n'}email (pixelshipon@gmail.com).
+      </Text>
 
-        <View style={instyles.form}>
-          {/* Password */}
-          <View style={instyles.inputGroup}>
-            <Text style={instyles.label}>New Password</Text>
-            <View style={instyles.passwordWrapper}>
-              <TextInput
-                placeholder="Enter your password"
-                secureTextEntry={!showPassword}
-                value={password}
-                onChangeText={text => {
-                  setPassword(text);
-                  setPasswordError('');
-                }}
-                style={[
-                  instyles.input,
-                  {
-                    borderColor: passwordError
-                      ? 'red'
-                      : passwordFocused
-                        ? '#FC0079'
-                        : '#C8C7CD',
-                  },
-                ]}
-                onFocus={() => setPasswordFocused(true)}
-                onBlur={() => {
-                  setPasswordFocused(false);
-                  validatePassword();
-                }}
-              />
-              <TouchableOpacity
-                style={instyles.eyeIcon}
-                onPress={() => setShowPassword(!showPassword)}
-              >
-                <MaterialCommunityIcons
-                  name={showPassword ? 'eye-off' : 'eye'}
-                  size={22}
-                  color="#888"
-                />
-              </TouchableOpacity>
-            </View>
-            {passwordError ? (
-              <Text style={{ color: 'red', marginTop: 4 }}>{passwordError}</Text>
-            ) : null}
-          </View>
-
-          {/* Confirm Password */}
-          <View style={instyles.inputGroup}>
-            <Text style={instyles.label}>Confirm Password</Text>
-            <View style={instyles.passwordWrapper}>
-              <TextInput
-                placeholder="Re-enter your password"
-                secureTextEntry={!showConfirmPassword}
-                value={confirmPassword}
-                onChangeText={text => {
-                  setConfirmPassword(text);
-                  setConfirmPasswordError('');
-                }}
-                style={[
-                  instyles.input,
-                  {
-                    borderColor: confirmPasswordError
-                      ? 'red'
-                      : confirmPasswordFocused
-                        ? '#FC0079'
-                        : '#C8C7CD',
-                  },
-                ]}
-                onFocus={() => setConfirmPasswordFocused(true)}
-                onBlur={() => {
-                  setConfirmPasswordFocused(false);
-                  validateConfirmPassword();
-                }}
-              />
-              <TouchableOpacity
-                style={instyles.eyeIcon}
-                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                <MaterialCommunityIcons
-                  name={showConfirmPassword ? 'eye-off' : 'eye'}
-                  size={22}
-                  color="#888"
-                />
-              </TouchableOpacity>
-            </View>
-            {confirmPasswordError ? (
-              <Text style={{ color: 'red', marginTop: 4 }}>
-                {confirmPasswordError}
-              </Text>
-            ) : null}
-          </View>
-
-          {/* Update Button */}
-          <TouchableOpacity style={instyles.loginButton} onPress={handleLogin}>
-            <Text style={instyles.loginButtonText}>Update Password</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.codeContainer}>
+        {code.map((digit, index) => (
+          <TextInput
+            key={index}
+            style={styles.input}
+            keyboardType="number-pad"
+            maxLength={1}
+            value={digit}
+            onChangeText={(text) => handleChange(text, index)}
+          />
+        ))}
       </View>
 
-      {/* Modal */}
-      <Modal visible={modalVisible} animationType="slide" transparent={true}>
-        <View style={instyles.modalContainer}>
-          <View style={instyles.modalContent}>
-            <Image
-              source={require("../assets/images/onboard.png")}
-              style={instyles.successImage}
-              resizeMode="contain"
-            />
-            <Text style={instyles.modalText}>Password updated{'\n'}Successfully!</Text>
-            <TouchableOpacity
-              style={instyles.loginButton}
-              onPress={() => {
-                setModalVisible(false);
-                // Optional: Navigate to login screen
-              }}
-            >
-              <Text style={instyles.loginButtonText}>Continue to Login</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    </KeyboardAvoidingView>
+      <Text style={styles.resend}>
+        Email not received?
+        <TouchableOpacity>
+          <Text style={styles.resendBold}> Resend Code
+          </Text>
+        </TouchableOpacity>
+      </Text>
+
+      <TouchableOpacity style={styles.button} onPress={() => router.push("./createnewpw")}>
+        <Text style={styles.buttonText}>
+          {timer > 0 ? `Continue ${timer}` : 'Continue'}
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 }
 
-const instyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingTop: 80,
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
-  main: {
-    flex: 1,
-    justifyContent: 'flex-start',
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 12,
   },
-  form: {
-    flex: 1,
+  subtitle: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 30,
   },
-  inputGroup: {
-    marginBottom: 15,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#333',
-    marginBottom: 4,
+  codeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
+    marginBottom: 20,
   },
   input: {
-    borderWidth: 1.5,
+    width: 50,
+    height: 50,
+    borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    fontSize: 16,
-    color: '#333',
-  },
-  passwordWrapper: {
-    position: 'relative',
-    justifyContent: 'center',
-  },
-  eyeIcon: {
-    position: 'absolute',
-    right: 16,
-  },
-  loginButton: {
-    backgroundColor: '#FC0079',
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 15,
-    marginTop: 10,
-  },
-  loginButtonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  modalText: {
-    fontSize: 18,
     textAlign: 'center',
-    fontWeight: '500',
-    marginVertical: 15,
+    fontSize: 20,
+    borderColor: '#ccc',
   },
-  successImage: {
-    width: 80,
-    height: 80,
+  resend: {
+    color: '#555',
+    marginBottom: 30,
+  },
+  resendBold: {
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+  },
+  button: {
+    backgroundColor: '#ff007f',
+    paddingVertical: 14,
+    paddingHorizontal: 100,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });

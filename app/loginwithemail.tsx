@@ -1,18 +1,20 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
     KeyboardAvoidingView,
     Platform,
     StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from "../styles";
 
 export default function EmailLogin() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [passwordFocused, setPasswordFocused] = useState(false);
     const [password, setPassword] = useState('');
@@ -153,24 +155,24 @@ export default function EmailLogin() {
                     </View>
 
                     {/* Forgot Password */}
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => router.push("./forgotpw")}>
                         <Text style={instyles.forgotPassword}>Forgot Password</Text>
                     </TouchableOpacity>
 
                     {/* Login Button */}
-                    <TouchableOpacity style={instyles.loginButton} onPress={handleLogin}>
+                    <TouchableOpacity style={instyles.loginButton} onPress={() => router.push("./home")}>
                         <Text style={instyles.loginButtonText}>Login</Text>
                     </TouchableOpacity>
 
                     {/* Success message box */}
-                    {loginSuccess && (
+                    {/* {loginSuccess && (
                         <View style={instyles.successBox}>
                             <Text style={instyles.successText}>Login  successful!</Text>
                             <TouchableOpacity>
                                 <Text style={instyles.forgotPassword}>Done</Text>
                             </TouchableOpacity>
                         </View>
-                    )}
+                    )} */}
                 </View>
             </View>
         </KeyboardAvoidingView>

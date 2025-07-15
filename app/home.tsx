@@ -1,4 +1,5 @@
 import { EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from 'react';
 import {
     Animated,
@@ -12,10 +13,15 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import NotificationPopup from "./homealert"
 
 const { width } = Dimensions.get('window');
 
 const App = () => {
+    const router = useRouter();
+    const [showNotificationPopup, setShowNotificationPopup] = useState(true);
+
+
     const [currentSlide, setCurrentSlide] = useState(0);
     const slideAnim = useRef(new Animated.Value(0)).current;
 
@@ -84,7 +90,10 @@ const App = () => {
             image: "https://cdn.pixabay.com/photo/2023/10/24/02/01/women-8337216_640.jpg",
         },
     ];
-
+    const handleNotificationResponse = (allowed: boolean) => {
+        console.log("Notification allowed?", allowed);
+        setShowNotificationPopup(false);
+    };
     // Auto slider effect
     useEffect(() => {
         const interval = setInterval(() => {
@@ -103,136 +112,145 @@ const App = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                {/* Header */}
-                <View style={styles.header}>
-                    <View style={styles.locationContainer}>
-                        <Text style={styles.locationLabel}>Location</Text>
-                        <View style={styles.locationRow}>
-                            <Text style={styles.locationText}>Baneshwor, Kathmandu</Text>
+            <View style={{ flex: 1, backgroundColor: 'white', opacity: showNotificationPopup ? 0.3 : 1 }}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    {/* Header */}
+                    <View style={styles.header}>
+                        <View style={styles.locationContainer}>
+                            <Text style={styles.locationLabel}>Location</Text>
+                            <View style={styles.locationRow}>
+                                <Text style={styles.locationText}>Baneshwor, Kathmandu</Text>
+                            </View>
                         </View>
-                    </View>
-                    <TouchableOpacity style={styles.profileButton}>
-                        <View style={styles.profileIcon}>
-                            <EvilIcons name="bell" size={22} color="black" />
+                        <TouchableOpacity style={styles.profileButton} onPress={() => router.push("./notification")}>
+                            <View style={styles.profileIcon}>
+                                <EvilIcons name="bell" size={22} color="black" />
 
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                {/* Search Bar */}
-                <View style={styles.searchContainer}>
-                    <View style={styles.searchIcon}>
-                        <EvilIcons name="search" size={22} color="black" />
-                    </View>
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Find your favorite items"
-                        placeholderTextColor="#999"
-                        selectionColor="#FF6B35"
-                    />
-                    <View>
-                        <MaterialCommunityIcons name="image-filter-center-focus" size={22} color="black" />
-                    </View>
-                </View>
-
-
-
-                <View style={styles.section}>
-                    <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>Categories</Text>
-                        <TouchableOpacity>
-                            <Text style={styles.viewAllText}>View All</Text>
+                            </View>
                         </TouchableOpacity>
                     </View>
 
-                    <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.categoriesScrollContainer}
-                    >
-                        {categories.map((category, index) => (
-                            <TouchableOpacity key={index} style={styles.categoryItem}>
-                                <View style={styles.categoryIcon}>
-                                    <MaterialCommunityIcons name={category.icon} size={24} color="black" />
-                                </View>
-                                <Text style={styles.categoryText}>{category.name}</Text>
+                    {/* Search Bar */}
+                    <View style={styles.searchContainer}>
+                        <View style={styles.searchIcon}>
+                            <EvilIcons name="search" size={22} color="black" />
+                        </View>
+                        <TextInput
+                            style={styles.searchInput}
+                            placeholder="Find your favorite items"
+                            placeholderTextColor="#999"
+                            selectionColor="#FF6B35"
+                        />
+                        <View>
+                            <MaterialCommunityIcons name="image-filter-center-focus" size={22} color="black" />
+                        </View>
+                    </View>
+
+
+
+                    <View style={styles.section}>
+                        <View style={styles.sectionHeader}>
+                            <Text style={styles.sectionTitle}>Categories</Text>
+                            <TouchableOpacity>
+                                <Text style={styles.viewAllText}>View All</Text>
                             </TouchableOpacity>
-                        ))}
-                    </ScrollView>
-                </View>
+                        </View>
 
-
-                {/* Promotional Banner Slider */}
-                <View style={styles.bannerContainer}>
-                    <View style={styles.sliderContainer}>
-                        <Animated.View
-                            style={[
-                                styles.sliderWrapper,
-                                {
-                                    transform: [{ translateX: slideAnim }],
-                                    width: bannerSlides.length * (width - 40),
-                                },
-                            ]}
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={styles.categoriesScrollContainer}
                         >
-                            {bannerSlides.map((slide) => (
-                                <View
-                                    key={slide.id}
-                                    style={{ width: width - 40, overflow: 'hidden' }}
-                                >
-                                    <Image
-                                        source={{ uri: slide.image }}
-                                        style={styles.bannerImage}
-                                        resizeMode="cover"
-                                    />
-                                </View>
+                            {categories.map((category, index) => (
+                                <TouchableOpacity key={index} style={styles.categoryItem}>
+                                    <View style={styles.categoryIcon}>
+                                        <MaterialCommunityIcons name={category.icon} size={24} color="black" />
+                                    </View>
+                                    <Text style={styles.categoryText}>{category.name}</Text>
+                                </TouchableOpacity>
                             ))}
-                        </Animated.View>
+                        </ScrollView>
                     </View>
 
-                    {/* Optional: Slider Indicators */}
-                    <View style={styles.indicatorContainer}>
-                        {bannerSlides.map((_, index) => (
-                            <View
-                                key={index}
+
+                    {/* Promotional Banner Slider */}
+                    <View style={styles.bannerContainer}>
+                        <View style={styles.sliderContainer}>
+                            <Animated.View
                                 style={[
-                                    styles.indicator,
-                                    { opacity: currentSlide === index ? 1 : 0.3 },
+                                    styles.sliderWrapper,
+                                    {
+                                        transform: [{ translateX: slideAnim }],
+                                        width: bannerSlides.length * (width - 40),
+                                    },
                                 ]}
-                            />
-                        ))}
+                            >
+                                {bannerSlides.map((slide) => (
+                                    <View
+                                        key={slide.id}
+                                        style={{ width: width - 40, overflow: 'hidden' }}
+                                    >
+                                        <Image
+                                            source={{ uri: slide.image }}
+                                            style={styles.bannerImage}
+                                            resizeMode="cover"
+                                        />
+                                    </View>
+                                ))}
+                            </Animated.View>
+                        </View>
+
+                        {/* Optional: Slider Indicators */}
+                        <View style={styles.indicatorContainer}>
+                            {bannerSlides.map((_, index) => (
+                                <View
+                                    key={index}
+                                    style={[
+                                        styles.indicator,
+                                        { opacity: currentSlide === index ? 1 : 0.3 },
+                                    ]}
+                                />
+                            ))}
+                        </View>
                     </View>
-                </View>
 
 
-                {/* Hot Deals */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Hot Deals</Text>
-                    <View style={styles.productsGrid}>
-                        {products.map((product) => (
-                            <View key={product.id} style={styles.productCard}>
-                                <View >
-                                    <Image source={{ uri: product.image }} style={styles.productImage} />
-                                </View>
-                                <View style={styles.productInfo}>
-                                    <Text style={styles.productName} numberOfLines={2}>
-                                        {product.name}
-                                    </Text>
-                                    <View style={styles.priceRow}>
-                                        <Text style={styles.currentPrice}>Rs {product.price}</Text>
-                                        <Text style={styles.originalPrice}>Rs {product.originalPrice}</Text>
+                    {/* Hot Deals */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Hot Deals</Text>
+                        <View style={styles.productsGrid}>
+                            {products.map((product) => (
+                                <TouchableOpacity onPress={() => router.push("./sizeproductdetail")}>
+                                    <View key={product.id} style={styles.productCard}>
+                                        <View >
+                                            <Image source={{ uri: product.image }} style={styles.productImage} />
+                                        </View>
+                                        <View style={styles.productInfo}>
+                                            <Text style={styles.productName} numberOfLines={2}>
+                                                {product.name}
+                                            </Text>
+                                            <View style={styles.priceRow}>
+                                                <Text style={styles.currentPrice}>Rs {product.price}</Text>
+                                                <Text style={styles.originalPrice}>Rs {product.originalPrice}</Text>
+                                            </View>
+                                            <View style={styles.ratingRow}>
+                                                <Text style={styles.starIcon}>⭐</Text>
+                                                <Text style={styles.rating}>{product.rating}</Text>
+                                                <Text style={styles.reviews}>({product.reviews})</Text>
+                                            </View>
+                                        </View>
                                     </View>
-                                    <View style={styles.ratingRow}>
-                                        <Text style={styles.starIcon}>⭐</Text>
-                                        <Text style={styles.rating}>{product.rating}</Text>
-                                        <Text style={styles.reviews}>({product.reviews})</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        ))}
+                                </TouchableOpacity>
+
+                            ))}
+                        </View>
                     </View>
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </View>
+            <NotificationPopup
+                visible={showNotificationPopup}
+                onResponse={handleNotificationResponse}
+            />
         </SafeAreaView>
     );
 };
@@ -250,6 +268,18 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 4,
         backgroundColor: '#FFFFFF',
+    },
+
+    popupOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.3)', // translucent black for dimming effect
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
     },
     locationContainer: {
         flex: 1,

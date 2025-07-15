@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-
-const NotificationPopup = () => {
-    const [isVisible, setIsVisible] = useState(true);
-
+type NotificationPopupProps = {
+    visible: boolean;
+    onResponse: (allowed: boolean) => void;
+};
+const NotificationPopup: React.FC<NotificationPopupProps> = ({ visible, onResponse }) => {
     const handleAllow = () => {
-        setIsVisible(false);
-        console.log('Notification  allowed');
-        // Add your notification  logic here
+        console.log('Notification allowed');
+        onResponse(true);  // notify parent
     };
 
     const handleDeny = () => {
-        setIsVisible(false);
-        console.log('Notification  denied');
+        console.log('Notification denied');
+        onResponse(false);  // notify parent
     };
 
     return (
-        <Modal visible={isVisible} transparent animationType="fade">
+        <Modal visible={visible} transparent animationType="fade">
             <View style={styles.overlay}>
                 <View style={styles.container}>
                     <Text style={styles.title}>"App" Would Like To Send You</Text>
@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#000',
         textAlign: 'center',
-
         padding: 15,
     },
     message: {
@@ -75,7 +74,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginHorizontal: 20,
         lineHeight: 18,
-
     },
     separator: {
         height: 1,

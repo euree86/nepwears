@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+const { useRouter } = require('expo-router');
 import {
     KeyboardAvoidingView,
     Platform,
@@ -10,6 +11,7 @@ import {
 } from 'react-native';
 
 export default function EmailLogin() {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [emailFocused, setEmailFocused] = useState(false);
@@ -22,7 +24,7 @@ export default function EmailLogin() {
             setEmailError("Email is required");
             return false;
         } else if (!emailRegex.test(email)) {
-            setEmailError("Please enter a valid Gmail address");
+            setEmailError("Please enter a valid email address");
             return false;
         } else {
             setEmailError('');
@@ -82,7 +84,7 @@ export default function EmailLogin() {
                     </View>
 
                     {/* Continue Button */}
-                    <TouchableOpacity style={instyles.loginButton} onPress={handleLogin}>
+                    <TouchableOpacity style={instyles.loginButton} onPress={() => router.push("./verificationcode")}>
                         <Text style={instyles.loginButtonText}>Continue</Text>
                     </TouchableOpacity>
 

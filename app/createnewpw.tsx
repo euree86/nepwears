@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons, } from '@expo/vector-icons';
 import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -13,6 +14,7 @@ import {
 import { styles } from '../styles';
 
 export default function EmailLogin() {
+  const router = useRouter();
   // STATES
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -200,7 +202,7 @@ export default function EmailLogin() {
                     style={instyles.trackButton}
                     onPress={() => {
                       setLoginSuccess(false);
-                      console.log('Redirect to login');
+                      router.push("./loginwithemail");
                       // Add navigation logic here
                     }}
                   >
