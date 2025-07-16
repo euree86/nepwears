@@ -13,7 +13,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import NotificationPopup from "./homealert"
+import NotificationPopup from "../homealert"
 
 const { width } = Dimensions.get('window');
 
@@ -164,7 +164,7 @@ const App = () => {
                             {categories.map((category, index) => (
                                 <TouchableOpacity key={index} style={styles.categoryItem}>
                                     <View style={styles.categoryIcon}>
-                                        <MaterialCommunityIcons name={category.icon} size={24} color="black" />
+                                        <MaterialCommunityIcons name={category.icon as any} size={24} color="black" />
                                     </View>
                                     <Text style={styles.categoryText}>{category.name}</Text>
                                 </TouchableOpacity>

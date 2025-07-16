@@ -12,8 +12,16 @@ import {
     TextInput
 } from 'react-native';
 
+type CartItemType = {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+    image: string;
+};
+
 const MyCart = () => {
-    const [cartItems, setCartItems] = useState([
+    const [cartItems, setCartItems] = useState<CartItemType[]>([
         {
             id: 1,
             name: 'Retinol Youth Renewal Night Cream',
@@ -44,7 +52,7 @@ const MyCart = () => {
         },
     ]);
 
-    const updateQuantity = (id, change) => {
+    const updateQuantity = (id: number | string, change: number) => {
         setCartItems(items =>
             items.map(item =>
                 item.id === id
@@ -54,7 +62,7 @@ const MyCart = () => {
         );
     };
 
-    const removeItem = (id) => {
+    const removeItem = (id: number | string) => {
         setCartItems(items => items.filter(item => item.id !== id));
     };
 
@@ -64,7 +72,7 @@ const MyCart = () => {
 
     const [couponCode, setCouponCode] = useState('');
 
-    const CartItem = ({ item }) => (
+    const CartItem = ({ item }: { item: CartItemType }) => (
         <View style={styles.cartItem}>
             <Image source={{ uri: item.image }} style={styles.productImage} />
 
