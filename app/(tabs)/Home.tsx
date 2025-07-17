@@ -122,7 +122,7 @@ const App = () => {
                                 <Text style={styles.locationText}>Baneshwor, Kathmandu</Text>
                             </View>
                         </View>
-                        <TouchableOpacity style={styles.profileButton} onPress={() => router.push("./notification")}>
+                        <TouchableOpacity style={styles.profileButton} onPress={() => router.push("../notification")}>
                             <View style={styles.profileIcon}>
                                 <EvilIcons name="bell" size={22} color="black" />
 
@@ -220,7 +220,7 @@ const App = () => {
                         <Text style={styles.sectionTitle}>Hot Deals</Text>
                         <View style={styles.productsGrid}>
                             {products.map((product) => (
-                                <TouchableOpacity onPress={() => router.push("./sizeproductdetail")}>
+                                <TouchableOpacity onPress={() => router.push("../sizeproductdetail")}>
                                     <View key={product.id} style={styles.productCard}>
                                         <View >
                                             <Image source={{ uri: product.image }} style={styles.productImage} />
@@ -259,6 +259,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        paddingTop: 5,
     },
     header: {
         flexDirection: 'row',

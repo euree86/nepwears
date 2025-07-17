@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         marginBottom: 20,
     },
-   
+
     sizeContainer: {
         flexDirection: "row",
         flexWrap: "wrap",

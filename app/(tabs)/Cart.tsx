@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from 'react';
-
+import { useRouter } from "expo-router";
 import {
     Image,
     SafeAreaView,
@@ -51,6 +51,8 @@ const MyCart = () => {
             image: 'https://cdn.pixabay.com/photo/2012/09/30/03/00/woman-58558_640.jpg',
         },
     ]);
+
+    const router = useRouter();
 
     const updateQuantity = (id: number | string, change: number) => {
         setCartItems(items =>
@@ -137,7 +139,7 @@ const MyCart = () => {
                     <Text style={styles.totalAmount}>${calculateTotal().toFixed(2)} USD</Text>
                 </View>
 
-                <TouchableOpacity style={styles.checkoutButton}>
+                <TouchableOpacity style={styles.checkoutButton} onPress={() => router.push("../checkout")}>
                     <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
                 </TouchableOpacity>
             </View>

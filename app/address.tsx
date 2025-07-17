@@ -8,10 +8,11 @@ import {
     StatusBar,
 } from 'react-native';
 import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const Address = () => {
     const [selectedAddress, setSelectedAddress] = useState('home');
-
+    const router = useRouter();
     const addresses = [
         {
             id: 'home',
@@ -107,7 +108,7 @@ const Address = () => {
             {/* Add New Address Button */}
             <TouchableOpacity
                 style={styles.addButton}
-                onPress={handleAddNewAddress}
+                onPress={() => router.push("./newaddress")}
                 activeOpacity={0.7}
             >
                 <MaterialIcons

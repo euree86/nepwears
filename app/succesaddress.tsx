@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; // for check-circle icon
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const Ordersuccess = () => {
-    const [isVisible, setIsVisible] = useState(true);
+type Props = {
+    visible: boolean;
+    onResponse: (allowed: boolean) => void;
+};
 
+const Successaddress = ({ visible, onResponse }: Props) => {
     const handleTrackOrder = () => {
-        setIsVisible(false);
         console.log('Track order clicked');
-        // Add navigation or logic here
+        onResponse(false);  // or true, depending on your logic
     };
 
     return (
-        <Modal visible={isVisible} transparent animationType="fade">
+        <Modal visible={visible} transparent animationType="fade">
             <View style={styles.overlay}>
                 <View style={styles.container}>
                     <MaterialCommunityIcons
@@ -22,10 +24,10 @@ const Ordersuccess = () => {
                         style={styles.icon}
                     />
                     <Text style={styles.title}>Congratulations!</Text>
-                    <Text style={styles.message}>Your order has been placed.</Text>
+                    <Text style={styles.message}>Your new address has been added.</Text>
 
                     <TouchableOpacity style={styles.trackButton} onPress={handleTrackOrder}>
-                        <Text style={styles.trackButtonText}>Track Your Order</Text>
+                        <Text style={styles.trackButtonText}>Thanks</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -78,4 +80,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Ordersuccess;
+export default Successaddress;

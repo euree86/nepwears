@@ -9,11 +9,19 @@ import {
     ScrollView,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import NotificationPopup from "./ordersuccess"
+import { useRouter } from "expo-router";
 
 const CheckoutScreen = () => {
     const [selectedPayment, setSelectedPayment] = useState('card');
     const [promoCode, setPromoCode] = useState('');
+    const [showNotificationPopup, setShowNotificationPopup] = useState(false);
 
+    const handleNotificationResponse = (allowed: boolean) => {
+        console.log("Notification allowed?", allowed);
+        setShowNotificationPopup(false);
+    };
+    const router = useRouter();
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
@@ -22,8 +30,8 @@ const CheckoutScreen = () => {
                 <View style={styles.section}>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>Delivery Address</Text>
-                        <TouchableOpacity>
-                            <Text style={styles.changeLink}>Change</Text>
+                        <TouchableOpacity onPress={() => router.push("./address")}>
+                            <Text style={styles.changeLink} >Change</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.addressContainer}>
@@ -168,10 +176,18 @@ const CheckoutScreen = () => {
 
             {/* Place Order Button */}
             <View style={styles.bottomContainer}>
-                <TouchableOpacity style={styles.placeOrderButton}>
+                <TouchableOpacity style={styles.placeOrderButton} onPress={() => setShowNotificationPopup(true)}>
                     <Text style={styles.placeOrderText}>Place Order</Text>
+
                 </TouchableOpacity>
             </View>
+            {showNotificationPopup && (
+                <NotificationPopup
+                    visible={showNotificationPopup}
+                    onResponse={handleNotificationResponse}
+                />
+            )}
+
         </SafeAreaView>
     );
 };

@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   main: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
     backgroundColor: "white",
   },
 

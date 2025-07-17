@@ -9,15 +9,13 @@ import {
     TextInput,
     TouchableOpacity,
     View,
+    Image,
 } from 'react-native';
-import { styles } from '../styles';
+import { LinearGradient } from 'expo-linear-gradient';
 
-export default function EmailLogin() {
-    //STATES 
+export default function EmailSignup() {
     const [showPassword, setShowPassword] = useState(false);
-
-    const [showconfirmPassword, setshowconfirmPassword] = useState(false);
-
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -29,10 +27,9 @@ export default function EmailLogin() {
 
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
-    const [confirmpasswordFocused, setconfirmpasswordFocused] = useState(false);
+    const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
 
-
-    const [isChecked, setChecked] = useState(false);      // ✅ real checkbox state
+    const [isChecked, setChecked] = useState(false);
     const [checkboxError, setCheckboxError] = useState('');
 
     const [loginSuccess, setLoginSuccess] = useState(false);
@@ -40,30 +37,17 @@ export default function EmailLogin() {
     const emailRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d._%+-]+@gmail\.com$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-
-    //  VALIDATORS 
     const validateEmail = () => {
-        if (!email.trim()) {
-            setEmailError('Email is required');
-            return false;
-        }
-        if (!emailRegex.test(email)) {
-            setEmailError('Please enter a valid Gmail address');
-            return false;
-        }
+        if (!email.trim()) return setEmailError('Email is required'), false;
+        if (!emailRegex.test(email)) return setEmailError('Enter a valid Gmail address'), false;
         setEmailError('');
         return true;
     };
 
     const validatePassword = () => {
-        if (!password.trim()) {
-            setPasswordError('Password is required');
-            return false;
-        }
+        if (!password.trim()) return setPasswordError('Password is required'), false;
         if (!passwordRegex.test(password)) {
-            setPasswordError(
-                'Password must contain at least one uppercase, lowercase, number, and special character'
-            );
+            setPasswordError('Must contain uppercase, lowercase, number & symbol');
             return false;
         }
         setPasswordError('');
@@ -71,47 +55,44 @@ export default function EmailLogin() {
     };
 
     const validateConfirmPassword = () => {
-        if (!confirmPassword.trim()) {
-            setConfirmPasswordError('Confirm password is required');
-            return false;
-        }
-        if (password !== confirmPassword) {
-            setConfirmPasswordError('Passwords do not match');
-            return false;
-        }
+        if (!confirmPassword.trim()) return setConfirmPasswordError('Confirm password required'), false;
+        if (password !== confirmPassword) return setConfirmPasswordError('Passwords do not match'), false;
         setConfirmPasswordError('');
         return true;
     };
 
-    //  MAIN HANDLER 
     const handleLogin = () => {
-        const isEmailValid = validateEmail();
-        const isPasswordValid = validatePassword();
-        const isConfirmValid = validateConfirmPassword();
+        const validEmail = validateEmail();
+        const validPassword = validatePassword();
+        const validConfirm = validateConfirmPassword();
 
-        if (!isChecked) setCheckboxError('You must agree to the Terms & Conditions');
+        if (!isChecked) setCheckboxError('You must agree to Terms & Conditions');
         else setCheckboxError('');
 
-        if (isEmailValid && isPasswordValid && isConfirmValid && isChecked) {
+        if (validEmail && validPassword && validConfirm && isChecked) {
             setLoginSuccess(true);
         } else {
             setLoginSuccess(false);
         }
     };
 
-    //  UI 
     return (
-        <KeyboardAvoidingView
-            style={instyles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-            <View style={instyles.main}>
-                <Text style={styles.title}>Signup with Email</Text>
+        <LinearGradient colors={['#c0cbd5ff', '#f2daf3ff']} style={styles.gradient}>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                <Image
+                    source={require('../assets/images/logo.png')}
+                    style={styles.topImage}
+                    resizeMode="contain"
+                />
 
-                <View style={instyles.form}>
-                    {/* ───── Email ───── */}
-                    <View style={instyles.inputGroup}>
-                        <Text style={instyles.label}>Email</Text>
+                <View style={styles.main}>
+                    <Text style={styles.title}>Signup with Email</Text>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Email</Text>
                         <TextInput
                             placeholder="Enter your email"
                             keyboardType="email-address"
@@ -122,14 +103,8 @@ export default function EmailLogin() {
                                 setLoginSuccess(false);
                             }}
                             style={[
-                                instyles.input,
-                                {
-                                    borderColor: emailError
-                                        ? 'red'
-                                        : emailFocused
-                                            ? '#FC0079'
-                                            : '#C8C7CD',
-                                },
+                                styles.input,
+                                { borderColor: emailError ? 'red' : emailFocused ? '#C8C7CD' : '#C8C7CD' },
                             ]}
                             onFocus={() => setEmailFocused(true)}
                             onBlur={() => {
@@ -138,15 +113,12 @@ export default function EmailLogin() {
                             }}
                             autoCapitalize="none"
                         />
-                        {emailError ? (
-                            <Text style={{ color: 'red', marginTop: 4 }}>{emailError}</Text>
-                        ) : null}
+                        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
                     </View>
 
-                    {/* ───── Password ───── */}
-                    <View style={instyles.inputGroup}>
-                        <Text style={instyles.label}>Password</Text>
-                        <View style={instyles.passwordWrapper}>
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Password</Text>
+                        <View style={styles.passwordWrapper}>
                             <TextInput
                                 placeholder="Enter your password"
                                 secureTextEntry={!showPassword}
@@ -157,14 +129,8 @@ export default function EmailLogin() {
                                     setLoginSuccess(false);
                                 }}
                                 style={[
-                                    instyles.input,
-                                    {
-                                        borderColor: passwordError
-                                            ? 'red'
-                                            : passwordFocused
-                                                ? '#FC0079'
-                                                : '#C8C7CD',
-                                    },
+                                    styles.input,
+                                    { borderColor: passwordError ? 'red' : passwordFocused ? '#C8C7CD' : '#C8C7CD' },
                                 ]}
                                 onFocus={() => setPasswordFocused(true)}
                                 onBlur={() => {
@@ -173,7 +139,7 @@ export default function EmailLogin() {
                                 }}
                             />
                             <TouchableOpacity
-                                style={instyles.eyeIcon}
+                                style={styles.eyeIcon}
                                 onPress={() => setShowPassword(!showPassword)}
                             >
                                 <MaterialCommunityIcons
@@ -183,18 +149,15 @@ export default function EmailLogin() {
                                 />
                             </TouchableOpacity>
                         </View>
-                        {passwordError ? (
-                            <Text style={{ color: 'red', marginTop: 4 }}>{passwordError}</Text>
-                        ) : null}
+                        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
                     </View>
 
-                    {/* ───── Confirm Password ───── */}
-                    <View style={instyles.inputGroup}>
-                        <Text style={instyles.label}>Confirm Password</Text>
-                        <View style={instyles.passwordWrapper}>
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Confirm Password</Text>
+                        <View style={styles.passwordWrapper}>
                             <TextInput
                                 placeholder="Re-enter your password"
-                                secureTextEntry={!showconfirmPassword}
+                                secureTextEntry={!showConfirmPassword}
                                 value={confirmPassword}
                                 onChangeText={text => {
                                     setConfirmPassword(text);
@@ -202,94 +165,93 @@ export default function EmailLogin() {
                                     setLoginSuccess(false);
                                 }}
                                 style={[
-                                    instyles.input,
+                                    styles.input,
                                     {
                                         borderColor: confirmPasswordError
                                             ? 'red'
-                                            : confirmpasswordFocused
-                                                ? '#FC0079'
+                                            : confirmPasswordFocused
+                                                ? '#C8C7CD'
                                                 : '#C8C7CD',
                                     },
                                 ]}
-                                onFocus={() => setconfirmpasswordFocused(true)}
+                                onFocus={() => setConfirmPasswordFocused(true)}
                                 onBlur={() => {
-                                    setconfirmpasswordFocused(false);
+                                    setConfirmPasswordFocused(false);
                                     validateConfirmPassword();
                                 }}
                             />
                             <TouchableOpacity
-                                style={instyles.eyeIcon}
-                                onPress={() => setshowconfirmPassword(!showconfirmPassword)}
+                                style={styles.eyeIcon}
+                                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
                             >
                                 <MaterialCommunityIcons
-                                    name={showconfirmPassword ? 'eye-off' : 'eye'}
+                                    name={showConfirmPassword ? 'eye-off' : 'eye'}
                                     size={22}
                                     color="#888"
                                 />
                             </TouchableOpacity>
                         </View>
-                        {confirmPasswordError ? (
-                            <Text style={{ color: 'red', marginTop: 4 }}>
-                                {confirmPasswordError}
-                            </Text>
-                        ) : null}
+                        {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
                     </View>
 
-                    {/* ───── Checkbox ───── */}
-                    <View style={instyles.checkboxcontainer}>
+                    <View style={styles.checkboxcontainer}>
                         <Checkbox
                             value={isChecked}
                             onValueChange={value => {
                                 setChecked(value);
                                 if (value) setCheckboxError('');
                             }}
-                            color={isChecked ? '#FC0079' : 'black'}
+                            color={isChecked ? '#FC0079' : undefined}
                         />
                         <Text> Agree with</Text>
                         <TouchableOpacity>
-                            <Text style={instyles.signup}>Terms & Condition</Text>
+                            <Text style={styles.signup}>Terms & Condition</Text>
                         </TouchableOpacity>
                     </View>
-                    {checkboxError ? (
-                        <Text style={{ color: 'red', marginBottom: 10 }}>
-                            {checkboxError}
-                        </Text>
-                    ) : null}
+                    {checkboxError ? <Text style={styles.errorText}>{checkboxError}</Text> : null}
 
-                    {/* ───── Button ───── */}
-                    <TouchableOpacity style={instyles.loginButton} onPress={handleLogin}>
-                        <Text style={instyles.loginButtonText}>Signup</Text>
+                    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                        <Text style={styles.loginButtonText}>Signup</Text>
                     </TouchableOpacity>
 
-                    {/* ───── Success ───── */}
                     {loginSuccess && (
-                        <View style={instyles.successBox}>
-                            <Text style={instyles.successText}>Signup successful!</Text>
+                        <View style={styles.successBox}>
+                            <Text style={styles.successText}>Signup successful!</Text>
                             <TouchableOpacity>
-                                <Text style={instyles.forgotPassword}>Done</Text>
+                                <Text style={styles.forgotPassword}>Done</Text>
                             </TouchableOpacity>
                         </View>
                     )}
                 </View>
-            </View>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </LinearGradient>
     );
 }
 
-//  STYLES 
-const instyles = StyleSheet.create({
+const styles = StyleSheet.create({
+    gradient: {
+        flex: 1,
+    },
     container: {
         flex: 1,
-        backgroundColor: 'white',
         paddingHorizontal: 20,
-        paddingVertical: 30,
+    },
+    topImage: {
+        width: "100%",
+        height: 250,
+        opacity: 0.4,
+        marginTop: 40,
     },
     main: {
         flex: 1,
         justifyContent: 'flex-start',
     },
-    form: {
-        flex: 1,
+    title: {
+        fontSize: 26,
+        fontWeight: "700",
+        color: "#333333",
+        marginBottom: 15,
+        textAlign: "center",
     },
     inputGroup: {
         marginBottom: 15,
@@ -301,12 +263,13 @@ const instyles = StyleSheet.create({
         marginBottom: 4,
     },
     input: {
-        borderWidth: 1.5,
+        borderWidth: 1,
         borderRadius: 8,
         paddingHorizontal: 16,
-        paddingVertical: 10,
+        paddingVertical: 12,
         fontSize: 16,
         color: '#333',
+        backgroundColor: 'rgba(255, 255, 255, 0.4)',
     },
     passwordWrapper: {
         position: 'relative',
@@ -320,7 +283,7 @@ const instyles = StyleSheet.create({
         textAlign: 'right',
         fontSize: 14,
         color: '#666',
-        marginBottom: 30,
+        marginTop: 10,
     },
     loginButton: {
         backgroundColor: '#FC0079',
@@ -333,6 +296,19 @@ const instyles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
         fontWeight: '600',
+    },
+    checkboxcontainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 25,
+        marginLeft: 3,
+    },
+    signup: {
+        borderBottomWidth: 1.5,
+        borderBottomColor: '#FC0079',
+        color: '#FC0079',
+        fontSize: 15,
+        marginLeft: 5,
     },
     successBox: {
         backgroundColor: '#d4edda',
@@ -348,16 +324,8 @@ const instyles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 16,
     },
-    checkboxcontainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 25,
-    },
-    signup: {
-        borderBottomWidth: 2,
-        borderBottomColor: '#FC0079',
-        color: '#FC0079',
-        fontSize: 15,
-        marginLeft: 5,
+    errorText: {
+        color: 'red',
+        marginTop: 4,
     },
 });

@@ -8,9 +8,10 @@ import {
     TextInput,
     TouchableOpacity,
     View,
+    Image,
 } from 'react-native';
-
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { styles } from "../styles";
 
 export default function EmailLogin() {
@@ -19,12 +20,9 @@ export default function EmailLogin() {
     const [passwordFocused, setPasswordFocused] = useState(false);
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
-
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [emailFocused, setEmailFocused] = useState(false);
-
-    // Added state to track login success
     const [loginSuccess, setLoginSuccess] = useState(false);
 
     const emailRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d._%+-]+@gmail\.com$/;
@@ -61,7 +59,6 @@ export default function EmailLogin() {
         const isPasswordValid = validatePassword();
 
         if (isEmailValid && isPasswordValid) {
-            // Simulate login success
             setLoginSuccess(true);
         } else {
             setLoginSuccess(false);
@@ -69,122 +66,149 @@ export default function EmailLogin() {
     };
 
     return (
-        <KeyboardAvoidingView
-            style={instyles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        <LinearGradient
+            colors={["#c0cbd5ff", "#f2daf3ff"]} // pink to purple
+            style={instyles.gradient}
         >
-            <View style={instyles.main}>
-                <Text style={styles.title}>Login with Email</Text>
+            <KeyboardAvoidingView
+                style={instyles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                {/* Logo at top */}
+                <Image
+                    source={require("../assets/images/logo.png")}
+                    style={instyles.topImage}
+                    resizeMode="contain"
+                />
 
-                <View style={instyles.form}>
-                    {/* Email Input */}
-                    <View style={instyles.inputGroup}>
-                        <Text style={instyles.label}>Email</Text>
-                        <TextInput
-                            placeholder="Enter your email"
-                            keyboardType="email-address"
-                            value={email}
-                            onChangeText={(text) => {
-                                setEmail(text);
-                                setEmailError('');
-                                setLoginSuccess(false); // Reset success on change
-                            }}
-                            style={[
-                                instyles.input,
-                                {
-                                    borderColor: emailError
-                                        ? 'red'
-                                        : emailFocused
-                                            ? '#FC0079'
-                                            : '#C8C7CD',
-                                },
-                            ]}
-                            onFocus={() => setEmailFocused(true)}
-                            onBlur={() => {
-                                setEmailFocused(false);
-                                validateEmail();
-                            }}
-                            autoCapitalize="none"
-                        />
-                        {emailError ? (
-                            <Text style={{ color: 'red', marginTop: 4 }}>{emailError}</Text>
-                        ) : null}
-                    </View>
 
-                    {/* Password Input */}
-                    <View style={instyles.inputGroup}>
-                        <Text style={instyles.label}>Password</Text>
-                        <View style={instyles.passwordWrapper}>
+                <View style={instyles.main}>
+                    <Text style={instyles.title}>Login with Email</Text>
+
+                    <View style={instyles.form}>
+                        {/* Email Input */}
+                        <View style={instyles.inputGroup}>
+                            <Text style={instyles.label}>Email</Text>
                             <TextInput
-                                placeholder="Enter your password"
-                                secureTextEntry={!showPassword}
-                                value={password}
+                                placeholder="Enter your email"
+                                keyboardType="email-address"
+                                value={email}
                                 onChangeText={(text) => {
-                                    setPassword(text);
-                                    setPasswordError('');
-                                    setLoginSuccess(false); // Reset success on change
+                                    setEmail(text);
+                                    setEmailError('');
+                                    setLoginSuccess(false);
                                 }}
                                 style={[
                                     instyles.input,
                                     {
-                                        borderColor: passwordFocused
-                                            ? '#FC0079'
-                                            : '#C8C7CD',
+                                        borderColor: emailError
+                                            ? 'red'
+                                            : emailFocused
+                                                ? '#C8C7CD'
+                                                : '#C8C7CD',
                                     },
                                 ]}
-                                onFocus={() => setPasswordFocused(true)}
+                                onFocus={() => setEmailFocused(true)}
                                 onBlur={() => {
-                                    setPasswordFocused(false);
-                                    validatePassword();
+                                    setEmailFocused(false);
+                                    validateEmail();
                                 }}
+                                autoCapitalize="none"
                             />
-                            <TouchableOpacity
-                                style={instyles.eyeIcon}
-                                onPress={() => setShowPassword(!showPassword)}
-                            >
-                                <MaterialCommunityIcons
-                                    name={showPassword ? 'eye-off' : 'eye'}
-                                    size={22}
-                                    color="#888"
+                            {emailError ? (
+                                <Text style={{ color: 'red', marginTop: 4 }}>{emailError}</Text>
+                            ) : null}
+                        </View>
+
+                        {/* Password Input */}
+                        <View style={instyles.inputGroup}>
+                            <Text style={instyles.label}>Password</Text>
+                            <View style={instyles.passwordWrapper}>
+                                <TextInput
+                                    placeholder="Enter your password"
+                                    secureTextEntry={!showPassword}
+                                    value={password}
+                                    onChangeText={(text) => {
+                                        setPassword(text);
+                                        setPasswordError('');
+                                        setLoginSuccess(false);
+                                    }}
+                                    style={[
+                                        instyles.input,
+                                        {
+                                            borderColor: passwordFocused
+                                                ? '#C8C7CD'
+                                                : '#C8C7CD',
+                                        },
+                                    ]}
+                                    onFocus={() => setPasswordFocused(true)}
+                                    onBlur={() => {
+                                        setPasswordFocused(false);
+                                        validatePassword();
+                                    }}
                                 />
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={instyles.eyeIcon}
+                                    onPress={() => setShowPassword(!showPassword)}
+                                >
+                                    <MaterialCommunityIcons
+                                        name={showPassword ? 'eye-off' : 'eye'}
+                                        size={22}
+                                        color="#888"
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            {passwordError ? (
+                                <Text style={{ color: 'red', marginTop: 4 }}>{passwordError}</Text>
+                            ) : null}
                         </View>
-                        {passwordError ? (
-                            <Text style={{ color: 'red', marginTop: 4 }}>{passwordError}</Text>
-                        ) : null}
+
+                        {/* Forgot Password */}
+                        <TouchableOpacity onPress={() => router.push("./forgotpw")}>
+                            <Text style={instyles.forgotPassword}>Forgot Password</Text>
+                        </TouchableOpacity>
+
+                        {/* Login Button */}
+                        <TouchableOpacity style={instyles.loginButton} onPress={() => router.push("../(tabs)/Home")}>
+                            <Text style={instyles.loginButtonText}>Login</Text>
+                        </TouchableOpacity>
+
+                        {/* Optional Success Message */}
+                        {/* {loginSuccess && (
+                            <View style={instyles.successBox}>
+                                <Text style={instyles.successText}>Login successful!</Text>
+                            </View>
+                        )} */}
                     </View>
-
-                    {/* Forgot Password */}
-                    <TouchableOpacity onPress={() => router.push("./forgotpw")}>
-                        <Text style={instyles.forgotPassword}>Forgot Password</Text>
-                    </TouchableOpacity>
-
-                    {/* Login Button */}
-                    <TouchableOpacity style={instyles.loginButton} onPress={() => router.push("./home")}>
-                        <Text style={instyles.loginButtonText}>Login</Text>
-                    </TouchableOpacity>
-
-                    {/* Success message box */}
-                    {/* {loginSuccess && (
-                        <View style={instyles.successBox}>
-                            <Text style={instyles.successText}>Login  successful!</Text>
-                            <TouchableOpacity>
-                                <Text style={instyles.forgotPassword}>Done</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )} */}
                 </View>
-            </View>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </LinearGradient>
     );
 }
 
 const instyles = StyleSheet.create({
+    gradient: {
+        flex: 1,
+    },
     container: {
         flex: 1,
-        backgroundColor: "white",
         paddingHorizontal: 20,
-        paddingVertical: 30,
+
+    },
+
+    topImage: {
+        width: "100%",
+        height: 250,
+        opacity: 0.4,
+        marginTop: 40,
+    },
+
+    title: {
+        fontSize: 26,
+        fontWeight: "700",
+        color: "#333333",
+        marginBottom: 15,
+        textAlign: "center",
     },
     main: {
         flex: 1,
@@ -203,12 +227,14 @@ const instyles = StyleSheet.create({
         marginBottom: 4,
     },
     input: {
-        borderWidth: 1.5,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        borderWidth: 1,
+        borderColor: "#C8C7CD",
         borderRadius: 8,
-        paddingHorizontal: 16,
-        paddingVertical: 10,
-        fontSize: 16,
-        color: '#333',
+        paddingVertical: 12,
+        backgroundColor: "rgba(255, 255, 255, 0.4)",
     },
     passwordWrapper: {
         position: 'relative',
@@ -251,4 +277,3 @@ const instyles = StyleSheet.create({
         fontSize: 16,
     },
 });
-
