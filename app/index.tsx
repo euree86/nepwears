@@ -36,7 +36,7 @@ const instyles = StyleSheet.create({
     backgroundColor: "white",
     paddingHorizontal: 18,
     justifyContent: "flex-start",
-    paddingVertical: 60,
+    paddingVertical: 90,
   },
   image: {
     width: "100%",

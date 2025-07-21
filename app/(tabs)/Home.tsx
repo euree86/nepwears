@@ -116,12 +116,15 @@ const App = () => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {/* Header */}
                     <View style={styles.header}>
-                        <View style={styles.locationContainer}>
-                            <Text style={styles.locationLabel}>Location</Text>
-                            <View style={styles.locationRow}>
-                                <Text style={styles.locationText}>Baneshwor, Kathmandu</Text>
+                        <TouchableOpacity onPress={() => router.push("../location")}>
+                            <View style={styles.locationContainer}>
+                                <Text style={styles.locationLabel}>Location</Text>
+                                <View style={styles.locationRow}>
+                                    <Text style={styles.locationText}>Baneshwor, Kathmandu</Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
+
                         <TouchableOpacity style={styles.profileButton} onPress={() => router.push("../notification")}>
                             <View style={styles.profileIcon}>
                                 <EvilIcons name="bell" size={22} color="black" />
@@ -324,7 +327,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderRadius: 8,
         paddingHorizontal: 10,
-        paddingVertical: 12,
+        paddingVertical: 7,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -367,7 +370,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     categoriesScrollContainer: {
-        paddingRight: 20,
+        paddingRight: 10,
     },
     categoryItem: {
         alignItems: 'center',

@@ -60,10 +60,12 @@ export default function EmailLogin() {
 
         if (isEmailValid && isPasswordValid) {
             setLoginSuccess(true);
+            router.push("../(tabs)/Home"); // ✅ Move navigation here
         } else {
             setLoginSuccess(false);
         }
     };
+
 
     return (
         <LinearGradient
@@ -152,7 +154,7 @@ export default function EmailLogin() {
                                     onPress={() => setShowPassword(!showPassword)}
                                 >
                                     <MaterialCommunityIcons
-                                        name={showPassword ? 'eye-off' : 'eye'}
+                                        name={showPassword ? 'eye' : 'eye-off'}
                                         size={22}
                                         color="#888"
                                     />
@@ -169,7 +171,8 @@ export default function EmailLogin() {
                         </TouchableOpacity>
 
                         {/* Login Button */}
-                        <TouchableOpacity style={instyles.loginButton} onPress={() => router.push("../(tabs)/Home")}>
+                        <TouchableOpacity style={instyles.loginButton} onPress={handleLogin}>
+
                             <Text style={instyles.loginButtonText}>Login</Text>
                         </TouchableOpacity>
 
@@ -235,6 +238,7 @@ const instyles = StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 12,
         backgroundColor: "rgba(255, 255, 255, 0.4)",
+        paddingHorizontal: 10,
     },
     passwordWrapper: {
         position: 'relative',

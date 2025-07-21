@@ -9,9 +9,11 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Modal
+  Modal,
+
 } from 'react-native';
 import { styles } from '../styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function EmailLogin() {
   const router = useRouter();
@@ -76,146 +78,150 @@ export default function EmailLogin() {
 
   // UI
   return (
-    <KeyboardAvoidingView
-      style={instyles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <View style={instyles.main}>
-        <Text style={styles.title}>Create New Password</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <KeyboardAvoidingView
+        style={instyles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
 
-        <View style={instyles.form}>
-          {/* ───── Password ───── */}
-          <View style={instyles.inputGroup}>
-            <Text style={instyles.label}>New Password</Text>
-            <View style={instyles.passwordWrapper}>
-              <TextInput
-                placeholder="Enter your password"
-                secureTextEntry={!showPassword}
-                value={password}
-                onChangeText={text => {
-                  setPassword(text);
-                  setPasswordError('');
-                  setLoginSuccess(false);
-                }}
-                style={[
-                  instyles.input,
-                  {
-                    borderColor: passwordError
-                      ? 'red'
-                      : passwordFocused
-                        ? '#FC0079'
-                        : '#C8C7CD',
-                  },
-                ]}
-                onFocus={() => setPasswordFocused(true)}
-                onBlur={() => {
-                  setPasswordFocused(false);
-                  validatePassword();
-                }}
-              />
-              <TouchableOpacity
-                style={instyles.eyeIcon}
-                onPress={() => setShowPassword(!showPassword)}
-              >
-                <MaterialCommunityIcons
-                  name={showPassword ? 'eye-off' : 'eye'}
-                  size={22}
-                  color="#888"
+        <View style={instyles.main}>
+          <Text style={styles.title}>Create New Password</Text>
+
+          <View style={instyles.form}>
+            {/* ───── Password ───── */}
+            <View style={instyles.inputGroup}>
+              <Text style={instyles.label}>New Password</Text>
+              <View style={instyles.passwordWrapper}>
+                <TextInput
+                  placeholder="Enter your password"
+                  secureTextEntry={!showPassword}
+                  value={password}
+                  onChangeText={text => {
+                    setPassword(text);
+                    setPasswordError('');
+                    setLoginSuccess(false);
+                  }}
+                  style={[
+                    instyles.input,
+                    {
+                      borderColor: passwordError
+                        ? 'red'
+                        : passwordFocused
+                          ? '#FC0079'
+                          : '#C8C7CD',
+                    },
+                  ]}
+                  onFocus={() => setPasswordFocused(true)}
+                  onBlur={() => {
+                    setPasswordFocused(false);
+                    validatePassword();
+                  }}
                 />
-              </TouchableOpacity>
-            </View>
-            {passwordError ? (
-              <Text style={{ color: 'red', marginTop: 4 }}>{passwordError}</Text>
-            ) : null}
-          </View>
-
-          {/* ───── Confirm Password ───── */}
-          <View style={instyles.inputGroup}>
-            <Text style={instyles.label}>Confirm Password</Text>
-            <View style={instyles.passwordWrapper}>
-              <TextInput
-                placeholder="Re-enter your password"
-                secureTextEntry={!showConfirmPassword}
-                value={confirmPassword}
-                onChangeText={text => {
-                  setConfirmPassword(text);
-                  setConfirmPasswordError('');
-                  setLoginSuccess(false);
-                }}
-                style={[
-                  instyles.input,
-                  {
-                    borderColor: confirmPasswordError
-                      ? 'red'
-                      : confirmPasswordFocused
-                        ? '#FC0079'
-                        : '#C8C7CD',
-                  },
-                ]}
-                onFocus={() => setConfirmPasswordFocused(true)}
-                onBlur={() => {
-                  setConfirmPasswordFocused(false);
-                  validateConfirmPassword();
-                }}
-              />
-              <TouchableOpacity
-                style={instyles.eyeIcon}
-                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                <MaterialCommunityIcons
-                  name={showConfirmPassword ? 'eye-off' : 'eye'}
-                  size={22}
-                  color="#888"
-                />
-              </TouchableOpacity>
-            </View>
-            {confirmPasswordError ? (
-              <Text style={{ color: 'red', marginTop: 4 }}>
-                {confirmPasswordError}
-              </Text>
-            ) : null}
-          </View>
-
-          {/* ───── Button ───── */}
-          <TouchableOpacity style={instyles.loginButton} onPress={handleLogin}>
-            <Text style={instyles.loginButtonText}>Update Password</Text>
-          </TouchableOpacity>
-
-          {loginSuccess && (
-            <Modal visible={loginSuccess} transparent>
-              <View style={instyles.bottomOverlay}>
-                <View style={instyles.bottomModal}>
+                <TouchableOpacity
+                  style={instyles.eyeIcon}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
                   <MaterialCommunityIcons
-                    name="check-circle"
-                    size={66}
-                    color="#28a745"
-                    style={instyles.icon}
+                    name={showPassword ? 'eye' : 'eye-off'}
+                    size={22}
+                    color="#888"
                   />
-                  <View  >
-                    <Text style={instyles.title}>Password updated  </Text>
-                    <Text style={instyles.title}>Successfully! </Text>
-
-                  </View>
-
-
-                  <TouchableOpacity
-                    style={instyles.trackButton}
-                    onPress={() => {
-                      setLoginSuccess(false);
-                      router.push("./loginwithemail");
-                      // Add navigation logic here
-                    }}
-                  >
-                    <Text style={instyles.trackButtonText}>Continue to Login</Text>
-                  </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               </View>
-            </Modal>
-          )}
+              {passwordError ? (
+                <Text style={{ color: 'red', marginTop: 4 }}>{passwordError}</Text>
+              ) : null}
+            </View>
 
+            {/* ───── Confirm Password ───── */}
+            <View style={instyles.inputGroup}>
+              <Text style={instyles.label}>Confirm Password</Text>
+              <View style={instyles.passwordWrapper}>
+                <TextInput
+                  placeholder="Re-enter your password"
+                  secureTextEntry={!showConfirmPassword}
+                  value={confirmPassword}
+                  onChangeText={text => {
+                    setConfirmPassword(text);
+                    setConfirmPasswordError('');
+                    setLoginSuccess(false);
+                  }}
+                  style={[
+                    instyles.input,
+                    {
+                      borderColor: confirmPasswordError
+                        ? 'red'
+                        : confirmPasswordFocused
+                          ? '#FC0079'
+                          : '#C8C7CD',
+                    },
+                  ]}
+                  onFocus={() => setConfirmPasswordFocused(true)}
+                  onBlur={() => {
+                    setConfirmPasswordFocused(false);
+                    validateConfirmPassword();
+                  }}
+                />
+                <TouchableOpacity
+                  style={instyles.eyeIcon}
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <MaterialCommunityIcons
+                    name={showConfirmPassword ? 'eye-off' : 'eye'}
+                    size={22}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </View>
+              {confirmPasswordError ? (
+                <Text style={{ color: 'red', marginTop: 4 }}>
+                  {confirmPasswordError}
+                </Text>
+              ) : null}
+            </View>
+
+            {/* ───── Button ───── */}
+            <TouchableOpacity style={instyles.loginButton} onPress={handleLogin}>
+              <Text style={instyles.loginButtonText}>Update Password</Text>
+            </TouchableOpacity>
+
+            {loginSuccess && (
+              <Modal visible={loginSuccess} transparent>
+                <View style={instyles.bottomOverlay}>
+                  <View style={instyles.bottomModal}>
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={66}
+                      color="#28a745"
+                      style={instyles.icon}
+                    />
+                    <View  >
+                      <Text style={instyles.title}>Password updated  </Text>
+                      <Text style={instyles.title}>Successfully! </Text>
+
+                    </View>
+
+
+                    <TouchableOpacity
+                      style={instyles.trackButton}
+                      onPress={() => {
+                        setLoginSuccess(false);
+                        router.push("./loginwithemail");
+                        // Add navigation logic here
+                      }}
+                    >
+                      <Text style={instyles.trackButtonText}>Continue to Login</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
+            )}
+
+          </View>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView >
+
   );
 }
 
@@ -225,7 +231,7 @@ const instyles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingVertical: 15,
   },
   main: {
     flex: 1,
@@ -246,7 +252,7 @@ const instyles = StyleSheet.create({
   input: {
     borderWidth: 1.5,
     borderRadius: 8,
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     fontSize: 16,
     color: '#333',

@@ -23,6 +23,11 @@ export default function RootLayout() {
           <Stack.Screen name="signupwithemail" options={{ headerShown: false }} />
           <Stack.Screen name="notification" options={{ headerShown: false }} />
           <Stack.Screen name="productdetail" options={{ headerShown: false }} />
+          <Stack.Screen name="verificationcode" options={{ headerShown: false }} />
+          <Stack.Screen name="createnewpw" options={{ headerShown: false }} />
+          <Stack.Screen name="location" options={{ headerShown: false }} />
+
+          <Stack.Screen name="forgotpw" options={{ headerShown: false }} />
           <Stack.Screen name="product" options={{ title: 'Product' }} />
           <Stack.Screen name="sizeproduct" options={{ title: 'Size' }} />
           <Stack.Screen name="rating" options={{ title: 'Rating' }} />

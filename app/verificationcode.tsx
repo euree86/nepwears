@@ -48,13 +48,13 @@ export default function VerificationScreen() {
         ))}
       </View>
 
-      <Text style={styles.resend}>
-        Email not received?
+      <View style={styles.resendContainer}>
+        <Text style={styles.resend}>Email not received?</Text>
         <TouchableOpacity>
-          <Text style={styles.resendBold}> Resend Code
-          </Text>
+          <Text style={styles.resendBold}> Resend Code</Text>
         </TouchableOpacity>
-      </Text>
+      </View>
+
 
       <TouchableOpacity style={styles.button} onPress={() => router.push("./createnewpw")}>
         <Text style={styles.buttonText}>
@@ -98,10 +98,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     borderColor: '#ccc',
   },
-  resend: {
-    color: '#555',
+  resendContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 30,
   },
+
+  resend: {
+    color: '#555',
+  },
+
   resendBold: {
     fontWeight: 'bold',
     textDecorationLine: 'underline',

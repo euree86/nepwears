@@ -235,12 +235,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
+        paddingVertical: 10,
     },
     topImage: {
         width: "100%",
         height: 250,
         opacity: 0.4,
-        marginTop: 40,
     },
     main: {
         flex: 1,
@@ -250,17 +250,17 @@ const styles = StyleSheet.create({
         fontSize: 26,
         fontWeight: "700",
         color: "#333333",
-        marginBottom: 15,
+        marginBottom: 8,
         textAlign: "center",
     },
     inputGroup: {
-        marginBottom: 15,
+        marginBottom: 10,
     },
     label: {
         fontSize: 16,
         fontWeight: '500',
         color: '#333',
-        marginBottom: 4,
+
     },
     input: {
         borderWidth: 1,
