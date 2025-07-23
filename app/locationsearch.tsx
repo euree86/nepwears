@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-    Alert,
-    SafeAreaView,
     StyleSheet,
     Text,
     TextInput,
@@ -11,28 +9,25 @@ import {
 
 import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const SearchLocationScreen = () => {
     const router = useRouter();
     const [searchText, setSearchText] = React.useState('');
 
     const handleUseCurrentLocation = async () => {
-        // Ask for permission
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
-            Alert.alert('Permission denied', 'Location permission is needed to get your current location.');
+            alert.alert('Permission denied', 'Location permission is needed to get your current location.');
             return;
         }
 
-        // Get current position
         let location = await Location.getCurrentPositionAsync({});
         const { latitude, longitude } = location.coords;
 
-        // For now, just log it (or do whatever you want)
         console.log('Current location:', latitude, longitude);
 
-        // Example: Navigate to another page passing location as query params
-        // Adjust route path as needed
         router.push({
             pathname: '/locationpermission',
             params: { latitude: latitude.toString(), longitude: longitude.toString() },
@@ -40,9 +35,10 @@ const SearchLocationScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.safeArea}>
             <View style={styles.content}>
                 <View style={styles.searchContainer}>
+                    <MaterialIcons name="search" size={22} color="gray" style={styles.searchIcon} />
                     <TextInput
                         style={styles.searchInput}
                         placeholder="Find your location"
@@ -51,6 +47,7 @@ const SearchLocationScreen = () => {
                         placeholderTextColor="#999"
                     />
                 </View>
+
 
                 <TouchableOpacity
                     style={styles.currentLocationButton}
@@ -67,31 +64,41 @@ const SearchLocationScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
+    safeArea: {
         flex: 1,
         backgroundColor: '#fff',
     },
     content: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingTop: 20,
     },
     searchContainer: {
-        marginBottom: 20,
-    },
-    searchInput: {
-        height: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
         borderWidth: 1,
         borderColor: '#e0e0e0',
         borderRadius: 8,
-        paddingHorizontal: 15,
-        fontSize: 16,
         backgroundColor: '#f9f9f9',
+        paddingHorizontal: 10,
+        height: 50,
     },
+
+    searchIcon: {
+        marginRight: 8,
+    },
+
+    searchInput: {
+        flex: 1,
+        fontSize: 16,
+        height: '100%',
+        color: '#333',
+    },
+
     currentLocationButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 15,
+
     },
     locationIcon: {
         width: 24,

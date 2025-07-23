@@ -1,20 +1,42 @@
 import React from 'react';
 import {
+    Alert,
     View,
     Text,
     TouchableOpacity,
     StyleSheet,
 } from 'react-native';
+import * as Location from 'expo-location';
+import { useRouter } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const LocationPermissionScreen = () => {
-    const handleAllowLocation = () => {
-        // Handle location permission
-        console.log('Allow location access');
+    const router = useRouter();
+
+    const handleAllowLocation = async () => {
+        // Request permission directly
+        const { status } = await Location.requestForegroundPermissionsAsync();
+
+        if (status !== 'granted') {
+            Alert.alert('Permission Denied', 'Location permission is needed to continue.');
+            return;
+        }
+
+        try {
+            const location = await Location.getCurrentPositionAsync({});
+            const { latitude, longitude } = location.coords;
+
+            router.push("/Home");
+        } catch (error) {
+            Alert.alert('Error', 'Could not fetch location. Please try again.');
+            console.error(error);
+        }
     };
 
+
     const handleEnterManually = () => {
-        // Navigate or show manual location input screen
-        console.log('Enter location manually');
+        // Navigate to manual location entry screen
+        router.push('/locationsearch');  // Adjust route if needed
     };
 
     return (
@@ -22,7 +44,7 @@ const LocationPermissionScreen = () => {
             <View style={styles.permissionContainer}>
                 <View style={styles.iconContainer}>
                     <View style={styles.locationIconBg}>
-                        <Text style={styles.locationIcon}>📍</Text>
+                        <MaterialIcons name="location-on" color="#e91e63" style={styles.locationIcon} />
                     </View>
                 </View>
 
@@ -38,10 +60,7 @@ const LocationPermissionScreen = () => {
                     <Text style={styles.allowButtonText}>Allow Location Access</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                    style={styles.manualButton}
-                    onPress={handleEnterManually}
-                >
+                <TouchableOpacity onPress={handleEnterManually}>
                     <Text style={styles.manualButtonText}>Enter Location Manually</Text>
                 </TouchableOpacity>
             </View>
@@ -57,8 +76,8 @@ const styles = StyleSheet.create({
     permissionContainer: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingTop: 60,
         alignItems: 'center',
+        justifyContent: "center",
     },
     iconContainer: {
         marginBottom: 30,
@@ -72,7 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     locationIcon: {
-        fontSize: 32,
+        fontSize: 52,
         color: '#e91e63',
     },
     title: {
@@ -97,15 +116,12 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 15,
+        marginBottom: 10,
     },
     allowButtonText: {
         color: '#fff',
         fontSize: 16,
         fontWeight: '600',
-    },
-    manualButton: {
-        paddingVertical: 15,
     },
     manualButtonText: {
         color: '#e91e63',

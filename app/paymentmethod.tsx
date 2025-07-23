@@ -8,8 +8,9 @@ import {
     StatusBar,
 } from 'react-native';
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
-
+import { useRouter } from 'expo-router';
 const PaymentMethod = () => {
+    const  router = useRouter();
     const [selectedCard, setSelectedCard] = useState('visa');
 
     const cards = [
@@ -50,7 +51,7 @@ const PaymentMethod = () => {
         setSelectedCard(cardId);
     };
     const handleAddNewCard = () => {
-        console.log('Add new card pressed');
+         router.push('/newcard');
     };
 
     const handleApply = () => {

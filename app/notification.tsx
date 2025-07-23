@@ -101,28 +101,28 @@ const NotificationsScreen = () => {
     ];
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-            <ScrollView style={styles.container}>
-                {notifications.map((section: NotificationSection, sectionIndex: number) => (
-                    <View key={sectionIndex} style={styles.section}>
-                        <Text style={styles.sectionTitle}>{section.section}</Text>
 
-                        {section.items.map((item: NotificationItem, itemIndex: number) => (
-                            <View key={itemIndex}>
-                                <View style={styles.notificationItem}>
-                                    <MaterialCommunityIcons name={item.icon} size={24} color="#333" style={styles.icon} />
-                                    <View style={styles.textContainer}>
-                                        <Text style={styles.title}>{item.title}</Text>
-                                        <Text style={styles.subtitle}>{item.subtitle}</Text>
-                                    </View>
+        <ScrollView style={styles.container}>
+            {notifications.map((section: NotificationSection, sectionIndex: number) => (
+                <View key={sectionIndex} style={styles.section}>
+                    <Text style={styles.sectionTitle}>{section.section}</Text>
+
+                    {section.items.map((item: NotificationItem, itemIndex: number) => (
+                        <View key={itemIndex}>
+                            <View style={styles.notificationItem}>
+                                <MaterialCommunityIcons name={item.icon} size={24} color="#333" style={styles.icon} />
+                                <View style={styles.textContainer}>
+                                    <Text style={styles.title}>{item.title}</Text>
+                                    <Text style={styles.subtitle}>{item.subtitle}</Text>
                                 </View>
-                                {itemIndex !== section.items.length - 1 && <View style={styles.divider} />}
                             </View>
-                        ))}
-                    </View>
-                ))}
-            </ScrollView>
-        </SafeAreaView>
+                            {itemIndex !== section.items.length - 1 && <View style={styles.divider} />}
+                        </View>
+                    ))}
+                </View>
+            ))}
+        </ScrollView>
+
 
     );
 };

@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-
+import { useRouter } from 'expo-router';
 
 
 type MaterialIconName = keyof typeof MaterialIcons.glyphMap;
@@ -34,30 +34,32 @@ type RootStackParamList = {
 type Props = NativeStackScreenProps<RootStackParamList, 'ProfileMenu'>;
 
 const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
+    const router = useRouter();
+
     const menuItems: MenuItemType[] = [
         {
             id: 'profile',
             title: 'Your Profile',
             icon: 'person-outline',
-            onPress: () => navigation.navigate('ProfileEdit'),
+            onPress: () => router.push('/myprofile'),
         },
         {
             id: 'orders',
             title: 'My Order',
             icon: 'shopping-bag',
-            onPress: () => console.log('Navigate to My Orders'),
+          onPress: () => router.push('/myorder'),
         },
         {
             id: 'payment',
             title: 'Payment Methods',
             icon: 'payment',
-            onPress: () => console.log('Navigate to Payment Methods'),
+           onPress: () => router.push('/paymentmethod'),
         },
         {
             id: 'notifications',
             title: 'Notifications',
             icon: 'notifications-none',
-            onPress: () => console.log('Navigate to Notifications'),
+           onPress: () => router.push('/notificationdetail'),
         },
         {
             id: 'privacy',
@@ -69,7 +71,7 @@ const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
             id: 'help',
             title: 'Help Center',
             icon: 'help-outline',
-            onPress: () => console.log('Navigate to Help Center'),
+           onPress: () => router.push('/helpcenter'),
         },
         {
             id: 'invite',
@@ -155,7 +157,7 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingTop: 20,
+        
     },
     menuItem: {
         flexDirection: 'row',

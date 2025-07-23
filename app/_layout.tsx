@@ -21,12 +21,12 @@ export default function RootLayout() {
           <Stack.Screen name="loginwithemail" options={{ headerShown: false }} />
           <Stack.Screen name="signup" options={{ headerShown: false }} />
           <Stack.Screen name="signupwithemail" options={{ headerShown: false }} />
-          <Stack.Screen name="notification" options={{ headerShown: false }} />
+          <Stack.Screen name="notification" options={{ title: 'Notification' }} />
           <Stack.Screen name="productdetail" options={{ headerShown: false }} />
           <Stack.Screen name="verificationcode" options={{ headerShown: false }} />
           <Stack.Screen name="createnewpw" options={{ headerShown: false }} />
           <Stack.Screen name="location" options={{ headerShown: false }} />
-
+          <Stack.Screen name="locationsearch" options={{ title: 'Enter your location' }} />
           <Stack.Screen name="forgotpw" options={{ headerShown: false }} />
           <Stack.Screen name="product" options={{ title: 'Product' }} />
           <Stack.Screen name="sizeproduct" options={{ title: 'Size' }} />
@@ -34,10 +34,10 @@ export default function RootLayout() {
           <Stack.Screen name="Notification" options={{ title: 'Notification' }} />
           <Stack.Screen name="Alert" options={{ title: 'Alert' }} />
           <Stack.Screen name="NoSaved" options={{ title: 'Saved Items' }} />
+
           <Stack.Screen name="emptycart" options={{ title: 'My Cart' }} />
           <Stack.Screen name="sizeproductdetail" options={{ title: 'Productdetail' }} />
           <Stack.Screen name="ratingandreview" options={{ title: 'Rating and Review' }} />
-          <Stack.Screen name="locationsearch" options={{ title: 'Enter your location' }} />
         </Stack>
       </View>
     </>
