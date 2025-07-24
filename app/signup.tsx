@@ -16,68 +16,63 @@ export default function SignupScreen() {
     const router = useRouter();
 
     return (
-        <LinearGradient
-            colors={["#c0cbd5ff", "#f2daf3ff"]}
-            style={instyles.gradient}
-        >
-            <SafeAreaView style={instyles.safeArea}>
-                <View style={instyles.container}>
 
-                    {/* Faint Logo Image */}
-                    <Image
-                        source={require("../assets/images/logo.png")}
-                        style={instyles.topImage}
-                        resizeMode="contain"
-                    />
+        <SafeAreaView style={instyles.safeArea}>
+            <View style={instyles.container}>
 
-                    <Text style={instyles.title}>Signup to Nepwears</Text>
+                {/* Faint Logo Image */}
+                <Image
+                    source={require("../assets/images/logo.png")}
+                    style={instyles.topImage}
+                    resizeMode="contain"
+                />
 
-                    {/* Social Signup Buttons */}
-                    <View style={instyles.socialButtons}>
-                        <TouchableOpacity style={instyles.loginButton}>
-                            <MaterialCommunityIcons name="google" size={22} color="green" />
-                            <Text style={instyles.loginButtonText}>Signup with Google</Text>
-                        </TouchableOpacity>
+                <Text style={instyles.title}>Signup to Nepwears</Text>
 
-                        <TouchableOpacity style={instyles.loginButton}>
-                            <MaterialCommunityIcons name="apple" size={22} color="black" />
-                            <Text style={instyles.loginButtonText}>Signup with Apple</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    {/* Divider */}
-                    <View style={instyles.divider}>
-                        <View style={instyles.line} />
-                        <Text style={instyles.orText}>Or</Text>
-                        <View style={instyles.line} />
-                    </View>
-
-                    {/* Email Signup Button */}
-                    <TouchableOpacity
-                        style={styles.btncontainer}
-                        onPress={() => router.push("./signupwithemail")}
-                    >
-                        <Text style={styles.buttontext}>Signup with Email</Text>
+                {/* Social Signup Buttons */}
+                <View style={instyles.socialButtons}>
+                    <TouchableOpacity style={instyles.loginButton}>
+                        <MaterialCommunityIcons name="google" size={22} color="green" />
+                        <Text style={instyles.loginButtonText}>Signup with Google</Text>
                     </TouchableOpacity>
 
-                    {/* Login Prompt */}
-                    <View style={instyles.signupContainer}>
-                        <Text style={instyles.orText}>Already have an account?</Text>
-                        <TouchableOpacity onPress={() => router.push("./login")}>
-                            <Text style={instyles.signup}> Login</Text>
-                        </TouchableOpacity>
-                    </View>
-
+                    <TouchableOpacity style={instyles.loginButton}>
+                        <MaterialCommunityIcons name="apple" size={22} color="black" />
+                        <Text style={instyles.loginButtonText}>Signup with Apple</Text>
+                    </TouchableOpacity>
                 </View>
-            </SafeAreaView>
-        </LinearGradient>
+
+                {/* Divider */}
+                <View style={instyles.divider}>
+                    <View style={instyles.line} />
+                    <Text style={instyles.orText}>Or</Text>
+                    <View style={instyles.line} />
+                </View>
+
+                {/* Email Signup Button */}
+                <TouchableOpacity
+                    style={styles.btncontainer}
+                    onPress={() => router.push("./signupwithemail")}
+                >
+                    <Text style={styles.buttontext}>Signup with Email</Text>
+                </TouchableOpacity>
+
+                {/* Login Prompt */}
+                <View style={instyles.signupContainer}>
+                    <Text style={instyles.orText}>Already have an account?</Text>
+                    <TouchableOpacity onPress={() => router.push("./login")}>
+                        <Text style={instyles.signup}> Login</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+        </SafeAreaView>
+
     );
 }
 
 const instyles = StyleSheet.create({
-    gradient: {
-        flex: 1,
-    },
+
     safeArea: {
         flex: 1,
     },
@@ -85,6 +80,7 @@ const instyles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 20,
         justifyContent: "flex-start",
+        backgroundColor: "white",
     },
     title: {
         fontSize: 26,
@@ -95,7 +91,7 @@ const instyles = StyleSheet.create({
     },
     topImage: {
         width: "100%",
-        height: 250,
+        height: 200,
         opacity: 0.4,
         marginTop: 40,
     },

@@ -79,14 +79,14 @@ const styles = StyleSheet.create({
     },
     settingsContainer: {
         marginHorizontal: 20,
-        marginTop: 20,
+
     },
     settingItem: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 4,
-        paddingVertical: 16,
+        paddingVertical: 14,
         borderBottomWidth: 1,
         borderBottomColor: "#f0f0f0",
     },
@@ -99,7 +99,8 @@ const styles = StyleSheet.create({
         fontWeight: "400",
     },
     switch: {
-        transform: Platform.OS === "ios" ? [{ scaleX: 0.9 }, { scaleY: 0.9 }] : [{ scaleX: 1 }, { scaleY: 1 }],
+        transform: Platform.OS === "ios" ? [{ scaleX: 0.9 }, { scaleY: 0.8 }] : [{ scaleX: 0.9 }, { scaleY: 0.8 }],
+
     },
 });
 

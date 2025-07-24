@@ -57,11 +57,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 16,
         marginBottom: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.04,
-        shadowRadius: 1,
-        elevation: 2,
+
     },
     serviceText: {
         fontSize: 16,

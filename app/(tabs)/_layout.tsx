@@ -3,12 +3,32 @@ import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
 
 export default function TabLayout() {
+    const commonHeaderOptions = {
+        headerShown: true,
+        headerTitleAlign: 'center' as const,
+        headerStyle: {
+            backgroundColor: '#fff',
+            height: 45, // Reduced height
+            elevation: 0,
+            shadowOpacity: 0,
+            borderBottomWidth: 0,
+            paddingTop: 0,
+        },
+        headerTitleStyle: {
+            fontSize: 18,
+            fontWeight: 'bold',
+            marginTop: 0, // Removed marginTop
+        },
+        headerStatusBarHeight: 0, // Removes extra padding for status bar
+    };
+
     return (
         <Tabs
             screenOptions={({ route }) => ({
                 tabBarActiveTintColor: '#FC0079',
                 tabBarInactiveTintColor: 'gray',
-                headerShown: route.name === 'Saved', // 👈 show header only on Saved tab
+                // Show header only on all tabs except Home (override in Screens below)
+                headerShown: route.name !== 'Home',
                 tabBarIcon: ({ color, size }) => {
                     let iconName: React.ComponentProps<typeof Ionicons>['name'];
                     switch (route.name) {
@@ -37,62 +57,37 @@ export default function TabLayout() {
                 },
             })}
         >
-            <Tabs.Screen name="Home" />
+            <Tabs.Screen
+                name="Home"
+                options={{
+                    title: 'Home',
+                    headerShown: false, // explicitly hide header on Home tab
+                }}
+            />
+
             <Tabs.Screen
                 name="Saved"
                 options={{
                     title: 'Saved Items',
-                    headerShown: true,
-                    headerTitleAlign: 'center',
-                    headerStyle: {
-                        backgroundColor: '#fff',
-                        height: Platform.OS === 'android' ? 80 : 80, // adjust height
-                        elevation: 0,
-                        shadowOpacity: 0,
-                        borderBottomWidth: 0,
-                    },
-                    headerTitleStyle: {
-                        fontSize: 18,
-                        fontWeight: 'bold',
-                        marginTop: Platform.OS === 'android' ? 7 : 0, // fine-tune spacing on Android
-                    },
+                    ...commonHeaderOptions,
                 }}
             />
 
-            <Tabs.Screen name="Cart" options={{
-                title: 'My Cart',
-                headerShown: true,
-                headerTitleAlign: 'center',
-                headerStyle: {
-                    backgroundColor: '#fff',
-                    height: Platform.OS === 'android' ? 80 : 80, // adjust height
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                headerTitleStyle: {
-                    fontSize: 18,
-                    fontWeight: 'bold',
-                    marginTop: Platform.OS === 'android' ? 7 : 0, // fine-tune spacing on Android
-                },
-            }} />
-            <Tabs.Screen name="Account" options={{
-                title: 'Account',
-                headerShown: true,
-                headerTitleAlign: 'center',
-                headerStyle: {
-                    backgroundColor: '#fff',
-                    height: Platform.OS === 'android' ? 80 : 80, // adjust height
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                headerTitleStyle: {
-                    fontSize: 18,
-                    fontWeight: 'bold',
-                    marginTop: Platform.OS === 'android' ? 8 : 0, // fine-tune spacing on Android
-                },
-            }} />
+            <Tabs.Screen
+                name="Cart"
+                options={{
+                    title: 'My Cart',
+                    ...commonHeaderOptions,
+                }}
+            />
+
+            <Tabs.Screen
+                name="Account"
+                options={{
+                    title: 'Account',
+                    ...commonHeaderOptions,
+                }}
+            />
         </Tabs>
     );
 }

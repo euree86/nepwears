@@ -196,7 +196,7 @@ const ProfileEditScreen = () => {
                             style={[styles.phoneInput, errors.phoneNumber && styles.inputError]}
                             value={phoneNumber}
                             onChangeText={setPhoneNumber}
-                            placeholder="Enter phone number (+9771234567890)"
+                            placeholder="Enter phone number "
                             placeholderTextColor="#999999"
                             keyboardType="phone-pad"
                         />
@@ -457,7 +457,7 @@ const styles = StyleSheet.create({
     phoneInput: {
         flex: 1,
         paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingVertical: 4,
         fontSize: 16,
         color: '#333333',
     },

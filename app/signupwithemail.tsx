@@ -1,7 +1,8 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
+    Animated,
     KeyboardAvoidingView,
     Platform,
     StyleSheet,
@@ -10,10 +11,17 @@ import {
     TouchableOpacity,
     View,
     Image,
+    ScrollView,
+    Keyboard,
+    TouchableWithoutFeedback,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
 export default function EmailSignup() {
+    const router = useRouter();
+    const slideAnim = useRef(new Animated.Value(-100)).current;
+
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -71,16 +79,31 @@ export default function EmailSignup() {
 
         if (validEmail && validPassword && validConfirm && isChecked) {
             setLoginSuccess(true);
+
+            // Animate slide from top
+            Animated.timing(slideAnim, {
+                toValue: 0,
+                duration: 100,
+                useNativeDriver: true,
+            }).start();
+
+            // Wait, then redirect
+            setTimeout(() => {
+                setLoginSuccess(false);
+                slideAnim.setValue(-100); // Reset position
+                router.replace('/login'); // Navigate to login screen
+            }, 500);
         } else {
             setLoginSuccess(false);
         }
     };
 
     return (
-        <LinearGradient colors={['#c0cbd5ff', '#f2daf3ff']} style={styles.gradient}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <KeyboardAvoidingView
                 style={styles.container}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
             >
                 <Image
                     source={require('../assets/images/logo.png')}
@@ -88,9 +111,14 @@ export default function EmailSignup() {
                     resizeMode="contain"
                 />
 
-                <View style={styles.main}>
+                <ScrollView
+                    contentContainerStyle={styles.main}
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled"
+                >
                     <Text style={styles.title}>Signup with Email</Text>
 
+                    {/* Email Input */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Email</Text>
                         <TextInput
@@ -116,6 +144,7 @@ export default function EmailSignup() {
                         {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
                     </View>
 
+                    {/* Password Input */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Password</Text>
                         <View style={styles.passwordWrapper}>
@@ -130,7 +159,13 @@ export default function EmailSignup() {
                                 }}
                                 style={[
                                     styles.input,
-                                    { borderColor: passwordError ? 'red' : passwordFocused ? '#C8C7CD' : '#C8C7CD' },
+                                    {
+                                        borderColor: passwordError
+                                            ? 'red'
+                                            : passwordFocused
+                                                ? '#C8C7CD'
+                                                : '#C8C7CD',
+                                    },
                                 ]}
                                 onFocus={() => setPasswordFocused(true)}
                                 onBlur={() => {
@@ -152,6 +187,7 @@ export default function EmailSignup() {
                         {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
                     </View>
 
+                    {/* Confirm Password Input */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Confirm Password</Text>
                         <View style={styles.passwordWrapper}>
@@ -194,6 +230,7 @@ export default function EmailSignup() {
                         {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
                     </View>
 
+                    {/* Checkbox */}
                     <View style={styles.checkboxcontainer}>
                         <Checkbox
                             value={isChecked}
@@ -210,41 +247,46 @@ export default function EmailSignup() {
                     </View>
                     {checkboxError ? <Text style={styles.errorText}>{checkboxError}</Text> : null}
 
+                    {/* Signup Button */}
                     <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
                         <Text style={styles.loginButtonText}>Signup</Text>
                     </TouchableOpacity>
+                </ScrollView>
 
-                    {loginSuccess && (
-                        <View style={styles.successBox}>
-                            <Text style={styles.successText}>Signup successful!</Text>
-                            <TouchableOpacity>
-                                <Text style={styles.forgotPassword}>Done</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                </View>
+                {/* Animated Success Message */}
+                {loginSuccess && (
+                    <Animated.View
+                        style={[
+                            styles.animatedSuccessBox,
+                            { transform: [{ translateY: slideAnim }] },
+                        ]}
+                    >
+                        <Text style={styles.successText}>Signup successful!</Text>
+                    </Animated.View>
+                )}
             </KeyboardAvoidingView>
-        </LinearGradient>
+        </TouchableWithoutFeedback>
+
     );
 }
 
 const styles = StyleSheet.create({
-    gradient: {
-        flex: 1,
-    },
+
     container: {
         flex: 1,
         paddingHorizontal: 20,
         paddingVertical: 10,
+        backgroundColor: "white",
     },
     topImage: {
         width: "100%",
-        height: 250,
+        height: 200,
         opacity: 0.4,
     },
     main: {
-        flex: 1,
+        flexGrow: 1,
         justifyContent: 'flex-start',
+      
     },
     title: {
         fontSize: 26,
@@ -260,7 +302,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
         color: '#333',
-
     },
     input: {
         borderWidth: 1,
@@ -278,6 +319,7 @@ const styles = StyleSheet.create({
     eyeIcon: {
         position: 'absolute',
         right: 16,
+        top: 14,
     },
     forgotPassword: {
         textAlign: 'right',
@@ -310,15 +352,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginLeft: 5,
     },
-    successBox: {
-        backgroundColor: '#d4edda',
-        padding: 12,
-        borderRadius: 8,
-        marginTop: 10,
-        borderWidth: 1,
-        borderColor: '#c3e6cb',
-        alignItems: 'center',
-    },
     successText: {
         color: '#155724',
         fontWeight: '600',
@@ -327,5 +360,18 @@ const styles = StyleSheet.create({
     errorText: {
         color: 'red',
         marginTop: 4,
+    },
+    animatedSuccessBox: {
+        position: 'absolute',
+        top: 60,
+        left: 20,
+        right: 20,
+        backgroundColor: '#d4edda',
+        padding: 12,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#c3e6cb',
+        alignItems: 'center',
+        zIndex: 999,
     },
 });

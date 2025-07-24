@@ -17,10 +17,7 @@ export default function LoginScreen() {
     const router = useRouter();
 
     return (
-        <LinearGradient
-            colors={["#c0cbd5ff", "#f2daf3ff"]} // pink to purple
-            style={instyles.gradient}
-        >
+       
             <SafeAreaView style={instyles.safeArea}>
                 <View style={instyles.container}>
 
@@ -71,18 +68,17 @@ export default function LoginScreen() {
 
                 </View>
             </SafeAreaView>
-        </LinearGradient>
+       
     );
 }
 
 const instyles = StyleSheet.create({
-    gradient: {
-        flex: 1,
-    },
+   
     safeArea: {
         flex: 1,
     },
     container: {
+        backgroundColor:"white",
         flex: 1,
         paddingHorizontal: 20,
         justifyContent: "flex-start",
@@ -98,7 +94,7 @@ const instyles = StyleSheet.create({
 
     topImage: {
         width: "100%",
-        height: 250,
+        height: 200,
         opacity: 0.4, 
         marginTop: 40,// Makes logo look like a watermark
     },

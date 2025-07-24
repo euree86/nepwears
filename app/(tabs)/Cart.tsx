@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     cartItem: {
         flexDirection: 'row',
         paddingVertical: 20,
+
         borderBottomWidth: 1,
         borderBottomColor: '#f0f0f0',
     },
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#E0E0E0',
         paddingHorizontal: 15,
-        paddingVertical: 12,
+        paddingVertical: 4,
         borderRadius: 8,
     },
     couponIcon: {

@@ -128,16 +128,16 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         backgroundColor: "#e8e8f0",
         marginHorizontal: 16,
-        marginTop: 16,
+        marginTop: 14,
         borderRadius: 8,
-        padding: 4,
+
     },
     tab: {
         flex: 1,
-        paddingVertical: 12,
+        paddingVertical: 6,
         margin: 8,
         alignItems: "center",
-        borderRadius: 8,
+        borderRadius: 6,
     },
     activeTab: {
         backgroundColor: "#ffffff",
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     productImage: {
         width: 80,
         height: 80,
-        borderRadius: 8,
+        borderRadius: 6,
         backgroundColor: "#f0f0f0",
     },
     orderDetails: {

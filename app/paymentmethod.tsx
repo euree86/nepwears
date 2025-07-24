@@ -8,9 +8,12 @@ import {
     StatusBar,
 } from 'react-native';
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import NotificationPopup from "./cardsuccess"
+
 import { useRouter } from 'expo-router';
+
 const PaymentMethod = () => {
-    const  router = useRouter();
+    const router = useRouter();
     const [selectedCard, setSelectedCard] = useState('visa');
 
     const cards = [
@@ -45,13 +48,18 @@ const PaymentMethod = () => {
             {selected && <View style={styles.radioButtonInner} />}
         </View>
     );
+    const [showNotificationPopup, setShowNotificationPopup] = useState(false);
 
+    const handleNotificationResponse = (allowed: boolean) => {
+        console.log("Notification allowed?", allowed);
+        setShowNotificationPopup(false);
+    };
 
     const handleCardSelect = (cardId: string) => {
         setSelectedCard(cardId);
     };
     const handleAddNewCard = () => {
-         router.push('/newcard');
+        router.push('/newcard');
     };
 
     const handleApply = () => {
@@ -116,11 +124,17 @@ const PaymentMethod = () => {
             {/* Apply Button */}
             <TouchableOpacity
                 style={styles.applyButton}
-                onPress={handleApply}
+                onPress={() => setShowNotificationPopup(true)}
                 activeOpacity={0.8}
             >
                 <Text style={styles.applyButtonText}>Apply</Text>
             </TouchableOpacity>
+            {showNotificationPopup && (
+                <NotificationPopup
+                    visible={showNotificationPopup}
+                    onResponse={handleNotificationResponse}
+                />
+            )}
         </SafeAreaView>
     );
 };

@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     KeyboardAvoidingView,
     Platform,
@@ -9,31 +9,45 @@ import {
     TouchableOpacity,
     View,
     Image,
+    ScrollView,
+    Dimensions,
+    StatusBar
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { styles } from "../styles";
+import { checkBiometricSupport, authenticateWithBiometrics } from './biometricauth';
+import { styles } from '../styles';
+
+const { width } = Dimensions.get('window');
 
 export default function EmailLogin() {
     const router = useRouter();
-    const [showPassword, setShowPassword] = useState(false);
-    const [passwordFocused, setPasswordFocused] = useState(false);
-    const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
+
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     const [emailFocused, setEmailFocused] = useState(false);
-    const [loginSuccess, setLoginSuccess] = useState(false);
+    const [passwordFocused, setPasswordFocused] = useState(false);
+    const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
 
     const emailRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d._%+-]+@gmail\.com$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+    useEffect(() => {
+        (async () => {
+            const supported = await checkBiometricSupport();
+            setIsBiometricAvailable(supported);
+        })();
+    }, []);
+
     const validateEmail = () => {
         if (!email.trim()) {
-            setEmailError("Email is required");
+            setEmailError('Email is required');
             return false;
         } else if (!emailRegex.test(email)) {
-            setEmailError("Please enter a valid Gmail address");
+            setEmailError('Please enter a valid Gmail address');
             return false;
         } else {
             setEmailError('');
@@ -43,10 +57,12 @@ export default function EmailLogin() {
 
     const validatePassword = () => {
         if (!password.trim()) {
-            setPasswordError("Password is required");
+            setPasswordError('Password is required');
             return false;
         } else if (!passwordRegex.test(password)) {
-            setPasswordError("Password must contain at least one uppercase, lowercase, number, and special character");
+            setPasswordError(
+                'Password must contain at least one uppercase, lowercase, number, and special character'
+            );
             return false;
         } else {
             setPasswordError('');
@@ -59,166 +75,150 @@ export default function EmailLogin() {
         const isPasswordValid = validatePassword();
 
         if (isEmailValid && isPasswordValid) {
-            setLoginSuccess(true);
-            router.push("../(tabs)/Home"); // ✅ Move navigation here
-        } else {
-            setLoginSuccess(false);
+            router.push("../(tabs)/Home")
         }
     };
 
+    const handleFingerprintLogin = async () => {
+        const result = await authenticateWithBiometrics();
+        if (result.success) {
+            router.push('../(tabs)/Home');
+        } else {
+            alert('Fingerprint Authentication failed. Please try again.');
+        }
+    };
 
     return (
-        <LinearGradient
-            colors={["#c0cbd5ff", "#f2daf3ff"]} // pink to purple
-            style={instyles.gradient}
+
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
         >
-            <KeyboardAvoidingView
-                style={instyles.container}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            <ScrollView
+                contentContainerStyle={stylesx.scrollContent}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
             >
-                {/* Logo at top */}
                 <Image
-                    source={require("../assets/images/logo.png")}
-                    style={instyles.topImage}
+                    source={require('../assets/images/logo.png')}
+                    style={stylesx.topImage}
                     resizeMode="contain"
                 />
 
+                <Text style={stylesx.title}>Login with Email</Text>
 
-                <View style={instyles.main}>
-                    <Text style={instyles.title}>Login with Email</Text>
-
-                    <View style={instyles.form}>
-                        {/* Email Input */}
-                        <View style={instyles.inputGroup}>
-                            <Text style={instyles.label}>Email</Text>
-                            <TextInput
-                                placeholder="Enter your email"
-                                keyboardType="email-address"
-                                value={email}
-                                onChangeText={(text) => {
-                                    setEmail(text);
-                                    setEmailError('');
-                                    setLoginSuccess(false);
-                                }}
-                                style={[
-                                    instyles.input,
-                                    {
-                                        borderColor: emailError
-                                            ? 'red'
-                                            : emailFocused
-                                                ? '#C8C7CD'
-                                                : '#C8C7CD',
-                                    },
-                                ]}
-                                onFocus={() => setEmailFocused(true)}
-                                onBlur={() => {
-                                    setEmailFocused(false);
-                                    validateEmail();
-                                }}
-                                autoCapitalize="none"
-                            />
-                            {emailError ? (
-                                <Text style={{ color: 'red', marginTop: 4 }}>{emailError}</Text>
-                            ) : null}
-                        </View>
-
-                        {/* Password Input */}
-                        <View style={instyles.inputGroup}>
-                            <Text style={instyles.label}>Password</Text>
-                            <View style={instyles.passwordWrapper}>
-                                <TextInput
-                                    placeholder="Enter your password"
-                                    secureTextEntry={!showPassword}
-                                    value={password}
-                                    onChangeText={(text) => {
-                                        setPassword(text);
-                                        setPasswordError('');
-                                        setLoginSuccess(false);
-                                    }}
-                                    style={[
-                                        instyles.input,
-                                        {
-                                            borderColor: passwordFocused
-                                                ? '#C8C7CD'
-                                                : '#C8C7CD',
-                                        },
-                                    ]}
-                                    onFocus={() => setPasswordFocused(true)}
-                                    onBlur={() => {
-                                        setPasswordFocused(false);
-                                        validatePassword();
-                                    }}
-                                />
-                                <TouchableOpacity
-                                    style={instyles.eyeIcon}
-                                    onPress={() => setShowPassword(!showPassword)}
-                                >
-                                    <MaterialCommunityIcons
-                                        name={showPassword ? 'eye' : 'eye-off'}
-                                        size={22}
-                                        color="#888"
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                            {passwordError ? (
-                                <Text style={{ color: 'red', marginTop: 4 }}>{passwordError}</Text>
-                            ) : null}
-                        </View>
-
-                        {/* Forgot Password */}
-                        <TouchableOpacity onPress={() => router.push("./forgotpw")}>
-                            <Text style={instyles.forgotPassword}>Forgot Password</Text>
-                        </TouchableOpacity>
-
-                        {/* Login Button */}
-                        <TouchableOpacity style={instyles.loginButton} onPress={handleLogin}>
-
-                            <Text style={instyles.loginButtonText}>Login</Text>
-                        </TouchableOpacity>
-
-                        {/* Optional Success Message */}
-                        {/* {loginSuccess && (
-                            <View style={instyles.successBox}>
-                                <Text style={instyles.successText}>Login successful!</Text>
-                            </View>
-                        )} */}
-                    </View>
+                {/* Email */}
+                <View style={stylesx.inputGroup}>
+                    <Text style={stylesx.label}>Email</Text>
+                    <TextInput
+                        placeholder="Enter your email"
+                        keyboardType="email-address"
+                        value={email}
+                        onChangeText={(text) => {
+                            setEmail(text);
+                            setEmailError('');
+                        }}
+                        style={[
+                            stylesx.input,
+                            { borderColor: emailError ? 'red' : emailFocused ? '#C8C7CD' : '#C8C7CD' },
+                        ]}
+                        onFocus={() => setEmailFocused(true)}
+                        onBlur={() => {
+                            setEmailFocused(false);
+                            validateEmail();
+                        }}
+                        autoCapitalize="none"
+                    />
+                    {emailError ? <Text style={stylesx.errorText}>{emailError}</Text> : null}
                 </View>
-            </KeyboardAvoidingView>
-        </LinearGradient>
+
+                {/* Password */}
+                <View style={stylesx.inputGroup}>
+                    <Text style={stylesx.label}>Password</Text>
+                    <View style={stylesx.passwordWrapper}>
+                        <TextInput
+                            placeholder="Enter your password"
+                            secureTextEntry={!showPassword}
+                            value={password}
+                            onChangeText={(text) => {
+                                setPassword(text);
+                                setPasswordError('');
+                            }}
+                            style={[
+                                stylesx.input,
+                                { borderColor: passwordFocused ? '#C8C7CD' : '#C8C7CD' },
+                            ]}
+                            onFocus={() => setPasswordFocused(true)}
+                            onBlur={() => {
+                                setPasswordFocused(false);
+                                validatePassword();
+                            }}
+                        />
+                        <TouchableOpacity
+                            style={stylesx.eyeIcon}
+                            onPress={() => setShowPassword(!showPassword)}
+                        >
+                            <MaterialCommunityIcons
+                                name={showPassword ? 'eye' : 'eye-off'}
+                                size={22}
+                                color="#888"
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    {passwordError ? <Text style={stylesx.errorText}>{passwordError}</Text> : null}
+                </View>
+
+                {/* Forgot */}
+                <TouchableOpacity onPress={() => router.push('./forgotpw')}>
+                    <Text style={stylesx.forgotPassword}>Forgot Password</Text>
+                </TouchableOpacity>
+
+                {/* Login Button */}
+                <TouchableOpacity style={stylesx.loginButton} onPress={handleLogin}>
+                    <Text style={stylesx.loginButtonText}>Login</Text>
+                </TouchableOpacity>
+
+                {/* OR text */}
+                <Text style={stylesx.orText}>OR</Text>
+
+                {/* Fingerprint */}
+                {isBiometricAvailable && (
+                    <View style={stylesx.biometricContainer}>
+                        <TouchableOpacity
+                            onPress={handleFingerprintLogin}
+                            style={stylesx.fingerprintWrapper}
+                        >
+                            <MaterialIcons name="fingerprint" size={55} color="#FC0079" />
+                        </TouchableOpacity>
+                        <Text style={stylesx.biometricText}>Tap here to login with Fingerprint</Text>
+                    </View>
+                )}
+            </ScrollView>
+        </KeyboardAvoidingView>
+
     );
 }
 
-const instyles = StyleSheet.create({
-    gradient: {
-        flex: 1,
-    },
-    container: {
-        flex: 1,
+const stylesx = StyleSheet.create({
+
+    scrollContent: {
         paddingHorizontal: 20,
-
+        backgroundColor: "white",
+        flexGrow: 1,
     },
-
     topImage: {
-        width: "100%",
-        height: 250,
+        width: '100%',
+        height: 200,
         opacity: 0.4,
-        marginTop: 40,
+        marginTop: 30,
     },
-
     title: {
         fontSize: 26,
-        fontWeight: "700",
-        color: "#333333",
-        marginBottom: 15,
-        textAlign: "center",
-    },
-    main: {
-        flex: 1,
-        justifyContent: 'flex-start',
-    },
-    form: {
-        flex: 1,
+        fontWeight: '700',
+        color: '#333333',
+        marginBottom: 10,
+        textAlign: 'center',
     },
     inputGroup: {
         marginBottom: 15,
@@ -230,15 +230,11 @@ const instyles = StyleSheet.create({
         marginBottom: 4,
     },
     input: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
         borderWidth: 1,
-        borderColor: "#C8C7CD",
         borderRadius: 8,
         paddingVertical: 12,
-        backgroundColor: "rgba(255, 255, 255, 0.4)",
         paddingHorizontal: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.4)',
     },
     passwordWrapper: {
         position: 'relative',
@@ -247,12 +243,17 @@ const instyles = StyleSheet.create({
     eyeIcon: {
         position: 'absolute',
         right: 16,
+        top: 12,
+    },
+    errorText: {
+        color: 'red',
+        marginTop: 4,
     },
     forgotPassword: {
         textAlign: 'right',
         fontSize: 14,
         color: '#666',
-        marginBottom: 30,
+        marginBottom: 10,
     },
     loginButton: {
         backgroundColor: '#FC0079',
@@ -266,18 +267,26 @@ const instyles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    successBox: {
-        backgroundColor: '#d4edda',
-        padding: 12,
-        borderRadius: 8,
-        marginTop: 10,
-        borderWidth: 1,
-        borderColor: '#c3e6cb',
-        alignItems: 'center',
-    },
-    successText: {
-        color: '#155724',
-        fontWeight: '600',
+    orText: {
+        textAlign: 'center',
         fontSize: 16,
+        fontWeight: '500',
+        color: '#333',
+
+    },
+    biometricContainer: {
+        alignItems: 'center',
+        marginTop: 30,
+    },
+    fingerprintWrapper: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: 5,
+    },
+    biometricText: {
+        color: '#333',
+        fontSize: 16,
+        fontWeight: '500',
+        textAlign: 'center',
     },
 });
