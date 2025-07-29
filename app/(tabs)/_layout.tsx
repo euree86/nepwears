@@ -2,7 +2,6 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
-import Constants from 'expo-constants';
 
 export default function TabLayout() {
     return (
@@ -15,13 +14,13 @@ export default function TabLayout() {
                     let iconName: React.ComponentProps<typeof Ionicons>['name'] = 'ellipse';
 
                     switch (route.name) {
-                        case 'Account':
+                        case 'account':
                             iconName = 'person';
                             break;
-                        case 'Saved':
+                        case 'saved':
                             iconName = 'bookmark';
                             break;
-                        case 'Cart':
+                        case 'cart':
                             iconName = 'cart';
                             break;
                         case 'Home':
@@ -31,14 +30,14 @@ export default function TabLayout() {
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
                 tabBarStyle: {
-                    height: 70,
+                    height: 50,
                     elevation: 0,
                     shadowOpacity: 0,
                     borderTopWidth: 0,
                     paddingBottom: Platform.OS === 'android' ? 10 : 20,
                 },
             })}
-        >
+        >5
             <Tabs.Screen name="Home" options={{ title: 'Home' }} />
             <Tabs.Screen name="Saved" options={{ title: 'Saved Items' }} />
             <Tabs.Screen name="Cart" options={{ title: 'My Cart' }} />

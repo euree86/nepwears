@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { checkBiometricSupport, authenticateWithBiometrics } from './biometricauth';
+import { checkBiometricSupport, authenticateWithBiometrics } from '../utils/biometricauth';
 import { styles } from '../styles';
 
 const { width } = Dimensions.get('window');

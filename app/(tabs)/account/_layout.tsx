@@ -10,7 +10,7 @@ export default function SavedStackLayout() {
         <Stack
             initialRouteName="detail"
             screenOptions={{
-                title:"Account",
+                title: "Account",
                 headerTitleAlign: 'center',
                 headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
                 headerLeft: () => (
