@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'expo-router';
 import {
   View,
@@ -13,12 +13,12 @@ export default function VerificationScreen() {
   const router = useRouter();
   const [code, setCode] = useState(['', '', '', '']);
   const [timer, setTimer] = useState(59);
+  const inputRefs = useRef<Array<TextInput | null>>([]);
 
   useEffect(() => {
     const countdown = setInterval(() => {
       setTimer((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
-
     return () => clearInterval(countdown);
   }, []);
 
@@ -26,25 +26,37 @@ export default function VerificationScreen() {
     const newCode = [...code];
     newCode[index] = text;
     setCode(newCode);
+
+    if (text && index < 3) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    if (!text && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Enter 4 Digit Code</Text>
       <Text style={styles.subtitle}>
-        Enter 4 digit code that your receive on your{'\n'}email (pixelshipon@gmail.com).
+        Enter 4 digit code that you received on your{'\n'}email (pixelshipon@gmail.com).
       </Text>
 
       <View style={styles.codeContainer}>
         {code.map((digit, index) => (
           <TextInput
             key={index}
+            ref={(ref) => {
+              inputRefs.current[index] = ref;
+            }}
             style={styles.input}
             keyboardType="number-pad"
             maxLength={1}
             value={digit}
             onChangeText={(text) => handleChange(text, index)}
           />
+
         ))}
       </View>
 
@@ -55,12 +67,20 @@ export default function VerificationScreen() {
         </TouchableOpacity>
       </View>
 
-
-      <TouchableOpacity style={styles.button} onPress={() => router.push("./createnewpw")}>
+      <TouchableOpacity
+        style={[styles.button, code.some((digit) => digit === '') && styles.buttonDisabled]}
+        onPress={() => {
+          if (code.every((digit) => digit !== '')) {
+            router.push('./createnewpw');
+          }
+        }}
+        disabled={code.some((digit) => digit === '')}
+      >
         <Text style={styles.buttonText}>
           {timer > 0 ? `Continue ${timer}` : 'Continue'}
         </Text>
       </TouchableOpacity>
+
     </SafeAreaView>
   );
 }
@@ -104,11 +124,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 30,
   },
-
   resend: {
     color: '#555',
   },
-
   resendBold: {
     fontWeight: 'bold',
     textDecorationLine: 'underline',
@@ -123,4 +141,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  buttonDisabled: {
+    opacity: 0.5,
+  }
+
 });

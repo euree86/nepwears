@@ -6,16 +6,31 @@ import Constants from 'expo-constants';
 export default function RootLayout() {
   return (
     <>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
 
+      {/* Padding to avoid content under status bar */}
       <View
         style={{
           flex: 1,
-          paddingTop: Platform.OS === 'android' ? Constants.statusBarHeight : 10,
-          backgroundColor: 'white', // you can change this to dynamic if needed
+          paddingTop: Platform.OS === 'android' ? Constants.statusBarHeight : 0,
         }}
       >
-        <Stack initialRouteName="index">
+        <Stack
+          initialRouteName="index"
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: 'white',
+            },
+            contentStyle: {
+              backgroundColor: 'white',
+            },
+            headerTitleAlign: 'center',
+          }}
+        >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="login" options={{ headerShown: false }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -32,10 +47,7 @@ export default function RootLayout() {
           <Stack.Screen name="product" options={{ title: 'Product' }} />
           <Stack.Screen name="sizeproduct" options={{ title: 'Size' }} />
           <Stack.Screen name="rating" options={{ title: 'Rating' }} />
-          <Stack.Screen
-            name="notificationdetail"
-            options={{ title: 'Notification Detail', headerTitleAlign: 'center' }}
-          />
+          <Stack.Screen name="notificationdetail" options={{ title: 'Notification Detail', headerTitleAlign: 'center' }} />
           <Stack.Screen name="Alert" options={{ title: 'Alert' }} />
           <Stack.Screen name="NoSaved" options={{ title: 'Saved Items' }} />
           <Stack.Screen name="myorder" options={{ title: 'My Orders', headerTitleAlign: 'center' }} />
@@ -47,6 +59,8 @@ export default function RootLayout() {
           <Stack.Screen name="emptycart" options={{ title: 'My Cart' }} />
           <Stack.Screen name="sizeproductdetail" options={{ title: 'Productdetail' }} />
           <Stack.Screen name="ratingandreview" options={{ title: 'Rating and Review' }} />
+          <Stack.Screen name="saveditem" options={{ headerShown: false }}  />
+
         </Stack>
       </View>
     </>

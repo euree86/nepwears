@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons, } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
@@ -10,13 +10,16 @@ import {
   TouchableOpacity,
   View,
   Modal,
-
+  Dimensions,
+  ScrollView,
 } from 'react-native';
-import { styles } from '../styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+const { width, height } = Dimensions.get('window');
 
 export default function EmailLogin() {
   const router = useRouter();
+
   // STATES
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -31,9 +34,9 @@ export default function EmailLogin() {
 
   const [loginSuccess, setLoginSuccess] = useState(false);
 
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  // VALIDATORS
   const validatePassword = () => {
     if (!password.trim()) {
       setPasswordError('Password is required');
@@ -41,7 +44,7 @@ export default function EmailLogin() {
     }
     if (!passwordRegex.test(password)) {
       setPasswordError(
-        'Password must contain at least one uppercase, lowercase, number, and special character'
+        'Password must contain uppercase, lowercase, number, and special character'
       );
       return false;
     }
@@ -62,7 +65,6 @@ export default function EmailLogin() {
     return true;
   };
 
-  // MAIN HANDLER
   const handleLogin = () => {
     const isPasswordValid = validatePassword();
     const isConfirmValid = validateConfirmPassword();
@@ -74,186 +76,171 @@ export default function EmailLogin() {
     }
   };
 
-
-
-  // UI
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <KeyboardAvoidingView
-        style={instyles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
+        <ScrollView
+          contentContainerStyle={styles.container}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.heading}>Create New Password</Text>
 
-        <View style={instyles.main}>
-          <Text style={styles.title}>Create New Password</Text>
-
-          <View style={instyles.form}>
-            {/* ───── Password ───── */}
-            <View style={instyles.inputGroup}>
-              <Text style={instyles.label}>New Password</Text>
-              <View style={instyles.passwordWrapper}>
-                <TextInput
-                  placeholder="Enter your password"
-                  secureTextEntry={!showPassword}
-                  value={password}
-                  onChangeText={text => {
-                    setPassword(text);
-                    setPasswordError('');
-                    setLoginSuccess(false);
-                  }}
-                  style={[
-                    instyles.input,
-                    {
-                      borderColor: passwordError
-                        ? 'red'
-                        : passwordFocused
-                          ? '#FC0079'
-                          : '#C8C7CD',
-                    },
-                  ]}
-                  onFocus={() => setPasswordFocused(true)}
-                  onBlur={() => {
-                    setPasswordFocused(false);
-                    validatePassword();
-                  }}
+          {/* ─── New Password ─── */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>New Password</Text>
+            <View style={styles.passwordWrapper}>
+              <TextInput
+                placeholder="Enter your password"
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  setPasswordError('');
+                  setLoginSuccess(false);
+                }}
+                style={[
+                  styles.input,
+                  {
+                    borderColor: passwordError
+                      ? 'red'
+                      : passwordFocused
+                        ? '#FC0079'
+                        : '#C8C7CD',
+                  },
+                ]}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => {
+                  setPasswordFocused(false);
+                  validatePassword();
+                }}
+              />
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <MaterialCommunityIcons
+                  name={showPassword ? 'eye' : 'eye-off'}
+                  size={22}
+                  color="#888"
                 />
-                <TouchableOpacity
-                  style={instyles.eyeIcon}
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  <MaterialCommunityIcons
-                    name={showPassword ? 'eye' : 'eye-off'}
-                    size={22}
-                    color="#888"
-                  />
-                </TouchableOpacity>
-              </View>
-              {passwordError ? (
-                <Text style={{ color: 'red', marginTop: 4 }}>{passwordError}</Text>
-              ) : null}
+              </TouchableOpacity>
             </View>
-
-            {/* ───── Confirm Password ───── */}
-            <View style={instyles.inputGroup}>
-              <Text style={instyles.label}>Confirm Password</Text>
-              <View style={instyles.passwordWrapper}>
-                <TextInput
-                  placeholder="Re-enter your password"
-                  secureTextEntry={!showConfirmPassword}
-                  value={confirmPassword}
-                  onChangeText={text => {
-                    setConfirmPassword(text);
-                    setConfirmPasswordError('');
-                    setLoginSuccess(false);
-                  }}
-                  style={[
-                    instyles.input,
-                    {
-                      borderColor: confirmPasswordError
-                        ? 'red'
-                        : confirmPasswordFocused
-                          ? '#FC0079'
-                          : '#C8C7CD',
-                    },
-                  ]}
-                  onFocus={() => setConfirmPasswordFocused(true)}
-                  onBlur={() => {
-                    setConfirmPasswordFocused(false);
-                    validateConfirmPassword();
-                  }}
-                />
-                <TouchableOpacity
-                  style={instyles.eyeIcon}
-                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  <MaterialCommunityIcons
-                    name={showConfirmPassword ? 'eye-off' : 'eye'}
-                    size={22}
-                    color="#888"
-                  />
-                </TouchableOpacity>
-              </View>
-              {confirmPasswordError ? (
-                <Text style={{ color: 'red', marginTop: 4 }}>
-                  {confirmPasswordError}
-                </Text>
-              ) : null}
-            </View>
-
-            {/* ───── Button ───── */}
-            <TouchableOpacity style={instyles.loginButton} onPress={handleLogin}>
-              <Text style={instyles.loginButtonText}>Update Password</Text>
-            </TouchableOpacity>
-
-            {loginSuccess && (
-              <Modal visible={loginSuccess} transparent>
-                <View style={instyles.bottomOverlay}>
-                  <View style={instyles.bottomModal}>
-                    <MaterialCommunityIcons
-                      name="check-circle"
-                      size={66}
-                      color="#28a745"
-                      style={instyles.icon}
-                    />
-                    <View  >
-                      <Text style={instyles.title}>Password updated  </Text>
-                      <Text style={instyles.title}>Successfully! </Text>
-
-                    </View>
-
-
-                    <TouchableOpacity
-                      style={instyles.trackButton}
-                      onPress={() => {
-                        setLoginSuccess(false);
-                        router.push("./loginwithemail");
-                        // Add navigation logic here
-                      }}
-                    >
-                      <Text style={instyles.trackButtonText}>Continue to Login</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </Modal>
-            )}
-
+            {passwordError ? (
+              <Text style={styles.errorText}>{passwordError}</Text>
+            ) : null}
           </View>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView >
 
+          {/* ─── Confirm Password ─── */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Confirm Password</Text>
+            <View style={styles.passwordWrapper}>
+              <TextInput
+                placeholder="Re-enter your password"
+                secureTextEntry={!showConfirmPassword}
+                value={confirmPassword}
+                onChangeText={(text) => {
+                  setConfirmPassword(text);
+                  setConfirmPasswordError('');
+                  setLoginSuccess(false);
+                }}
+                style={[
+                  styles.input,
+                  {
+                    borderColor: confirmPasswordError
+                      ? 'red'
+                      : confirmPasswordFocused
+                        ? '#FC0079'
+                        : '#C8C7CD',
+                  },
+                ]}
+                onFocus={() => setConfirmPasswordFocused(true)}
+                onBlur={() => {
+                  setConfirmPasswordFocused(false);
+                  validateConfirmPassword();
+                }}
+              />
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+              >
+                <MaterialCommunityIcons
+                  name={showConfirmPassword ? 'eye-off' : 'eye'}
+                  size={22}
+                  color="#888"
+                />
+              </TouchableOpacity>
+            </View>
+            {confirmPasswordError ? (
+              <Text style={styles.errorText}>{confirmPasswordError}</Text>
+            ) : null}
+          </View>
+
+          {/* ─── Update Password Button ─── */}
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <Text style={styles.loginButtonText}>Update Password</Text>
+          </TouchableOpacity>
+        </ScrollView>
+
+        {/* ─── Success Modal ─── */}
+        {loginSuccess && (
+          <Modal visible={loginSuccess} transparent>
+            <View style={styles.bottomOverlay}>
+              <View style={styles.bottomModal}>
+                <MaterialCommunityIcons
+                  name="check-circle"
+                  size={64}
+                  color="#28a745"
+                  style={{ marginBottom: 10 }}
+                />
+                <Text style={styles.successTitle}>Password Updated !</Text>
+                <TouchableOpacity
+                  style={styles.trackButton}
+                  onPress={() => {
+                    setLoginSuccess(false);
+                    router.push('./loginwithemail');
+                  }}
+                >
+                  <Text style={styles.trackButtonText}>Continue to Login</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        )}
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
-
-// STYLES
-const instyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    paddingHorizontal: width * 0.06,
     backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
   },
-  main: {
-    flex: 1,
-    justifyContent: 'flex-start',
-  },
-  form: {
-    flex: 1,
+  heading: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 20,
+    textAlign: 'left',
   },
   inputGroup: {
     marginBottom: 15,
   },
   label: {
     fontSize: 16,
-    fontWeight: '500',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 6,
+    fontWeight: '500',
   },
   input: {
     borderWidth: 1.5,
     borderRadius: 8,
-    paddingHorizontal: 10,
     paddingVertical: 10,
+    paddingHorizontal: 12,
     fontSize: 16,
     color: '#333',
   },
@@ -264,39 +251,24 @@ const instyles = StyleSheet.create({
   eyeIcon: {
     position: 'absolute',
     right: 16,
+    top: 12,
   },
-  forgotPassword: {
-    textAlign: 'right',
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 30,
+  errorText: {
+    color: 'red',
+    fontSize: 13,
+    marginTop: 4,
   },
   loginButton: {
     backgroundColor: '#FC0079',
-    paddingVertical: 12,
-    borderRadius: 12,
+    paddingVertical: 14,
+    borderRadius: 10,
     alignItems: 'center',
-    marginBottom: 15,
     marginTop: 10,
   },
   loginButtonText: {
-    color: '#FFF',
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-  },
-  successBox: {
-    backgroundColor: '#d4edda',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: '#c3e6cb',
-    alignItems: 'center',
-  },
-  successText: {
-    color: '#155724',
-    fontWeight: '600',
-    fontSize: 16,
   },
   bottomOverlay: {
     flex: 1,
@@ -305,51 +277,30 @@ const instyles = StyleSheet.create({
   },
   bottomModal: {
     backgroundColor: 'white',
-    paddingHorizontal: 30,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    justifyContent: "center",
+    padding: 30,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 10,
-    height: 300, // ← increase height as you like
+    height: height * 0.3,
   },
-
-
-  icon: {
-    marginBottom: 10,
-  },
-
-
-  title: {
+  successTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
     color: '#000',
-    textAlign: "center",
-  },
-
-  message: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 25,
+    marginBottom: 20,
   },
 
   trackButton: {
     backgroundColor: '#FC0079',
     paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 6,
+    paddingHorizontal: 32,
+    borderRadius: 8,
     width: '100%',
     alignItems: 'center',
-    marginTop: 20,
   },
   trackButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
 });

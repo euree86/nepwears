@@ -75,14 +75,17 @@ export default function EmailLogin() {
         const isPasswordValid = validatePassword();
 
         if (isEmailValid && isPasswordValid) {
-            router.push("../(tabs)/Home")
+            router.replace('/Home');
+
         }
     };
 
     const handleFingerprintLogin = async () => {
         const result = await authenticateWithBiometrics();
         if (result.success) {
-            router.push('../(tabs)/Home');
+            router.replace('/Home');
+
+
         } else {
             alert('Fingerprint Authentication failed. Please try again.');
         }
@@ -247,7 +250,6 @@ const stylesx = StyleSheet.create({
     },
     errorText: {
         color: 'red',
-        marginTop: 4,
     },
     forgotPassword: {
         textAlign: 'right',
