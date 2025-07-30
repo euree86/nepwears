@@ -54,6 +54,10 @@ export default function RootLayout() {
           <Stack.Screen name="emptycart" options={{ title: 'My Cart' }} />
           <Stack.Screen name="sizeproductdetail" options={{ title: 'Productdetail' }} />
           <Stack.Screen name="ratingandreview" options={{ title: 'Rating and Review' }} />
+          <Stack.Screen name="checkout" options={{ title: 'Checkout' }} />
+          <Stack.Screen name="address" options={{ title: 'Address' }} />
+
+
 
 
 

@@ -30,7 +30,7 @@ export default function TabLayout() {
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
                 tabBarStyle: {
-                    height: 50,
+                    height: 65,
                     elevation: 0,
                     shadowOpacity: 0,
                     borderTopWidth: 0,

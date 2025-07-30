@@ -139,7 +139,7 @@ const MyCart = () => {
                     <Text style={styles.totalAmount}>${calculateTotal().toFixed(2)} USD</Text>
                 </View>
 
-                <TouchableOpacity style={styles.checkoutButton} onPress={() => router.push("../checkout")}>
+                <TouchableOpacity style={styles.checkoutButton} onPress={() => router.push("../../../checkout")}>
                     <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
                 </TouchableOpacity>
             </View>
@@ -164,9 +164,9 @@ const styles = StyleSheet.create({
         borderBottomColor: '#f0f0f0',
     },
     productImage: {
-        width: 60,
-        height: 60,
-        borderRadius: 8,
+        width: 80,
+        height: 70,
+        borderRadius: 6,
         backgroundColor: '#f8f8f8',
     },
     productDetails: {
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     },
     checkoutButton: {
         backgroundColor: '#FC0079',
-        paddingVertical: 14,
+        paddingVertical: 12,
         borderRadius: 8,
         alignItems: 'center',
     },
