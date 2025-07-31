@@ -52,7 +52,7 @@ const ProductGrid = () => {
             {products.map((product) => (
                 <TouchableOpacity
                     key={product.id}
-                    onPress={() => router.push("../sizeproductdetail")}
+                    onPress={() => router.push("../../../product/ProductDetailScreen")}
                     style={styles.cardContainer}
                 >
                     <ProductCard {...product} />

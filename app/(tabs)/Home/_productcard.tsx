@@ -35,7 +35,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const router = useRouter();
   return (
     <Pressable
-      onPress={() => router.push("../sizeproductdetail")}
+      onPress={() => router.push("../../../product/ProductDetailScreen")}
       android_ripple={{ color: "#ddd" }}
       style={({ pressed }) => [
         styles.card,
