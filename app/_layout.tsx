@@ -56,6 +56,8 @@ export default function RootLayout() {
           <Stack.Screen name="ratingandreview" options={{ title: 'Rating and Review' }} />
           <Stack.Screen name="checkout" options={{ title: 'Checkout' }} />
           <Stack.Screen name="address" options={{ title: 'Address' }} />
+          <Stack.Screen name="product/ProductDetailScreen" options={{ headerShown: false }} />
+
 
 
 

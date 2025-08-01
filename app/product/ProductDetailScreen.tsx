@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, SafeAreaView, StyleSheet } from "react-native";
+import { ScrollView, SafeAreaView, StyleSheet, View } from "react-native";
 import ProductImages from "./ProductImages";
 import ProductInfo from "./ProductInfo";
 import SizeSelector from "./SizeSelector";
@@ -58,6 +58,11 @@ const ProductDetailScreen = () => {
         },
     ];
 
+    const handleAddToCart = () => {
+        setShowSavedBox(true);
+        setTimeout(() => setShowSavedBox(false), 2500); // auto-hide after 2.5 sec
+    };
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
@@ -82,17 +87,18 @@ const ProductDetailScreen = () => {
                 <ColorSelector colors={colors} />
 
                 <ReviewsSection reviews={reviews} />
-
-                <SavedNotification
-                    visible={showSavedBox}
-                    onClose={() => setShowSavedBox(false)}
-                />
             </ScrollView>
+
+            {/* Notification (above BottomBar) */}
+            {showSavedBox && (
+                <View style={styles.notificationWrapper}>
+                    <SavedNotification visible={true} onClose={() => setShowSavedBox(false)} />
+                </View>
+            )}
 
             <BottomBar
                 price="Rs. 3,999"
-                rating={4.5}
-                onAddToCart={() => setShowSavedBox(true)}
+                onAddToCart={handleAddToCart}
             />
         </SafeAreaView>
     );
@@ -108,6 +114,14 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         paddingBottom: 120
+    },
+    notificationWrapper: {
+        position: "absolute",
+        bottom: 50, // ✅ slightly above the bottom bar (height ~80)
+        left: 0,
+        right: 0,
+        alignItems: "center",
+        zIndex: 10,
     }
 });
 

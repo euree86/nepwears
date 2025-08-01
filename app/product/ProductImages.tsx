@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import {
     View,
+    Text,
     Image,
     TouchableOpacity,
     ScrollView,
@@ -86,6 +87,10 @@ const ProductImages: React.FC<ProductImagesProps> = ({
                 </View>
             </View>
 
+            <View style={styles.colorcontainer}>
+                <Text style={styles.colortext}> COLOUR: MULTI</Text>
+            </View>
+
             {/* Thumbnails for Variants */}
             <ScrollView
                 horizontal
@@ -146,7 +151,7 @@ const ProductImages: React.FC<ProductImagesProps> = ({
 
 const styles = StyleSheet.create({
     imageSliderContainer: {
-        height: 500,
+        height: 450,
         position: "relative"
     },
     mainImage: {
@@ -164,8 +169,8 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     dot: {
-        width: 8,
-        height: 8,
+        width: 6,
+        height: 6,
         borderRadius: 4,
         backgroundColor: "#aaa",
         marginHorizontal: 4
@@ -173,31 +178,43 @@ const styles = StyleSheet.create({
     activeDot: {
         backgroundColor: "#fff"
     },
+
+    colorcontainer: {
+        paddingTop: 10,
+        paddingHorizontal: 10,
+    },
+
+    colortext: {
+        fontSize: 14,
+        fontWeight: 600,
+    },
     thumbnailScroll: {
         flexDirection: "row",
-        paddingHorizontal: 10,
-        marginTop: 12
+        paddingHorizontal: 12,
+        paddingTop: 10,
+
     },
     thumbnail: {
         width: 70,
         height: 70,
         marginRight: 10,
-        borderRadius: 8,
-        borderWidth: 2,
+        borderRadius: 6,
+        borderWidth: 1,
         borderColor: "transparent"
     },
     activeThumbnail: {
-        borderColor: "#000"
+        borderColor: "#FC0079"
     },
     modalContainer: {
         flex: 1,
         backgroundColor: "#000",
-      
+        justifyContent: "center",
+        alignItems: "center"
     },
     fullscreenImage: {
         width: width,
         height: height,
-        resizeMode: "contain"
+        resizeMode: "cover"
     },
     closeButton: {
         position: "absolute",

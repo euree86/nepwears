@@ -14,7 +14,7 @@ const SavedNotification: React.FC<SavedNotificationProps> = ({ visible, onClose 
     <View style={styles.container}>
       <View style={styles.savedContent}>
         <MaterialCommunityIcons name="check-circle" size={20} color="white" />
-        <Text style={styles.savedText}>Item Added to Saved</Text>
+        <Text style={styles.savedText}>Item Added to Cart Successfully!</Text>
       </View>
       <TouchableOpacity onPress={onClose}>
         <Text style={styles.closeText}>✕</Text>
@@ -25,7 +25,7 @@ const SavedNotification: React.FC<SavedNotificationProps> = ({ visible, onClose 
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#333",
+    backgroundColor: "transparent",
     borderRadius: 6,
     paddingVertical: 14,
     paddingHorizontal: 15,
@@ -35,13 +35,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginHorizontal: 20,
     marginBottom: 20,
+
   },
   savedContent: {
     flexDirection: "row",
     alignItems: "center",
   },
   savedText: {
-    color: "white",
+    color: "black",
     marginLeft: 8,
     fontSize: 16,
   },

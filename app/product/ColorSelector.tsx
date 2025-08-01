@@ -23,23 +23,22 @@ const ColorSelector: React.FC<ColorSelectorProps> = ({ colors }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    marginBottom: 30,
+    paddingHorizontal: 15,
   },
   colorTitle: {
     fontSize: 16,
     fontWeight: "600",
     color: "#333",
-    marginBottom: 15,
   },
   colorContainer: {
     flexDirection: "row",
+    paddingVertical: 20,
   },
   colorOption: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    marginRight: 15,
+    marginRight: 10,
   },
 });
 

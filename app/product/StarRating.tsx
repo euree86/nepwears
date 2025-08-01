@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   star: {
-    fontSize: 16,
+    fontSize: 12,
     marginRight: 5
   }
 });

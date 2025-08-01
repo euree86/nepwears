@@ -20,77 +20,72 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   rating = 5,
 }) => {
   return (
-    <View style={styles.reviewCard}>
+    <View >
       <View style={styles.reviewHeader}>
         <StarRating rating={rating} />
         <Text style={styles.reviewerName}>{reviewerName}</Text>
       </View>
+
       <Text style={styles.reviewTitle}>{title}</Text>
       <Text style={styles.reviewContent}>{content}</Text>
+
       {productImages.length > 0 && (
-        <View style={styles.productImagesContainer}>
+        <View style={styles.imageContainer}>
           {productImages.map((image, index) => (
-            <View key={index} style={styles.productImageWrapper}>
-              <Image source={{ uri: image }} style={styles.productImage} resizeMode="cover" />
-            </View>
+            <Image
+              key={index}
+              source={{ uri: image }}
+              style={styles.image}
+              resizeMode="cover"
+            />
           ))}
         </View>
       )}
-      <Text style={styles.reviewDate}>{date}</Text>
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  reviewCard: {
-    backgroundColor: '#fff',
-    paddingVertical: 20,
-    paddingHorizontal: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
+
   reviewHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,
+    marginTop: 4,
   },
   reviewerName: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 14,
+    fontWeight: '700',
     color: '#333',
-    marginLeft: 12,
+    marginLeft: 10,
   },
   reviewTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 8,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#111',
+    marginBottom: 6,
   },
   reviewContent: {
     fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
-    marginBottom: 12,
+    color: '#555',
+    lineHeight: 22,
+
   },
-  productImagesContainer: {
+  imageContainer: {
     flexDirection: 'row',
-    marginBottom: 12,
+    flexWrap: 'wrap',
+    marginBottom: 10,
+    gap: 8,
   },
-  productImageWrapper: {
+  image: {
+    width: 70,
+    height: 70,
+    borderRadius: 10,
     marginRight: 8,
-    borderRadius: 8,
-    overflow: 'hidden',
+    marginBottom: 8,
   },
-  productImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 8,
-  },
-  reviewDate: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 4,
-  },
+
 });
 
 export default ReviewCard;

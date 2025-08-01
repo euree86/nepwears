@@ -38,22 +38,21 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({ sizes, selectedSize, onSele
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    marginBottom: 25,
+    paddingHorizontal: 15,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
-    marginVertical: 12,
   },
   sizeContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingVertical: 20,
   },
   sizeOption: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 6,

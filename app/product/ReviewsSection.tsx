@@ -116,16 +116,12 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
   },
   ratingReviewHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-    marginBottom: 15,
   },
   sectionTitle: {
     fontSize: 16,
@@ -152,7 +148,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   star: {
-    fontSize: 24,
+    fontSize: 12,
     marginRight: 8,
   },
   selectedStar: {
