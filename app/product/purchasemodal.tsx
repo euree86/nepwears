@@ -37,7 +37,7 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
     const decrease = () => quantity > 1 && setQuantity(quantity - 1);
 
     const handleBuyNow = () => {
-        onClose(); // Close modal first
+        onClose();
         router.push({
             pathname: '/checkout',
             params: {
@@ -50,32 +50,34 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
     };
 
     return (
-        <Modal animationType="slide" transparent={true} visible={visible}>
+        <Modal animationType="slide" transparent visible={visible}>
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                     <Image source={{ uri: image }} style={styles.image} />
+                    <Text style={styles.priceLabel}>Total Price</Text>
                     <Text style={styles.priceText}>Rs. {Number(price) * quantity}</Text>
 
                     <View style={styles.quantityControl}>
-                        <TouchableOpacity onPress={decrease} style={styles.qtyBtn}>
-                            <Ionicons name="remove" size={22} />
+                        <TouchableOpacity onPress={decrease} style={styles.qtyBtn} activeOpacity={0.7}>
+                            <Ionicons name="remove" size={20} color="#333" />
                         </TouchableOpacity>
                         <Text style={styles.qtyText}>{quantity}</Text>
-                        <TouchableOpacity onPress={increase} style={styles.qtyBtn}>
-                            <Ionicons name="add" size={22} />
+                        <TouchableOpacity onPress={increase} style={styles.qtyBtn} activeOpacity={0.7}>
+                            <Ionicons name="add" size={20} color="#333" />
                         </TouchableOpacity>
                     </View>
 
                     <TouchableOpacity
                         style={styles.confirmBtn}
                         onPress={actionType === 'buy' ? handleBuyNow : onConfirm}
+                        activeOpacity={0.8}
                     >
                         <Text style={styles.confirmText}>
                             {actionType === 'buy' ? 'Buy Now' : 'Add to Cart'}
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
+                    <TouchableOpacity style={styles.cancelBtn} onPress={onClose} activeOpacity={0.6}>
                         <Text style={styles.cancelText}>Cancel</Text>
                     </TouchableOpacity>
                 </View>
@@ -88,46 +90,59 @@ const styles = StyleSheet.create({
     modalOverlay: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0,0,0,0.4)',
+        backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalContainer: {
         backgroundColor: '#fff',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        padding: 20,
+        padding: 25,
         alignItems: 'center',
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
     },
     image: {
-        width: 120,
+        width: 110,
         height: 120,
-        borderRadius: 10,
-        marginBottom: 15,
+        borderRadius: 8,
+        marginBottom: 4,
+    },
+    priceLabel: {
+        fontSize: 14,
+        color: '#888',
     },
     priceText: {
         fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 15,
+        fontWeight: '700',
+        color: '#222',
+        marginBottom: 10,
     },
     quantityControl: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 10,
     },
     qtyBtn: {
-        padding: 10,
-        backgroundColor: '#eee',
+        padding: 8,
+        backgroundColor: '#f0f0f0',
         borderRadius: 8,
     },
     qtyText: {
-        marginHorizontal: 20,
-        fontSize: 18,
+        marginHorizontal: 16,
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#333',
     },
     confirmBtn: {
         backgroundColor: '#FC0079',
-        paddingVertical: 12,
-        paddingHorizontal: 30,
+        paddingVertical: 14,
+        paddingHorizontal: 40,
         borderRadius: 10,
-        marginTop: 10,
+        marginTop: 20,
+        width: '100%',
+        alignItems: 'center',
     },
     confirmText: {
         color: '#fff',
@@ -135,12 +150,12 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     cancelBtn: {
-        padding: 10,
-        marginTop: 10,
+        paddingVertical: 10,
     },
     cancelText: {
-        color: '#888',
+        color: 'black',
         fontSize: 14,
+        fontWeight: 600,
     },
 });
 

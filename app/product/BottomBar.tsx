@@ -46,8 +46,8 @@ const BottomBar: React.FC<BottomBarProps> = ({ price }) => {
           style={[styles.actionBtn, styles.buyNowBtn]}
           onPress={() => handleOpenModal('buy')}
         >
-          <MaterialIcons name="shopping-bag" size={20} color="#fff" />
-          <Text style={styles.actionText}>Buy Now</Text>
+          <MaterialIcons name="shopping-bag" size={20} color="#FC0079" />
+          <Text style={styles.buyactionText}>Buy Now</Text>
         </TouchableOpacity>
 
         {/* Add to Cart */}
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   heartBtn: {
     flex: 0.8,
-    height: 48,
+    height: 42,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
   },
   actionBtn: {
     flex: 2.2,
-    height: 48,
-    borderRadius: 12,
+    height: 42,
+    borderRadius: 8,
     marginLeft: 10,
     flexDirection: 'row',
     alignItems: 'center',
@@ -117,13 +117,18 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   buyNowBtn: {
-    backgroundColor: '#FF4081',
+    backgroundColor: '#FFF0F6',
+  },
+
+  buyactionText: {
+    color: "#FC0079",
+
   },
   addToCartBtn: {
-    backgroundColor: '#5B2C6F',
+    backgroundColor: "#FC0079",
   },
   actionText: {
-    color: '#fff',
+    color: "white",
     fontSize: 15,
     fontWeight: '600',
   },

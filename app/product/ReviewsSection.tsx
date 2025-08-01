@@ -1,16 +1,25 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ReviewCard from "./ReviewCard";
 
-// Define the Review type according to your review shape
 interface Review {
   reviewerName: string;
   title: string;
   content: string;
   date: string;
   rating: number;
-  productImages: string[]; // or whatever type it has
+  productImages: string[];
 }
 
 interface ReviewsSectionProps {
@@ -29,15 +38,19 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
   };
 
   const submitReview = () => {
-    if (!userTitle || !userContent || userRating === 0) {
-      alert("Please fill out all fields and select a rating.");
+    if (
+      userRating === 0 ||
+      userTitle.trim().length === 0 ||
+      userContent.trim().length === 0
+    ) {
+      Alert.alert("Incomplete", "Please fill out all fields and select a rating.");
       return;
     }
 
     const newReview: Review = {
       reviewerName: "You",
-      title: userTitle,
-      content: userContent,
+      title: userTitle.trim(),
+      content: userContent.trim(),
       date: new Date().toLocaleDateString(),
       rating: userRating,
       productImages: [],
@@ -47,81 +60,99 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
     setUserRating(0);
     setUserTitle("");
     setUserContent("");
+
+    Alert.alert("Thank you!", "Your review has been submitted.");
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.ratingReviewHeader}
-        onPress={toggleReviewsContent}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={100}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.sectionTitle}>Rating and Review</Text>
-        <MaterialCommunityIcons
-          name={showReviewsContent ? "chevron-up" : "chevron-down"}
-          size={24}
-          color="black"
-        />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.ratingReviewHeader}
+          onPress={toggleReviewsContent}
+        >
+          <Text style={styles.sectionTitle}>Rating and Review</Text>
+          <MaterialCommunityIcons
+            name={showReviewsContent ? "chevron-up" : "chevron-down"}
+            size={24}
+            color="black"
+          />
+        </TouchableOpacity>
 
-      {showReviewsContent && (
-        <View style={styles.ratingReviewContent}>
-          {submittedReviews.map((review, index) => (
-            <ReviewCard key={`user-${index}`} {...review} />
-          ))}
-          {reviews.map((review, index) => (
-            <ReviewCard key={index} {...review} />
-          ))}
+        {showReviewsContent && (
+          <View style={styles.ratingReviewContent}>
+            {submittedReviews.map((review, index) => (
+              <ReviewCard key={`user-${index}`} {...review} />
+            ))}
+            {reviews.map((review, index) => (
+              <ReviewCard key={index} {...review} />
+            ))}
 
-          <View style={styles.reviewForm}>
-            <Text style={styles.reviewFormTitle}>Add Your Review</Text>
-            <View style={styles.starSelector}>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <TouchableOpacity key={star} onPress={() => setUserRating(star)}>
-                  <Text
-                    style={[styles.star, userRating >= star && styles.selectedStar]}
+            <View style={styles.reviewForm}>
+              <Text style={styles.reviewFormTitle}>Add Your Review</Text>
+
+              <View style={styles.starSelector}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <TouchableOpacity
+                    key={star}
+                    onPress={() => setUserRating(star)}
+                    activeOpacity={0.7}
                   >
-                    ⭐
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    <MaterialCommunityIcons
+                      name={userRating >= star ? "star" : "star-outline"}
+                      size={28}
+                      color={userRating >= star ? "#FC0079" : "#ccc"}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <Text style={styles.inputLabel}>Title</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Review title"
+                value={userTitle}
+                onChangeText={setUserTitle}
+              />
+
+              <Text style={styles.inputLabel}>Content</Text>
+              <TextInput
+                style={[styles.input, styles.textarea]}
+                placeholder="Share your experience..."
+                value={userContent}
+                onChangeText={setUserContent}
+                multiline
+                numberOfLines={4}
+              />
+
+              <TouchableOpacity style={styles.submitButton} onPress={submitReview}>
+                <Text style={styles.submitButtonText}>Submit Review</Text>
+              </TouchableOpacity>
             </View>
-
-            <Text style={styles.inputLabel}>Title</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Review title"
-              value={userTitle}
-              onChangeText={setUserTitle}
-            />
-
-            <Text style={styles.inputLabel}>Content</Text>
-            <TextInput
-              style={[styles.input, styles.textarea]}
-              placeholder="Share your experience..."
-              value={userContent}
-              onChangeText={setUserContent}
-              multiline
-              numberOfLines={4}
-            />
-
-            <TouchableOpacity style={styles.submitButton} onPress={submitReview}>
-              <Text style={styles.submitButtonText}>Submit Review</Text>
-            </TouchableOpacity>
           </View>
-        </View>
-      )}
-    </View>
+        )}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
+   
   },
   ratingReviewHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingTop: 10,
   },
   sectionTitle: {
     fontSize: 16,
@@ -146,13 +177,7 @@ const styles = StyleSheet.create({
   starSelector: {
     flexDirection: "row",
     marginBottom: 15,
-  },
-  star: {
-    fontSize: 12,
-    marginRight: 8,
-  },
-  selectedStar: {
-    color: "#FC0079",
+    gap: 5,
   },
   inputLabel: {
     fontSize: 14,

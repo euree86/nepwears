@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     scrollContainer: {
-        paddingBottom: 120
+        paddingBottom: 70
     },
     notificationWrapper: {
         position: "absolute",

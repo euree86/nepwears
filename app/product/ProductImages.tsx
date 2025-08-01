@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
 
     colortext: {
         fontSize: 14,
-        fontWeight: 600,
+        fontWeight: 500,
     },
     thumbnailScroll: {
         flexDirection: "row",
