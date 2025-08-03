@@ -8,7 +8,8 @@ import {
     StyleSheet,
     Dimensions,
     Modal,
-    Pressable
+    Pressable,
+    Animated
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -37,6 +38,8 @@ const ProductImages: React.FC<ProductImagesProps> = ({
     const scrollRef = useRef<ScrollView>(null);
     const fullscreenScrollRef = useRef<ScrollView>(null);
 
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
     const selectedImages = variants[selectedVariantIndex]?.images || [];
 
     const onScroll = (event: any) => {
@@ -47,7 +50,13 @@ const ProductImages: React.FC<ProductImagesProps> = ({
     const openModalAtIndex = (index: number) => {
         setCurrentIndex(index);
         setModalVisible(true);
-        // slight delay to allow modal to render before scrolling
+        fadeAnim.setValue(0);
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true
+        }).start();
+
         setTimeout(() => {
             fullscreenScrollRef.current?.scrollTo({ x: index * width, animated: false });
         }, 50);
@@ -118,8 +127,8 @@ const ProductImages: React.FC<ProductImagesProps> = ({
             </ScrollView>
 
             {/* Full Screen Modal */}
-            <Modal visible={isModalVisible} transparent animationType="fade">
-                <View style={styles.modalContainer}>
+            <Modal visible={isModalVisible} transparent animationType="none">
+                <Animated.View style={[styles.modalContainer, { opacity: fadeAnim }]}>
                     <Pressable
                         style={styles.closeButton}
                         onPress={() => setModalVisible(false)}
@@ -143,7 +152,7 @@ const ProductImages: React.FC<ProductImagesProps> = ({
                             />
                         ))}
                     </ScrollView>
-                </View>
+                </Animated.View>
             </Modal>
         </View>
     );
@@ -178,21 +187,18 @@ const styles = StyleSheet.create({
     activeDot: {
         backgroundColor: "#fff"
     },
-
     colorcontainer: {
         paddingTop: 10,
         paddingHorizontal: 10,
     },
-
     colortext: {
         fontSize: 14,
-        fontWeight: 500,
+        fontWeight: "500",
     },
     thumbnailScroll: {
         flexDirection: "row",
         paddingHorizontal: 12,
         paddingTop: 10,
-
     },
     thumbnail: {
         width: 70,

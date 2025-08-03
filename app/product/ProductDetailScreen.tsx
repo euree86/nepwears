@@ -107,7 +107,8 @@ const ProductDetailScreen = () => {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+        paddingBottom: 40,
     },
     container: {
         flex: 1
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     },
     notificationWrapper: {
         position: "absolute",
-        bottom: 50, // ✅ slightly above the bottom bar (height ~80)
+        bottom: 50,
         left: 0,
         right: 0,
         alignItems: "center",

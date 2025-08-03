@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
-import Header from "../../_header";
+import Header from "./_header";
 import SearchBar from "./_searchbar";
 import SectionHeader from "./_sectionheader";
 import Categories from "./_categories";

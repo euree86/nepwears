@@ -43,6 +43,13 @@ const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
             onPress: () => router.push('/myorder'),
         },
         {
+            id: 'getmembership',
+            title: 'Get Membership',
+            icon: 'person',
+             onPress: () => router.push('/getmembership'),
+
+        },
+        {
             id: 'payment',
             title: 'Payment Methods',
             icon: 'payment',
