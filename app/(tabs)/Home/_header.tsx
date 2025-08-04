@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { EvilIcons } from "@expo/vector-icons";
+import { EvilIcons, Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
 const Header = () => {
@@ -16,7 +16,7 @@ const Header = () => {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.push("../notification")}>
-        <EvilIcons name="bell" size={24} color="black" />
+        <Ionicons name="notifications-outline" size={24} color="#1a1a1a" />
       </TouchableOpacity>
     </View>
   );

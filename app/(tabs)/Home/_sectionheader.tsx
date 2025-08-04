@@ -1,17 +1,17 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-
+import { useRouter } from "expo-router";
 type SectionHeaderProps = {
   title: string;
   onPress?: () => void;
 };
-
+const router = useRouter();
 const SectionHeader: React.FC<SectionHeaderProps> = ({ title, onPress }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       {onPress && (
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={() => router.push("/categorydetail/main")}>
           <Text style={styles.viewAll}>View All</Text>
         </TouchableOpacity>
       )}

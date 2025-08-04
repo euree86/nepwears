@@ -1,11 +1,16 @@
-"use client"
-
-import { useState } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, SafeAreaView } from "react-native"
-
+import React, { useState } from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Image,
+    ScrollView,
+    SafeAreaView,
+} from "react-native";
+import Header from "./components/header";
 const OrderTrackingScreen = () => {
-    const [activeTab, setActiveTab] = useState("Ongoing")
-
+    const [activeTab, setActiveTab] = useState("Ongoing");
     const orderData = {
         Ongoing: [
             {
@@ -100,37 +105,44 @@ const OrderTrackingScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            {/* ✅ Reusable Header */}
+            <Header title="My Orders" />
+
+            {/* Tabs */}
             <View style={styles.tabContainer}>
                 {["Ongoing", "Complete", "Review"].map((tab) => (
                     <TouchableOpacity
                         key={tab}
                         style={[styles.tab, activeTab === tab && styles.activeTab]}
-                        onPress={() => handleTabPress(tab)}
+                        onPress={() => setActiveTab(tab)}
                     >
-                        <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>{tab}</Text>
+                        <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+                            {tab}
+                        </Text>
                     </TouchableOpacity>
                 ))}
             </View>
 
+            {/* Order List */}
             <ScrollView style={styles.orderList}>
                 {orderData[activeTab as keyof typeof orderData].map(renderOrderItem)}
             </ScrollView>
         </SafeAreaView>
-    )
-}
+    );
+};
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "white",
+        paddingHorizontal: 20,
     },
     tabContainer: {
         flexDirection: "row",
         backgroundColor: "#e8e8f0",
-        marginHorizontal: 16,
-        marginTop: 14,
+        marginTop: 4,
         borderRadius: 8,
-
     },
     tab: {
         flex: 1,
@@ -161,7 +173,8 @@ const styles = StyleSheet.create({
     },
     orderList: {
         flex: 1,
-        padding: 16,
+        paddingVertical: 16,
+        paddingHorizontal: 2,
     },
     orderItem: {
         flexDirection: "row",
