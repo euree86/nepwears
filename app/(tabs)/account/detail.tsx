@@ -46,7 +46,7 @@ const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
             id: 'getmembership',
             title: 'Get Membership',
             icon: 'person',
-             onPress: () => router.push('/membership'),
+             onPress: () => router.push('/membership/main'),
 
         },
         {

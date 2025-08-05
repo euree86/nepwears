@@ -104,31 +104,33 @@ const OrderTrackingScreen = () => {
     )
 
     return (
-        <SafeAreaView style={styles.container}>
-            {/* ✅ Reusable Header */}
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+
             <Header title="My Orders" />
 
-            {/* Tabs */}
-            <View style={styles.tabContainer}>
-                {["Ongoing", "Complete", "Review"].map((tab) => (
-                    <TouchableOpacity
-                        key={tab}
-                        style={[styles.tab, activeTab === tab && styles.activeTab]}
-                        onPress={() => setActiveTab(tab)}
-                    >
-                        <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
-                            {tab}
-                        </Text>
-                    </TouchableOpacity>
-                ))}
-            </View>
 
-            {/* Order List */}
-            <ScrollView style={styles.orderList}>
-                {orderData[activeTab as keyof typeof orderData].map(renderOrderItem)}
-            </ScrollView>
+            <View style={styles.container}>
+                <View style={styles.tabContainer}>
+                    {["Ongoing", "Complete", "Review"].map((tab) => (
+                        <TouchableOpacity
+                            key={tab}
+                            style={[styles.tab, activeTab === tab && styles.activeTab]}
+                            onPress={() => setActiveTab(tab)}
+                        >
+                            <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+                                {tab}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+
+                <ScrollView style={styles.orderList}>
+                    {orderData[activeTab as keyof typeof orderData].map(renderOrderItem)}
+                </ScrollView>
+            </View>
         </SafeAreaView>
     );
+
 };
 
 
