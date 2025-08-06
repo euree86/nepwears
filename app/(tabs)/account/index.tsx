@@ -5,7 +5,7 @@ export default function SavedIndex() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/(tabs)/account/detail'); // Redirect immediately to detail screen if accessed
+    router.replace('/(tabs)/account/main'); // Redirect immediately to detail screen if accessed
   }, []);
 
   return null;

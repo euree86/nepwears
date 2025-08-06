@@ -15,16 +15,18 @@ import {
     Keyboard,
     TouchableWithoutFeedback,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-
+import AuthHeader from "../components/authheader";
+import Button from '../components/button';
 export default function EmailSignup() {
     const router = useRouter();
     const slideAnim = useRef(new Animated.Value(-100)).current;
 
+    // Show/hide password toggles
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    // Input states and errors
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [emailFocused, setEmailFocused] = useState(false);
@@ -40,11 +42,13 @@ export default function EmailSignup() {
     const [isChecked, setChecked] = useState(false);
     const [checkboxError, setCheckboxError] = useState('');
 
-    const [loginSuccess, setLoginSuccess] = useState(false);
+    const [signupSuccess, setSignupSuccess] = useState(false);
 
+    // Validation regex
     const emailRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d._%+-]+@gmail\.com$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+    // Validation functions
     const validateEmail = () => {
         if (!email.trim()) return setEmailError('Email is required'), false;
         if (!emailRegex.test(email)) return setEmailError('Enter a valid Gmail address'), false;
@@ -69,7 +73,8 @@ export default function EmailSignup() {
         return true;
     };
 
-    const handleLogin = () => {
+    // Handle signup
+    const handleSignup = () => {
         const validEmail = validateEmail();
         const validPassword = validatePassword();
         const validConfirm = validateConfirmPassword();
@@ -78,23 +83,23 @@ export default function EmailSignup() {
         else setCheckboxError('');
 
         if (validEmail && validPassword && validConfirm && isChecked) {
-            setLoginSuccess(true);
+            setSignupSuccess(true);
 
-            // Animate slide from top
+            // Animate success box sliding down
             Animated.timing(slideAnim, {
                 toValue: 0,
-                duration: 100,
+                duration: 200,
                 useNativeDriver: true,
             }).start();
 
-            // Wait, then redirect
+            // After delay, reset and navigate
             setTimeout(() => {
-                setLoginSuccess(false);
-                slideAnim.setValue(-100); // Reset position
-                router.replace('/login'); // Navigate to login screen
-            }, 500);
+                setSignupSuccess(false);
+                slideAnim.setValue(-100);
+                router.replace('/login/login');
+            }, 1000);
         } else {
-            setLoginSuccess(false);
+            setSignupSuccess(false);
         }
     };
 
@@ -105,18 +110,16 @@ export default function EmailSignup() {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
             >
-                <Image
-                    source={require('../assets/images/logo.png')}
-                    style={styles.topImage}
-                    resizeMode="contain"
-                />
+
+
+                <AuthHeader />
 
                 <ScrollView
                     contentContainerStyle={styles.main}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled"
                 >
-                    <Text style={styles.title}>Signup with Email</Text>
+
 
                     {/* Email Input */}
                     <View style={styles.inputGroup}>
@@ -128,7 +131,7 @@ export default function EmailSignup() {
                             onChangeText={text => {
                                 setEmail(text);
                                 setEmailError('');
-                                setLoginSuccess(false);
+                                setSignupSuccess(false);
                             }}
                             style={[
                                 styles.input,
@@ -141,7 +144,7 @@ export default function EmailSignup() {
                             }}
                             autoCapitalize="none"
                         />
-                        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+                        {!!emailError && <Text style={styles.errorText}>{emailError}</Text>}
                     </View>
 
                     {/* Password Input */}
@@ -155,16 +158,12 @@ export default function EmailSignup() {
                                 onChangeText={text => {
                                     setPassword(text);
                                     setPasswordError('');
-                                    setLoginSuccess(false);
+                                    setSignupSuccess(false);
                                 }}
                                 style={[
                                     styles.input,
                                     {
-                                        borderColor: passwordError
-                                            ? 'red'
-                                            : passwordFocused
-                                                ? '#C8C7CD'
-                                                : '#C8C7CD',
+                                        borderColor: passwordError ? 'red' : passwordFocused ? '#C8C7CD' : '#C8C7CD',
                                     },
                                 ]}
                                 onFocus={() => setPasswordFocused(true)}
@@ -184,7 +183,7 @@ export default function EmailSignup() {
                                 />
                             </TouchableOpacity>
                         </View>
-                        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+                        {!!passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
                     </View>
 
                     {/* Confirm Password Input */}
@@ -198,16 +197,12 @@ export default function EmailSignup() {
                                 onChangeText={text => {
                                     setConfirmPassword(text);
                                     setConfirmPasswordError('');
-                                    setLoginSuccess(false);
+                                    setSignupSuccess(false);
                                 }}
                                 style={[
                                     styles.input,
                                     {
-                                        borderColor: confirmPasswordError
-                                            ? 'red'
-                                            : confirmPasswordFocused
-                                                ? '#C8C7CD'
-                                                : '#C8C7CD',
+                                        borderColor: confirmPasswordError ? 'red' : confirmPasswordFocused ? '#C8C7CD' : '#C8C7CD',
                                     },
                                 ]}
                                 onFocus={() => setConfirmPasswordFocused(true)}
@@ -227,11 +222,11 @@ export default function EmailSignup() {
                                 />
                             </TouchableOpacity>
                         </View>
-                        {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
+                        {!!confirmPasswordError && <Text style={styles.errorText}>{confirmPasswordError}</Text>}
                     </View>
 
-                    {/* Checkbox */}
-                    <View style={styles.checkboxcontainer}>
+                    {/* Terms Checkbox */}
+                    <View style={styles.checkboxContainer}>
                         <Checkbox
                             value={isChecked}
                             onValueChange={value => {
@@ -240,21 +235,19 @@ export default function EmailSignup() {
                             }}
                             color={isChecked ? '#FC0079' : undefined}
                         />
-                        <Text> Agree with</Text>
+                        <Text style={{ marginLeft: 8 }}>I agree with</Text>
                         <TouchableOpacity>
-                            <Text style={styles.signup}>Terms & Condition</Text>
+                            <Text style={styles.termsText}> Terms & Conditions</Text>
                         </TouchableOpacity>
                     </View>
-                    {checkboxError ? <Text style={styles.errorText}>{checkboxError}</Text> : null}
+                    {!!checkboxError && <Text style={styles.errorText}>{checkboxError}</Text>}
 
                     {/* Signup Button */}
-                    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                        <Text style={styles.loginButtonText}>Signup</Text>
-                    </TouchableOpacity>
+                    <Button text="Signup" onPress={handleSignup} />
                 </ScrollView>
 
                 {/* Animated Success Message */}
-                {loginSuccess && (
+                {signupSuccess && (
                     <Animated.View
                         style={[
                             styles.animatedSuccessBox,
@@ -266,42 +259,36 @@ export default function EmailSignup() {
                 )}
             </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
-
     );
 }
 
 const styles = StyleSheet.create({
-
     container: {
         flex: 1,
         paddingHorizontal: 20,
         paddingVertical: 10,
         backgroundColor: "white",
     },
-    topImage: {
-        width: "100%",
-        height: 200,
-        opacity: 0.4,
-    },
+
     main: {
         flexGrow: 1,
         justifyContent: 'flex-start',
-      
     },
     title: {
         fontSize: 26,
         fontWeight: "700",
         color: "#333333",
-        marginBottom: 8,
+        marginBottom: 12,
         textAlign: "center",
     },
     inputGroup: {
-        marginBottom: 10,
+        marginBottom: 15,
     },
     label: {
         fontSize: 16,
         fontWeight: '500',
         color: '#333',
+        marginBottom: 4,
     },
     input: {
         borderWidth: 1,
@@ -321,45 +308,29 @@ const styles = StyleSheet.create({
         right: 16,
         top: 14,
     },
-    forgotPassword: {
-        textAlign: 'right',
-        fontSize: 14,
-        color: '#666',
-        marginTop: 10,
-    },
-    loginButton: {
-        backgroundColor: '#FC0079',
-        paddingVertical: 12,
-        borderRadius: 12,
-        alignItems: 'center',
-        marginBottom: 15,
-    },
-    loginButtonText: {
-        color: '#FFF',
-        fontSize: 16,
-        fontWeight: '600',
-    },
-    checkboxcontainer: {
+    checkboxContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 25,
         marginLeft: 3,
     },
-    signup: {
-        borderBottomWidth: 1.5,
-        borderBottomColor: '#FC0079',
+    termsText: {
         color: '#FC0079',
+        fontWeight: '600',
         fontSize: 15,
         marginLeft: 5,
+        borderBottomWidth: 1.5,
+        borderBottomColor: '#FC0079',
+    },
+
+    errorText: {
+        color: 'red',
+        marginTop: 4,
     },
     successText: {
         color: '#155724',
         fontWeight: '600',
         fontSize: 16,
-    },
-    errorText: {
-        color: 'red',
-        marginTop: 4,
     },
     animatedSuccessBox: {
         position: 'absolute',

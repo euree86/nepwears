@@ -35,7 +35,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const router = useRouter();
   return (
     <Pressable
-      onPress={() => router.push("../../../product/ProductDetailScreen")}
+      onPress={() => router.push("../../../product/main")}
       android_ripple={{ color: "#ddd" }}
       style={({ pressed }) => [
         styles.card,
@@ -73,14 +73,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <LinearGradient
-              colors={["#76C4E3", "#FC0079"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.cartButton}
-            >
+            <View style={styles.cartButton}>
               <Text style={styles.cartButtonText}>Add to Cart</Text>
-            </LinearGradient>
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -172,6 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#FC0079"
   },
 
   cartButtonText: {

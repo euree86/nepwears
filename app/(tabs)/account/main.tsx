@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Header from "../../components/header";
 import React from 'react';
 import {
     Alert,
@@ -13,6 +14,7 @@ import {
     Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { HeaderShownContext } from '@react-navigation/elements';
 
 const { width } = Dimensions.get('window');
 
@@ -46,7 +48,7 @@ const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
             id: 'getmembership',
             title: 'Get Membership',
             icon: 'person',
-             onPress: () => router.push('/membership/main'),
+            onPress: () => router.push('/membership/main'),
 
         },
         {
@@ -89,7 +91,7 @@ const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
                 style: 'destructive',
                 onPress: () => {
                     console.log('User logged out');
-                    router.replace('/login');
+                    router.replace('/login/login');
                 },
             },
         ]);
@@ -112,7 +114,7 @@ const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+            <Header title='Account' />
 
             <View style={styles.profileSection}>
                 <View style={styles.profileInfo}>

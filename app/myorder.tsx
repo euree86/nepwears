@@ -9,7 +9,9 @@ import {
     SafeAreaView,
 } from "react-native";
 import Header from "./components/header";
+import { useRouter } from "expo-router";
 const OrderTrackingScreen = () => {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState("Ongoing");
     const orderData = {
         Ongoing: [
@@ -92,16 +94,25 @@ const OrderTrackingScreen = () => {
                 <Text style={styles.productName}>{item.name}</Text>
                 <Text style={styles.productSize}>Size : {item.size}</Text>
                 <Text style={styles.productPrice}>{item.price}</Text>
-                <TouchableOpacity style={styles.trackButton} onPress={() => handleTrackOrder(item.id)}>
+
+                <View style={styles.statusAndButtonContainer}>
                     <Text style={[styles.trackButtonText, getStatusColorStyle(item.status)]}>
                         {item.status}
                     </Text>
-                </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.detailsButton}
+                        onPress={() => router.push("/ordertrack/main")}
+
+
+                    >
+                        <Text style={styles.detailsButtonText}>Details</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-
         </View>
+    );
 
-    )
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -225,11 +236,33 @@ const styles = StyleSheet.create({
         bottom: 20,
         alignItems: "flex-end"
     },
-    trackButtonText: {
 
+
+    statusAndButtonContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginTop: 8,
+    },
+
+    trackButtonText: {
         fontSize: 14,
         fontWeight: "600",
     },
+
+    detailsButton: {
+        backgroundColor: "#FC0079",
+        paddingVertical: 4,
+        paddingHorizontal: 12,
+        borderRadius: 6,
+    },
+
+    detailsButtonText: {
+        color: "#fff",
+        fontSize: 13,
+        fontWeight: "600",
+    },
+
 })
 
 export default OrderTrackingScreen

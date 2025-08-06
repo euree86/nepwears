@@ -7,7 +7,7 @@ import ColorSelector from "./ColorSelector";
 import ReviewsSection from "./ReviewsSection";
 import BottomBar from "./BottomBar";
 import SavedNotification from "./SavedNotification";
-
+import Header from "../components/header";
 const ProductDetailScreen = () => {
     const colors = ["#FF6B6B", "#8B5CF6", "#1F2937", "#3B82F6", "#EC4899"];
     const sizes = ["S", "M", "L", "XL", "XXL"];
@@ -65,6 +65,7 @@ const ProductDetailScreen = () => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
+            <Header title="Product Detail"/>
             <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
                 <ProductImages
                     variants={variants}

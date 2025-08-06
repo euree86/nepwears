@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ReactNode } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInputProps,
 } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface CustomInputProps extends TextInputProps {
   label: string;
@@ -18,6 +19,9 @@ interface CustomInputProps extends TextInputProps {
   onPress?: () => void;
   isPicker?: boolean;
   prefix?: string;
+  suffix?: ReactNode;
+  showPasswordToggle?: boolean;
+  onValidationChange?: (isValid: boolean) => void; // New prop to report validation status
 }
 
 const CustomInputWithValidation: React.FC<CustomInputProps> = ({
@@ -33,9 +37,12 @@ const CustomInputWithValidation: React.FC<CustomInputProps> = ({
   isPicker = false,
   prefix,
   autoCapitalize = 'none',
+  showPasswordToggle = false,
+  onValidationChange,
 }) => {
   const [validationError, setValidationError] = useState<string | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const validateName = (name: string) => {
     if (!name.trim()) return 'Name is required';
@@ -45,8 +52,43 @@ const CustomInputWithValidation: React.FC<CustomInputProps> = ({
 
   const validateEmail = (email: string): string | null => {
     if (!email.trim()) return 'Email is required';
-    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    return isValid ? null : 'Invalid email format';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+    return null;
+  };
+
+  const validatePassword = (password: string): string | null => {
+    if (!password.trim()) return 'Password is required';
+    if (password.length < 8) return 'Password must be at least 8 characters long';
+
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[@$!%*?&]/.test(password);
+
+    if (!hasUppercase) return 'Password must contain at least one uppercase letter';
+    if (!hasLowercase) return 'Password must contain at least one lowercase letter';
+    if (!hasNumber) return 'Password must contain at least one number';
+    if (!hasSpecialChar) return 'Password must contain at least one special character (@$!%*?&)';
+
+    return null;
+  };
+
+  const validateLoginPassword = (password: string): string | null => {
+    if (!password.trim()) return 'Password is required';
+    if (password.length < 8) return 'Password must be at least 8 characters long';
+
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[@$!%*?&]/.test(password);
+
+    if (!hasUppercase) return 'Password must contain at least one uppercase letter';
+    if (!hasLowercase) return 'Password must contain at least one lowercase letter';
+    if (!hasNumber) return 'Password must contain at least one number';
+    if (!hasSpecialChar) return 'Password must contain at least one special character (@$!%*?&)';
+
+    return null;
   };
 
   const validatePhoneNumber = (phone: string): string | null => {
@@ -70,27 +112,42 @@ const CustomInputWithValidation: React.FC<CustomInputProps> = ({
     return null;
   };
 
-  useEffect(() => {
+  // Function to get appropriate validator based on context
+  const getValidator = () => {
     if (validator) {
-      setValidationError(validator(value));
+      return validator;
     } else if (label.toLowerCase().includes('name')) {
-      setValidationError(validateName(value));
+      return validateName;
     } else if (label.toLowerCase().includes('email')) {
-      setValidationError(validateEmail(value));
+      return validateEmail;
+    } else if (label.toLowerCase().includes('password')) {
+      // Check if it's a login context (you can also pass this as a prop)
+      const isLoginContext = placeholder?.toLowerCase().includes('enter your password') ||
+        label.toLowerCase() === 'password';
+      return isLoginContext ? validateLoginPassword : validatePassword;
     } else if (label.toLowerCase().includes('phone')) {
-      setValidationError(validatePhoneNumber(value));
+      return validatePhoneNumber;
     } else if (label.toLowerCase().includes('address')) {
-      setValidationError(validateAddress(value));
+      return validateAddress;
     } else if (label.toLowerCase().includes('gender')) {
-      setValidationError(validateGender(value));
+      return validateGender;
     } else if (label.toLowerCase().includes('birth') || label.toLowerCase().includes('dob')) {
-      setValidationError(validateDOB(value));
-    } else {
-      setValidationError(null);
+      return validateDOB;
     }
-  }, [value, validator, label]);
+    return null;
+  };
 
-  // Reset interaction state when error prop is cleared (form is reset)
+  useEffect(() => {
+    const currentValidator = getValidator();
+    const currentError = currentValidator ? currentValidator(value) : null;
+    setValidationError(currentError);
+
+    // Report validation status to parent component
+    if (onValidationChange) {
+      onValidationChange(currentError === null && value.trim() !== '');
+    }
+  }, [value, validator, label, onValidationChange]);
+
   useEffect(() => {
     if (!error && !value) {
       setHasInteracted(false);
@@ -117,7 +174,6 @@ const CustomInputWithValidation: React.FC<CustomInputProps> = ({
     }
   };
 
-  // Only show validation error if user has interacted AND there's actually an error, or if there's an external error
   const shouldShowError = (hasInteracted && validationError) || (error && error.trim() !== '');
   const errorMessage = error || validationError;
 
@@ -146,7 +202,7 @@ const CustomInputWithValidation: React.FC<CustomInputProps> = ({
     );
   }
 
-  // Default text input
+  // Default text input with optional eye toggle
   return (
     <View style={styles.inputGroup}>
       <Text style={styles.label}>{label}</Text>
@@ -163,11 +219,25 @@ const CustomInputWithValidation: React.FC<CustomInputProps> = ({
           placeholder={placeholder || label}
           placeholderTextColor="#999"
           keyboardType={keyboardType}
-          secureTextEntry={secureTextEntry}
+          secureTextEntry={secureTextEntry && !showPassword}
           autoCapitalize={autoCapitalize}
           editable={!isPicker}
           showSoftInputOnFocus={!isPicker}
         />
+        {showPasswordToggle && label.toLowerCase().includes('password') && (
+          <TouchableOpacity
+            onPress={() => setShowPassword(!showPassword)}
+            style={styles.eyeIcon}
+            accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <MaterialCommunityIcons
+              name={showPassword ? 'eye' : 'eye-off'}
+              size={22}
+              color="#888"
+            />
+          </TouchableOpacity>
+        )}
       </View>
       {shouldShowError && (
         <Text style={styles.errorText}>{errorMessage}</Text>
@@ -196,6 +266,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     paddingHorizontal: 12,
     height: 48,
+    position: 'relative',
   },
   input: {
     flex: 1,
@@ -234,6 +305,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333333',
     lineHeight: 20,
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 12,
+    top: '50%',
+    transform: [{ translateY: -11 }],
   },
 });
 

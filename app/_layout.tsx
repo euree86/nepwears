@@ -32,11 +32,11 @@ export default function RootLayout() {
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="login" options={{ headerShown: false }} />
+          <Stack.Screen name="login/login" options={{ headerShown: false }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="loginwithemail" options={{ headerShown: false }} />
-          <Stack.Screen name="signup" options={{ headerShown: false }} />
-          <Stack.Screen name="signupwithemail" options={{ headerShown: false }} />
+          <Stack.Screen name="login/loginwithemail" options={{ headerShown: false }} />
+          <Stack.Screen name="signup/signup" options={{ headerShown: false }} />
+          <Stack.Screen name="signup/signupwithemail" options={{ headerShown: false }} />
           <Stack.Screen name="notification" options={{ title: 'Notification' }} />
           <Stack.Screen name="verificationcode" options={{ headerShown: false }} />
           <Stack.Screen name="createnewpw" options={{ headerShown: false }} />
@@ -56,9 +56,11 @@ export default function RootLayout() {
           <Stack.Screen name="ratingandreview" options={{ title: 'Rating and Review' }} />
           <Stack.Screen name="checkout" options={{ title: 'Checkout' }} />
           <Stack.Screen name="address" options={{ title: 'Address' }} />
-          <Stack.Screen name="product/ProductDetailScreen" options={{ headerShown: false }} />
+          <Stack.Screen name="product/main" options={{ headerShown: false }} />
           <Stack.Screen name="categorydetail/main" options={{ headerShown: false }} />
           <Stack.Screen name="membership/main" options={{ headerShown: false }} />
+          <Stack.Screen name="ordertrack/main" options={{ headerShown: false }} />
+
 
 
 
