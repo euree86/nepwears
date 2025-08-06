@@ -7,10 +7,8 @@ import {
     Platform,
     StyleSheet,
     Text,
-    TextInput,
     TouchableOpacity,
     View,
-    Image,
     ScrollView,
     Keyboard,
     TouchableWithoutFeedback,
@@ -18,71 +16,80 @@ import {
 import { useRouter } from 'expo-router';
 import AuthHeader from "../components/authheader";
 import Button from '../components/button';
+import CustomInputWithValidation from '../components/custominput';
+
 export default function EmailSignup() {
     const router = useRouter();
     const slideAnim = useRef(new Animated.Value(-100)).current;
 
-    // Show/hide password toggles
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-    // Input states and errors
+    // Input states
     const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [emailFocused, setEmailFocused] = useState(false);
-
     const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [passwordFocused, setPasswordFocused] = useState(false);
-
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
-    const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
+
+    // Validation states
+    const [isEmailValid, setIsEmailValid] = useState(false);
+    const [isPasswordValid, setIsPasswordValid] = useState(false);
+    const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
 
     const [isChecked, setChecked] = useState(false);
     const [checkboxError, setCheckboxError] = useState('');
-
     const [signupSuccess, setSignupSuccess] = useState(false);
 
-    // Validation regex
-    const emailRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d._%+-]+@gmail\.com$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    // Validation functions
-    const validateEmail = () => {
-        if (!email.trim()) return setEmailError('Email is required'), false;
-        if (!emailRegex.test(email)) return setEmailError('Enter a valid Gmail address'), false;
-        setEmailError('');
-        return true;
+    // Custom validator for email (Gmail only)
+    const validateGmailEmail = (email: string): string | null => {
+        if (!email.trim()) return 'Email is required';
+        const gmailRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d._%+-]+@gmail\.com$/;
+        if (!gmailRegex.test(email)) return 'Enter a valid Gmail address';
+        return null;
     };
 
-    const validatePassword = () => {
-        if (!password.trim()) return setPasswordError('Password is required'), false;
-        if (!passwordRegex.test(password)) {
-            setPasswordError('Must contain uppercase, lowercase, number & symbol');
-            return false;
-        }
-        setPasswordError('');
-        return true;
+    // Custom validator for confirm password
+    const validateConfirmPassword = (confirmPwd: string): string | null => {
+        if (!confirmPwd.trim()) return 'Confirm password required';
+        if (password !== confirmPwd) return 'Passwords do not match';
+        return null;
     };
 
-    const validateConfirmPassword = () => {
-        if (!confirmPassword.trim()) return setConfirmPasswordError('Confirm password required'), false;
-        if (password !== confirmPassword) return setConfirmPasswordError('Passwords do not match'), false;
+    // Validation change handlers
+    const handleEmailValidation = (isValid: boolean) => {
+        setIsEmailValid(isValid);
+    };
+
+    const handlePasswordValidation = (isValid: boolean) => {
+        setIsPasswordValid(isValid);
+    };
+
+    const handleConfirmPasswordValidation = (isValid: boolean) => {
+        setIsConfirmPasswordValid(isValid);
+    };
+
+    // Handle confirm password text change
+    const handleConfirmPasswordChange = (text: string) => {
+        setConfirmPassword(text);
         setConfirmPasswordError('');
-        return true;
+        setSignupSuccess(false);
+
+        // Validate confirm password immediately
+        const error = validateConfirmPassword(text);
+        setConfirmPasswordError(error || '');
+        setIsConfirmPasswordValid(!error && text.trim() !== '');
     };
+
+    // Check if form is valid
+    const isFormValid = isEmailValid && isPasswordValid && isConfirmPasswordValid && isChecked;
 
     // Handle signup
     const handleSignup = () => {
-        const validEmail = validateEmail();
-        const validPassword = validatePassword();
-        const validConfirm = validateConfirmPassword();
+        if (!isChecked) {
+            setCheckboxError('You must agree to Terms & Conditions');
+            return;
+        }
 
-        if (!isChecked) setCheckboxError('You must agree to Terms & Conditions');
-        else setCheckboxError('');
+        setCheckboxError('');
 
-        if (validEmail && validPassword && validConfirm && isChecked) {
+        if (isFormValid) {
             setSignupSuccess(true);
 
             // Animate success box sliding down
@@ -98,8 +105,6 @@ export default function EmailSignup() {
                 slideAnim.setValue(-100);
                 router.replace('/login/login');
             }, 1000);
-        } else {
-            setSignupSuccess(false);
         }
     };
 
@@ -110,8 +115,6 @@ export default function EmailSignup() {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
             >
-
-
                 <AuthHeader />
 
                 <ScrollView
@@ -119,110 +122,60 @@ export default function EmailSignup() {
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled"
                 >
-
-
                     {/* Email Input */}
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Email</Text>
-                        <TextInput
+                        <CustomInputWithValidation
+                            label="Email"
                             placeholder="Enter your email"
-                            keyboardType="email-address"
                             value={email}
-                            onChangeText={text => {
+                            onChangeText={(text) => {
                                 setEmail(text);
-                                setEmailError('');
                                 setSignupSuccess(false);
                             }}
-                            style={[
-                                styles.input,
-                                { borderColor: emailError ? 'red' : emailFocused ? '#C8C7CD' : '#C8C7CD' },
-                            ]}
-                            onFocus={() => setEmailFocused(true)}
-                            onBlur={() => {
-                                setEmailFocused(false);
-                                validateEmail();
-                            }}
+                            keyboardType="email-address"
                             autoCapitalize="none"
+                            validator={validateGmailEmail}
+                            onValidationChange={handleEmailValidation}
                         />
-                        {!!emailError && <Text style={styles.errorText}>{emailError}</Text>}
                     </View>
 
                     {/* Password Input */}
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Password</Text>
-                        <View style={styles.passwordWrapper}>
-                            <TextInput
-                                placeholder="Enter your password"
-                                secureTextEntry={!showPassword}
-                                value={password}
-                                onChangeText={text => {
-                                    setPassword(text);
-                                    setPasswordError('');
-                                    setSignupSuccess(false);
-                                }}
-                                style={[
-                                    styles.input,
-                                    {
-                                        borderColor: passwordError ? 'red' : passwordFocused ? '#C8C7CD' : '#C8C7CD',
-                                    },
-                                ]}
-                                onFocus={() => setPasswordFocused(true)}
-                                onBlur={() => {
-                                    setPasswordFocused(false);
-                                    validatePassword();
-                                }}
-                            />
-                            <TouchableOpacity
-                                style={styles.eyeIcon}
-                                onPress={() => setShowPassword(!showPassword)}
-                            >
-                                <MaterialCommunityIcons
-                                    name={showPassword ? 'eye-off' : 'eye'}
-                                    size={22}
-                                    color="#888"
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        {!!passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
+                        <CustomInputWithValidation
+                            label="Password"
+                            placeholder="Enter your password"
+                            value={password}
+                            onChangeText={(text) => {
+                                setPassword(text);
+                                setSignupSuccess(false);
+                                // Re-validate confirm password when password changes
+                                if (confirmPassword) {
+                                    const error = validateConfirmPassword(confirmPassword);
+                                    setConfirmPasswordError(error || '');
+                                    setIsConfirmPasswordValid(!error && confirmPassword.trim() !== '');
+                                }
+                            }}
+                            secureTextEntry={true}
+                            autoCapitalize="none"
+                            showPasswordToggle={true}
+                            onValidationChange={handlePasswordValidation}
+                        />
                     </View>
 
                     {/* Confirm Password Input */}
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Confirm Password</Text>
-                        <View style={styles.passwordWrapper}>
-                            <TextInput
-                                placeholder="Re-enter your password"
-                                secureTextEntry={!showConfirmPassword}
-                                value={confirmPassword}
-                                onChangeText={text => {
-                                    setConfirmPassword(text);
-                                    setConfirmPasswordError('');
-                                    setSignupSuccess(false);
-                                }}
-                                style={[
-                                    styles.input,
-                                    {
-                                        borderColor: confirmPasswordError ? 'red' : confirmPasswordFocused ? '#C8C7CD' : '#C8C7CD',
-                                    },
-                                ]}
-                                onFocus={() => setConfirmPasswordFocused(true)}
-                                onBlur={() => {
-                                    setConfirmPasswordFocused(false);
-                                    validateConfirmPassword();
-                                }}
-                            />
-                            <TouchableOpacity
-                                style={styles.eyeIcon}
-                                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                            >
-                                <MaterialCommunityIcons
-                                    name={showConfirmPassword ? 'eye-off' : 'eye'}
-                                    size={22}
-                                    color="#888"
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        {!!confirmPasswordError && <Text style={styles.errorText}>{confirmPasswordError}</Text>}
+                        <CustomInputWithValidation
+                            label="Confirm Password"
+                            placeholder="Re-enter your password"
+                            value={confirmPassword}
+                            onChangeText={handleConfirmPasswordChange}
+                            secureTextEntry={true}
+                            autoCapitalize="none"
+                            showPasswordToggle={true}
+                            error={confirmPasswordError}
+                            validator={() => null}
+                            onValidationChange={() => { }}
+                        />
                     </View>
 
                     {/* Terms Checkbox */}
@@ -243,7 +196,15 @@ export default function EmailSignup() {
                     {!!checkboxError && <Text style={styles.errorText}>{checkboxError}</Text>}
 
                     {/* Signup Button */}
-                    <Button text="Signup" onPress={handleSignup} />
+                    <Button
+                        text="Signup"
+                        onPress={() => {
+                            if (isFormValid) {
+                                handleSignup();
+                            }
+                        }}
+
+                    />
                 </ScrollView>
 
                 {/* Animated Success Message */}
@@ -269,7 +230,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         backgroundColor: "white",
     },
-
     main: {
         flexGrow: 1,
         justifyContent: 'flex-start',
@@ -282,7 +242,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     inputGroup: {
-        marginBottom: 15,
+        marginBottom: 0,
     },
     label: {
         fontSize: 16,
@@ -322,7 +282,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1.5,
         borderBottomColor: '#FC0079',
     },
-
     errorText: {
         color: 'red',
         marginTop: 4,
@@ -344,5 +303,12 @@ const styles = StyleSheet.create({
         borderColor: '#c3e6cb',
         alignItems: 'center',
         zIndex: 999,
+    },
+    signupButton: {
+        // Add any additional styles for the button
+    },
+    disabledButton: {
+        opacity: 0.5,
+        backgroundColor: '#cccccc',
     },
 });

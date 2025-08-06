@@ -121,10 +121,17 @@ const CustomInputWithValidation: React.FC<CustomInputProps> = ({
     } else if (label.toLowerCase().includes('email')) {
       return validateEmail;
     } else if (label.toLowerCase().includes('password')) {
-      // Check if it's a login context (you can also pass this as a prop)
-      const isLoginContext = placeholder?.toLowerCase().includes('enter your password') ||
+      // Check if it's a login context vs signup context
+      const isLoginContext = placeholder?.toLowerCase().includes('enter your password') &&
+        !placeholder?.toLowerCase().includes('re-enter');
+      const isSignupContext = placeholder?.toLowerCase().includes('enter your password') &&
         label.toLowerCase() === 'password';
-      return isLoginContext ? validateLoginPassword : validatePassword;
+
+      if (isLoginContext && !isSignupContext) {
+        return validateLoginPassword;
+      } else {
+        return validatePassword; // Full validation for signup
+      }
     } else if (label.toLowerCase().includes('phone')) {
       return validatePhoneNumber;
     } else if (label.toLowerCase().includes('address')) {
@@ -261,7 +268,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: "#C8C7CD",
     borderRadius: 8,
     backgroundColor: '#ffffff',
     paddingHorizontal: 12,

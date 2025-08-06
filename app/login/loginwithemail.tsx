@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -8,12 +8,16 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
+    Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CustomInputWithValidation from '../components/custominput';
 import Button from '../components/button';
 import AuthHeader from '../components/authheader';
+import OrDivider from '../components/divider';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 const { width } = Dimensions.get('window');
 
@@ -24,9 +28,19 @@ export default function LoginWithEmail() {
     const [password, setPassword] = useState('');
     const [isEmailValid, setIsEmailValid] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(false);
+    const [biometricSupported, setBiometricSupported] = useState(false);
 
     // Check if both email and password are valid
     const isFormValid = isEmailValid && isPasswordValid;
+
+    useEffect(() => {
+        // Check biometric support on mount
+        (async () => {
+            const hasHardware = await LocalAuthentication.hasHardwareAsync();
+            const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+            setBiometricSupported(hasHardware && isEnrolled);
+        })();
+    }, []);
 
     const handleLogin = () => {
         if (!isFormValid) {
@@ -37,6 +51,26 @@ export default function LoginWithEmail() {
         // Proceed with login
         console.log('Logging in with:', email, password);
         router.replace('/Home');
+    };
+
+    const handleBiometricAuth = async () => {
+        try {
+            const result = await LocalAuthentication.authenticateAsync({
+                promptMessage: 'Login with Biometrics',
+                fallbackLabel: 'Use Password',
+                disableDeviceFallback: false,
+            });
+
+            if (result.success) {
+                // Successful biometric login, navigate to Home
+                router.replace('/Home');
+            } else {
+                Alert.alert('Authentication failed', 'Please try again or use password login.');
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Biometric authentication error. Please try again.');
+            console.error(error);
+        }
     };
 
     const handleEmailValidation = (isValid: boolean) => {
@@ -77,6 +111,8 @@ export default function LoginWithEmail() {
                             showPasswordToggle={true}
                             onValidationChange={handlePasswordValidation}
                         />
+
+
                     </View>
 
                     <TouchableOpacity onPress={() => router.push('/forgotpw')}>
@@ -98,6 +134,23 @@ export default function LoginWithEmail() {
                             <Text style={styles.signup}> Signup</Text>
                         </TouchableOpacity>
                     </View>
+                    <OrDivider />
+
+                    {/* Biometric fingerprint icon below password input */}
+                    {biometricSupported && (
+                        <TouchableOpacity
+                            onPress={handleBiometricAuth}
+                            style={styles.fingerprintIconContainer}
+                            accessibilityLabel="Login with fingerprint"
+                        >
+                            <MaterialCommunityIcons
+                                name="fingerprint"
+                                size={48}
+                                color="#FC0079"
+                            />
+                            <Text style={styles.fingerprintText}>Use Fingerprint</Text>
+                        </TouchableOpacity>
+                    )}
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -116,23 +169,10 @@ const styles = StyleSheet.create({
         padding: 20,
         justifyContent: 'center',
     },
-    title: {
-        fontSize: 26,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginTop: 30,
-    },
-    subtitle: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginVertical: 10,
-        color: '#666',
-    },
     forgotPassword: {
         textAlign: 'right',
-        color: '#FC0079',
+        color: 'black',
         fontSize: 14,
-        marginBottom: 10,
     },
     orText: {
         marginHorizontal: 10,
@@ -153,9 +193,17 @@ const styles = StyleSheet.create({
         marginLeft: 6,
         fontWeight: "600",
     },
-    loginButton: {
-        // Add any additional styles for the button
+
+    fingerprintIconContainer: {
+        alignItems: 'center',
     },
+    fingerprintText: {
+        marginTop: 6,
+        fontSize: 14,
+        color: 'black',
+        fontWeight: '400',
+    },
+
     disabledButton: {
         opacity: 0.5,
         backgroundColor: '#cccccc',
