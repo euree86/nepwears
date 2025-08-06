@@ -5,10 +5,10 @@ import OrderHeader from './orderheader';
 import DeliveryAddressCard from './deliveryaddress';
 import OrderProgressTracker from './orderprogess';
 import OrderSummary from './ordersummary';
-import ActionButtons from './actionbutton';
 import Header from "../components/header";
+import Button from '../components/button';
 // Define interfaces for data shapes
-
+import { useRouter } from 'expo-router';
 interface OrderItem {
   id: number;
   name: string;
@@ -86,7 +86,7 @@ const fetchOrderData = async (orderId: string): Promise<OrderData> => {
     ]
   };
 };
-
+const router = useRouter();
 const OrderTrackingScreen = () => {
   const [orderData, setOrderData] = useState<OrderData | null>(null);
 
@@ -101,7 +101,7 @@ const OrderTrackingScreen = () => {
   if (!orderData) return null; // or loading indicator
 
   return (
-    <ScrollView style={{ flex: 1  }}>
+    <ScrollView style={{ flex: 1 }}>
       <Header title='Order Details' />
       <OrderHeader
         item={orderData.orderItems[0]}
@@ -124,8 +124,8 @@ const OrderTrackingScreen = () => {
         promoCode={orderData.promoCode}
         totalAmount={orderData.totalAmount}
       />
+      <Button text="Contact Support" onPress={() => router.push("/helpcenter")} style={{ marginHorizontal: 15 }} />
 
-      <ActionButtons />
     </ScrollView>
   );
 };

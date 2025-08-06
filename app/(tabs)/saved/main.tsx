@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-
+import Header from '@/app/components/header';
 const { width } = Dimensions.get('window');
 
 // Type for a Saved item
@@ -93,15 +93,19 @@ const SavedGrid = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.grid}>{Saveds.map(renderCard)}</View>
+      <Header title="Saved" />
+      <View style={styles.grid}>
+        {Saveds.map(renderCard)}
+      </View>
     </ScrollView>
   );
+
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'white',
   },
   grid: {
     flexDirection: 'row',

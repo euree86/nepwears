@@ -5,12 +5,18 @@ import {
     TouchableOpacity,
     TextInput,
     StyleSheet,
-    SafeAreaView,
     ScrollView,
+    Platform,
+    KeyboardAvoidingView,
+    Dimensions,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import NotificationPopup from "./ordersuccess"
+import NotificationPopup from "./ordersuccess";
 import { useRouter } from "expo-router";
+import Header from './components/header';
+
+const { width, height } = Dimensions.get('window');
 
 const CheckoutScreen = () => {
     const [selectedPayment, setSelectedPayment] = useState('card');
@@ -21,173 +27,151 @@ const CheckoutScreen = () => {
         console.log("Notification allowed?", allowed);
         setShowNotificationPopup(false);
     };
+
     const router = useRouter();
+
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.scrollView}>
+            <Header title="Checkout" />
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+            >
 
-                {/* Delivery Address Section */}
-                <View style={styles.section}>
-                    <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>Delivery Address</Text>
-                        <TouchableOpacity onPress={() => router.push("./address")}>
-                            <Text style={styles.changeLink} >Change</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.addressContainer}>
-                        <MaterialCommunityIcons
-                            name="map-marker"
-                            size={24}
-                            color="#e91e63"
-                            style={styles.locationIcon}
-                        />
-                        <View>
-                            <Text style={styles.addressTitle}>Home</Text>
-                            <Text style={styles.addressText}>Naya Baneshwor, Kathmandu</Text>
-                        </View>
-                    </View>
-                </View>
-
-                {/* Payment Method Section */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Payment Method</Text>
-                    <View style={styles.paymentMethods}>
-                        <TouchableOpacity
-                            style={[
-                                styles.paymentButton,
-                                selectedPayment === 'card' && styles.paymentButtonActive,
-                            ]}
-                            onPress={() => setSelectedPayment('card')}
-                        >
-                            <MaterialCommunityIcons
-                                name="credit-card-outline"
-                                size={16}
-                                color={selectedPayment === 'card' ? 'white' : '#666'}
-                            />
-                            <Text
-                                style={[
-                                    styles.paymentButtonText,
-                                    selectedPayment === 'card' && styles.paymentButtonTextActive,
-                                    { marginLeft: 6 },
-                                ]}
-                            >
-                                Card
-                            </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={[
-                                styles.paymentButton,
-                                selectedPayment === 'cash' && styles.paymentButtonActive,
-                            ]}
-                            onPress={() => setSelectedPayment('cash')}
-                        >
-                            <MaterialCommunityIcons
-                                name="cash"
-                                size={16}
-                                color={selectedPayment === 'cash' ? 'white' : '#666'}
-                            />
-                            <Text
-                                style={[
-                                    styles.paymentButtonText,
-                                    selectedPayment === 'cash' && styles.paymentButtonTextActive,
-                                    { marginLeft: 6 },
-                                ]}
-                            >
-                                Cash
-                            </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={[
-                                styles.paymentButton,
-                                selectedPayment === 'pay' && styles.paymentButtonActive,
-                            ]}
-                            onPress={() => setSelectedPayment('pay')}
-                        >
-                            <MaterialCommunityIcons
-                                name="cellphone"
-                                size={16}
-                                color={selectedPayment === 'pay' ? 'white' : '#666'}
-                            />
-                            <Text
-                                style={[
-                                    styles.paymentButtonText,
-                                    selectedPayment === 'pay' && styles.paymentButtonTextActive,
-                                    { marginLeft: 6 },
-                                ]}
-                            >
-                                Pay
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    {/* Card Details */}
-                    {selectedPayment === 'card' && (
-                        <View style={styles.cardContainer}>
-                            <View style={styles.cardInfo}>
-                                <Text style={styles.cardBrand}>VISA</Text>
-                                <Text style={styles.cardNumber}>**** **** **** 2512</Text>
-                            </View>
-                            <TouchableOpacity style={styles.editButton}>
-                                <MaterialCommunityIcons name="pencil" size={20} color="#333" />
+                <ScrollView
+                    contentContainerStyle={styles.scrollContent}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    {/* Delivery Address */}
+                    <View style={styles.section}>
+                        <View style={styles.sectionHeader}>
+                            <Text style={styles.sectionTitle}>Delivery Address</Text>
+                            <TouchableOpacity onPress={() => router.push("./address")}>
+                                <Text style={styles.changeLink}>Change</Text>
                             </TouchableOpacity>
                         </View>
-                    )}
-                </View>
+                        <View style={styles.addressContainer}>
+                            <MaterialCommunityIcons
+                                name="map-marker"
+                                size={24}
+                                color="#e91e63"
+                                style={styles.locationIcon}
+                            />
+                            <View>
+                                <Text style={styles.addressTitle}>Home</Text>
+                                <Text style={styles.addressText}>Naya Baneshwor, Kathmandu</Text>
+                            </View>
+                        </View>
+                    </View>
 
-                {/* Order Summary Section */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Order Summary</Text>
-                    <View style={styles.summaryRow}>
-                        <Text style={styles.summaryLabel}>Sub Total</Text>
-                        <Text style={styles.summaryValue}>Rs 1700</Text>
-                    </View>
-                    <View style={styles.summaryRow}>
-                        <Text style={styles.summaryLabel}>Delivery Fee</Text>
-                        <Text style={styles.summaryValue}>Rs 200</Text>
-                    </View>
-                    <View style={styles.summaryRow}>
-                        <Text style={styles.summaryLabel}>Discount</Text>
-                        <Text style={styles.summaryValue}>Rs 100</Text>
-                    </View>
-                    <View style={[styles.summaryRow, styles.totalRow]}>
-                        <Text style={styles.totalLabel}>Total</Text>
-                        <Text style={styles.totalValue}>Rs 1900</Text>
-                    </View>
-                </View>
+                    {/* Payment Method */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Payment Method</Text>
+                        <View style={styles.paymentMethods}>
+                            {['card', 'cash', 'pay'].map((method) => (
+                                <TouchableOpacity
+                                    key={method}
+                                    style={[
+                                        styles.paymentButton,
+                                        selectedPayment === method && styles.paymentButtonActive,
+                                    ]}
+                                    onPress={() => setSelectedPayment(method)}
+                                >
+                                    <MaterialCommunityIcons
+                                        name={
+                                            method === 'card' ? 'credit-card-outline' :
+                                                method === 'cash' ? 'cash' :
+                                                    'cellphone'
+                                        }
+                                        size={16}
+                                        color={selectedPayment === method ? 'white' : '#666'}
+                                    />
+                                    <Text
+                                        style={[
+                                            styles.paymentButtonText,
+                                            selectedPayment === method && styles.paymentButtonTextActive,
+                                            { marginLeft: 6 },
+                                        ]}
+                                    >
+                                        {method.charAt(0).toUpperCase() + method.slice(1)}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
 
-                {/* Promo Code Section */}
-                <View style={styles.promoSection}>
-                    <View style={styles.promoInputContainer}>
-                        <MaterialCommunityIcons name="tag-outline" size={20} color="#e91e63" style={{ marginRight: 8 }} />
-                        <TextInput
-                            style={styles.promoInput}
-                            placeholder="Enter promo code"
-                            value={promoCode}
-                            onChangeText={setPromoCode}
-                        />
-                        <TouchableOpacity style={styles.addButton}>
-                            <Text style={styles.addButtonText}>Add</Text>
+                        {selectedPayment === 'card' && (
+                            <View style={styles.cardContainer}>
+                                <View style={styles.cardInfo}>
+                                    <Text style={styles.cardBrand}>VISA</Text>
+                                    <Text style={styles.cardNumber}>**** **** **** 2512</Text>
+                                </View>
+                                <TouchableOpacity style={styles.editButton}>
+                                    <MaterialCommunityIcons name="pencil" size={20} color="#333" />
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
+
+                    {/* Order Summary */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Order Summary</Text>
+                        {[
+                            ['Sub Total', 'Rs 1700'],
+                            ['Delivery Fee', 'Rs 200'],
+                            ['Discount', 'Rs 100'],
+                        ].map(([label, value]) => (
+                            <View style={styles.summaryRow} key={label}>
+                                <Text style={styles.summaryLabel}>{label}</Text>
+                                <Text style={styles.summaryValue}>{value}</Text>
+                            </View>
+                        ))}
+                        <View style={[styles.summaryRow, styles.totalRow]}>
+                            <Text style={styles.totalLabel}>Total</Text>
+                            <Text style={styles.totalValue}>Rs 1900</Text>
+                        </View>
+                    </View>
+
+                    {/* Promo Code */}
+                    <View style={styles.promoSection}>
+                        <View style={styles.promoInputContainer}>
+                            <MaterialCommunityIcons
+                                name="tag-outline"
+                                size={20}
+                                color="#e91e63"
+                                style={{ marginRight: 8 }}
+                            />
+                            <TextInput
+                                style={styles.promoInput}
+                                placeholder="Enter promo code"
+                                value={promoCode}
+                                onChangeText={setPromoCode}
+                                returnKeyType="done"
+                            />
+                            <TouchableOpacity style={styles.addButton}>
+                                <Text style={styles.addButtonText}>Add</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    {/* ✅ Moved Bottom Button inside ScrollView */}
+                    <View style={styles.bottomContainer}>
+                        <TouchableOpacity
+                            style={styles.placeOrderButton}
+                            onPress={() => setShowNotificationPopup(true)}
+                        >
+                            <Text style={styles.placeOrderText}>Place Order</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
-            </ScrollView>
+                </ScrollView>
 
-            {/* Place Order Button */}
-            <View style={styles.bottomContainer}>
-                <TouchableOpacity style={styles.placeOrderButton} onPress={() => setShowNotificationPopup(true)}>
-                    <Text style={styles.placeOrderText}>Place Order</Text>
-
-                </TouchableOpacity>
-            </View>
-            {showNotificationPopup && (
-                <NotificationPopup
-                    visible={showNotificationPopup}
-                    onResponse={handleNotificationResponse}
-                />
-            )}
-
+                {showNotificationPopup && (
+                    <NotificationPopup
+                        visible={showNotificationPopup}
+                        onResponse={handleNotificationResponse}
+                    />
+                )}
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };
@@ -195,11 +179,11 @@ const CheckoutScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8f9fa',
+        backgroundColor: 'white',
     },
-    scrollView: {
-        flex: 1,
+    scrollContent: {
         padding: 16,
+
     },
     section: {
         backgroundColor: 'white',
@@ -207,10 +191,7 @@ const styles = StyleSheet.create({
         padding: 16,
         marginBottom: 16,
         shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 3.84,
         elevation: 5,
@@ -338,12 +319,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 12,
         padding: 16,
-        marginBottom: 30,
+        marginBottom: 16,
         shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 3.84,
         elevation: 5,
@@ -374,6 +352,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     bottomContainer: {
+        marginTop: 16,
         padding: 16,
         backgroundColor: 'white',
         borderTopWidth: 1,

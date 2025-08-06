@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { EvilIcons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-
+import Header from "./components/header";
 const Address = () => {
     const [selectedAddress, setSelectedAddress] = useState('home');
     const router = useRouter();
@@ -67,8 +67,7 @@ const Address = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-
+            <Header title="Address" />
             {/* Header */}
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>Saved Address</Text>

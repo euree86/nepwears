@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 type Props = {
     visible: boolean;
@@ -8,9 +9,11 @@ type Props = {
 };
 
 const Ordersuccess = ({ visible, onResponse }: Props) => {
+    const router = useRouter();
+
     const handleTrackOrder = () => {
-        console.log('Track order clicked');
-        onResponse(false);  // or true, depending on your logic
+        onResponse(false); // Close the modal
+        router.push('/ordertrack/main'); // Navigate to the order tracking screen
     };
 
     return (

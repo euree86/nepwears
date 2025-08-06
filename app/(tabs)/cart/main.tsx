@@ -66,7 +66,7 @@ const MyCart = () => {
           <CartItem key={item.id} item={item} onUpdate={updateQuantity} onRemove={removeItem} />
         ))}
       </ScrollView>
-      <CartFooter total={calculateTotal()} onCheckout={() => router.push('../../../checkout')} />
+      <CartFooter total={calculateTotal()} onCheckout={() => router.push('/checkout/main')} />
     </SafeAreaView>
   );
 };

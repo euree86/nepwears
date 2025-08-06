@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     section: {
         paddingHorizontal: 20,
         marginBottom: 20,
-        
+
     },
 });
 

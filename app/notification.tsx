@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 type MaterialCommunityIconName = keyof typeof MaterialCommunityIcons.glyphMap;
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import Header from './components/header';
 
 // Types
 type NotificationItem = {
@@ -101,38 +101,51 @@ const NotificationsScreen = () => {
     ];
 
     return (
-
         <ScrollView style={styles.container}>
-            {notifications.map((section: NotificationSection, sectionIndex: number) => (
-                <View key={sectionIndex} style={styles.section}>
-                    <Text style={styles.sectionTitle}>{section.section}</Text>
+            <Header title="Notification" />
 
-                    {section.items.map((item: NotificationItem, itemIndex: number) => (
-                        <View key={itemIndex}>
-                            <View style={styles.notificationItem}>
-                                <MaterialCommunityIcons name={item.icon} size={24} color="#333" style={styles.icon} />
-                                <View style={styles.textContainer}>
-                                    <Text style={styles.title}>{item.title}</Text>
-                                    <Text style={styles.subtitle}>{item.subtitle}</Text>
+            {/* Wrap notification sections with padding, NOT the whole container */}
+            <View style={styles.contentWrapper}>
+                {notifications.map((section: NotificationSection, sectionIndex: number) => (
+                    <View key={sectionIndex} style={styles.section}>
+                        <Text style={styles.sectionTitle}>{section.section}</Text>
+
+                        {section.items.map((item: NotificationItem, itemIndex: number) => (
+                            <View key={itemIndex}>
+                                <View style={styles.notificationItem}>
+                                    <MaterialCommunityIcons
+                                        name={item.icon}
+                                        size={24}
+                                        color="#333"
+                                        style={styles.icon}
+                                    />
+                                    <View style={styles.textContainer}>
+                                        <Text style={styles.title}>{item.title}</Text>
+                                        <Text style={styles.subtitle}>{item.subtitle}</Text>
+                                    </View>
                                 </View>
+                                {itemIndex !== section.items.length - 1 && <View style={styles.divider} />}
                             </View>
-                            {itemIndex !== section.items.length - 1 && <View style={styles.divider} />}
-                        </View>
-                    ))}
-                </View>
-            ))}
+                        ))}
+                    </View>
+                ))}
+            </View>
         </ScrollView>
-
-
     );
+
 };
 
 const styles = StyleSheet.create({
+
+    contentWrapper: {
+        paddingHorizontal: 20,
+        paddingTop: 20,
+    },
+
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingHorizontal: 20,
-        paddingTop: 20,
+
     },
     section: {
         marginBottom: 30,

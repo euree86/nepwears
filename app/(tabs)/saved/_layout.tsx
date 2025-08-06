@@ -3,24 +3,14 @@ import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-export default function SavedStackLayout() {
+export default function StackLayout() {
     const router = useRouter();
 
     return (
         <Stack
             initialRouteName="index"
             screenOptions={{
-                title:"Saved",
-                headerTitleAlign: 'center',
-                headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
-                headerLeft: () => (
-                    <TouchableOpacity
-
-                        onPress={() => router.push('/Home')} // navigate to previous tab or screen here
-                    >
-                        <Ionicons name="arrow-back" size={24} />
-                    </TouchableOpacity>
-                ),
+                headerShown: false,
             }}
         />
     );

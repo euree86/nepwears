@@ -8,6 +8,7 @@ type Props = {
     onPress: () => void;
     style?: ViewStyle;
     textStyle?: TextStyle;
+
 };
 
 const Button: React.FC<Props> = ({ text, onPress, style, textStyle }) => {
