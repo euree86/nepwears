@@ -5,16 +5,22 @@ import {
     TouchableOpacity,
     StyleSheet,
     SafeAreaView,
-    StatusBar,
+    Dimensions,
+    ScrollView,
 } from 'react-native';
-import { MaterialIcons, Ionicons } from "@expo/vector-icons";
-import NotificationPopup from "./cardsuccess"
-
+import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import NotificationPopup from "./cardsuccess";
+import Header from './components/header';
+import Button from './components/button';
 import { useRouter } from 'expo-router';
+
+const { width } = Dimensions.get('window');
+const fontScale = width / 375;
 
 const PaymentMethod = () => {
     const router = useRouter();
     const [selectedCard, setSelectedCard] = useState('visa');
+    const [showNotificationPopup, setShowNotificationPopup] = useState(false);
 
     const cards = [
         {
@@ -22,24 +28,28 @@ const PaymentMethod = () => {
             type: 'Visa',
             label: 'Default',
             number: '**** **** **** 1234',
+            icon: <FontAwesome5 name="cc-visa" size={28} color="#1A1F71" />,
         },
         {
             id: 'mastercard',
             type: 'MasterCard',
             label: '',
             number: '**** **** **** 5678',
+            icon: <FontAwesome5 name="cc-mastercard" size={28} color="#eb001b" />,
         },
         {
             id: 'amex',
             type: 'Amex',
             label: '',
             number: '**** **** **** 9012',
+            icon: <FontAwesome5 name="cc-amex" size={28} color="#2E77BC" />,
         },
         {
             id: 'paypal',
             type: 'PayPal',
             label: '',
             number: 'eurika@example.com',
+            icon: <FontAwesome5 name="cc-paypal" size={28} color="#003087" />,
         },
     ];
 
@@ -48,87 +58,77 @@ const PaymentMethod = () => {
             {selected && <View style={styles.radioButtonInner} />}
         </View>
     );
-    const [showNotificationPopup, setShowNotificationPopup] = useState(false);
+
+    const handleCardSelect = (cardId: string) => {
+        setSelectedCard(cardId);
+    };
+
+    const handleAddNewCard = () => {
+        router.push('/newcard/main');
+    };
 
     const handleNotificationResponse = (allowed: boolean) => {
         console.log("Notification allowed?", allowed);
         setShowNotificationPopup(false);
     };
 
-    const handleCardSelect = (cardId: string) => {
-        setSelectedCard(cardId);
-    };
-    const handleAddNewCard = () => {
-        router.push('/newcard');
-    };
-
-    const handleApply = () => {
-        console.log('Apply pressed with selected card:', selectedCard);
-    };
-
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-
-            {/* Header */}
-            <View style={styles.header}>
+            <Header title="Payment Method" />
+            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
                 <Text style={styles.headerTitle}>Saved Cards</Text>
-            </View>
 
-            {/* Card List */}
-            <View style={styles.cardList}>
-                {cards.map((card) => (
-                    <TouchableOpacity
-                        key={card.id}
-                        style={styles.cardItem}
-                        onPress={() => handleCardSelect(card.id)}
-                        activeOpacity={0.7}
-                    >
-                        <Ionicons
-                            name="card-outline"
-                            size={28}
-                            color="#666666"
-                            style={styles.cardIcon}
-                        />
+                <View style={styles.cardList}>
+                    {cards.map((card) => (
+                        <TouchableOpacity
+                            key={card.id}
+                            onPress={() => handleCardSelect(card.id)}
+                            activeOpacity={0.85}
+                            style={styles.shadowWrapper}
+                        >
+                            <View style={[
+                                styles.cardItem,
+                                selectedCard === card.id && styles.selectedCard,
+                            ]}>
+                                <View style={styles.cardIcon}>{card.icon}</View>
 
-                        <View style={styles.cardContent}>
-                            <View style={styles.cardHeader}>
-                                <Text style={styles.cardType}>{card.type}</Text>
-                                {card.label && (
-                                    <Text style={styles.cardLabel}>{card.label}</Text>
-                                )}
+                                <View style={styles.cardContent}>
+                                    <View style={styles.cardHeader}>
+                                        <Text style={styles.cardType}>{card.type}</Text>
+                                        {card.label && (
+                                            <Text style={styles.cardLabel}>{card.label}</Text>
+                                        )}
+                                    </View>
+                                    <Text style={styles.cardNumber}>{card.number}</Text>
+                                </View>
+
+                                <RadioButton selected={selectedCard === card.id} />
                             </View>
-                            <Text style={styles.cardNumber}>{card.number}</Text>
-                        </View>
+                        </TouchableOpacity>
+                    ))}
+                </View>
 
-                        <RadioButton selected={selectedCard === card.id} />
-                    </TouchableOpacity>
-                ))}
-            </View>
+                <TouchableOpacity
+                    style={styles.addButton}
+                    onPress={handleAddNewCard}
+                    activeOpacity={0.85}
+                >
+                    <MaterialIcons
+                        name="add"
+                        size={20}
+                        color="#d63384"
+                        style={styles.addButtonIcon}
+                    />
+                    <Text style={styles.addButtonText}>Add New Card</Text>
+                </TouchableOpacity>
 
-            {/* Add New Card Button */}
-            <TouchableOpacity
-                style={styles.addButton}
-                onPress={handleAddNewCard}
-                activeOpacity={0.7}
-            >
-                <MaterialIcons
-                    name="add"
-                    size={20}
-                    color="#333333"
-                    style={styles.addButtonIcon}
+                <Button
+                    text="Apply"
+                    onPress={() => setShowNotificationPopup(true)}
+
                 />
-                <Text style={styles.addButtonText}>Add New Card</Text>
-            </TouchableOpacity>
+            </ScrollView>
 
-            {/* Apply Button */}
-            <TouchableOpacity
-                style={styles.applyButton}
-                onPress={() => setShowNotificationPopup(true)}
-                activeOpacity={0.8}
-            >
-                <Text style={styles.applyButtonText}>Apply</Text>
-            </TouchableOpacity>
             {showNotificationPopup && (
                 <NotificationPopup
                     visible={showNotificationPopup}
@@ -142,34 +142,40 @@ const PaymentMethod = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffffff',
+
     },
-    header: {
+    scrollContainer: {
         paddingHorizontal: 20,
-        paddingVertical: 16,
+        paddingBottom: 30,
     },
     headerTitle: {
-        fontSize: 18,
+        fontSize: 18 * fontScale,
         fontWeight: '600',
         color: '#333333',
+        marginVertical: 16,
     },
     cardList: {
-        flex: 1,
-        paddingHorizontal: 20,
-        paddingTop: 8,
-        gap: 12,
+        gap: 16,
+    },
+    shadowWrapper: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3,
+        borderRadius: 12,
+        backgroundColor: 'transparent',
     },
     cardItem: {
         flexDirection: 'row',
         alignItems: 'center',
         padding: 16,
-        borderRadius: 10,
+        borderRadius: 8,
         backgroundColor: '#fff',
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
+    },
+    selectedCard: {
+        borderWidth: 1,
+        borderColor: '#fec3e9ff',
     },
     cardIcon: {
         marginRight: 16,
@@ -183,22 +189,22 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     cardType: {
-        fontSize: 16,
+        fontSize: 16 * fontScale,
         fontWeight: '500',
-        color: 'black',
+        color: '#000',
         marginRight: 8,
     },
     cardLabel: {
-        fontSize: 12,
-        color: 'black',
-        backgroundColor: '#f0f0f0',
+        fontSize: 12 * fontScale,
+        color: '#d63384',
+        backgroundColor: '#ffdce7',
         paddingHorizontal: 6,
         paddingVertical: 2,
         borderRadius: 4,
     },
     cardNumber: {
-        fontSize: 14,
-        color: '#888888',
+        fontSize: 14 * fontScale,
+        color: '#666',
     },
     radioButton: {
         width: 20,
@@ -210,46 +216,32 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     radioButtonSelected: {
-        borderColor: '#333333',
+        borderColor: '#d63384',
     },
     radioButtonInner: {
         width: 10,
         height: 10,
         borderRadius: 5,
-        backgroundColor: '#333333',
+        backgroundColor: '#d63384',
     },
     addButton: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: 20,
-        marginVertical: 16,
-        paddingVertical: 16,
+        marginTop: 28,
+        paddingVertical: 14,
         borderWidth: 1,
         borderColor: '#e0e0e0',
-        borderRadius: 8,
-        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        backgroundColor: '#f9f9f9',
     },
     addButtonIcon: {
         marginRight: 8,
     },
     addButtonText: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: '#333333',
-    },
-    applyButton: {
-        marginHorizontal: 20,
-        marginBottom: 20,
-        paddingVertical: 16,
-        backgroundColor: '#FC0079',
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    applyButtonText: {
-        fontSize: 16,
+        fontSize: 14 * fontScale,
         fontWeight: '600',
-        color: '#ffffff',
+        color: '#d63384',
     },
 });
 

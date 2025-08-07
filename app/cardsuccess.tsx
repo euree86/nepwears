@@ -1,18 +1,16 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons'; // for check-circle icon
-import React, { useState } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const CardSuccess = () => {
-    const [isVisible, setIsVisible] = useState(true);
+type Props = {
+    visible: boolean;
+    onResponse: (allowed: boolean) => void
 
-    const handleTrackOrder = () => {
-        setIsVisible(false);
-        console.log('Track order clicked');
-        // Add navigation or logic here
-    };
+};
 
+const CardSuccess = ({ visible, onResponse }: Props) => {
     return (
-        <Modal visible={isVisible} transparent animationType="fade">
+        <Modal visible={visible} transparent animationType="fade">
             <View style={styles.overlay}>
                 <View style={styles.container}>
                     <MaterialCommunityIcons
@@ -24,7 +22,7 @@ const CardSuccess = () => {
                     <Text style={styles.title}>Congratulations!</Text>
                     <Text style={styles.message}>Your new card has been added.</Text>
 
-                    <TouchableOpacity style={styles.trackButton} onPress={handleTrackOrder}>
+                    <TouchableOpacity style={styles.trackButton} onPress={() => onResponse(true)}>
                         <Text style={styles.trackButtonText}>Thanks</Text>
                     </TouchableOpacity>
                 </View>

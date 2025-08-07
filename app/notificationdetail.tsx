@@ -9,7 +9,7 @@ import {
     ScrollView,
     SafeAreaView,
 } from "react-native";
-
+import Header from "./components/header";
 const NotificationSettingsScreen = () => {
     const [settings, setSettings] = useState({
         generalNotifications: true,
@@ -52,6 +52,7 @@ const NotificationSettingsScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Header title="Notification" />
             <ScrollView style={styles.scrollView}>
                 <View style={styles.settingsContainer}>
                     {renderSettingItem("General Notifications", "generalNotifications")}
