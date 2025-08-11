@@ -4,16 +4,19 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-type CardType = 'visa' | 'mastercard' | 'amex' | 'discover' | string;
+type CardType = 'visa' | 'esewa' | 'merchantpay' | 'mobilebanking' | string;
 type MaterialIconName = React.ComponentProps<typeof MaterialIcons>['name'];
 
 const getCardIcon = (cardType: CardType): MaterialIconName => {
     switch (cardType.toLowerCase()) {
         case 'visa':
-        case 'mastercard':
-        case 'amex':
-        case 'discover':
             return 'credit-card';
+        case 'esewa':
+            return 'account-balance-wallet';
+        case 'merchantpay':
+            return 'store';
+        case 'mobilebanking':
+            return 'phone-android';
         default:
             return 'credit-card';
     }
@@ -23,12 +26,12 @@ const getCardGradient = (cardType: CardType): [string, string] => {
     switch (cardType.toLowerCase()) {
         case 'visa':
             return ['#1A1F71', '#2E4BC6'];
-        case 'mastercard':
-            return ['#EB001B', '#FF5F00'];
-        case 'amex':
-            return ['#006FCF', '#00A2E5'];
-        case 'discover':
-            return ['#FF6000', '#FFA500'];
+        case 'esewa':
+            return ['#60B158', '#7BC142'];
+        case 'merchantpay':
+            return ['#FF6B35', '#FF8A50'];
+        case 'mobilebanking':
+            return ['#1976D2', '#42A5F5'];
         default:
             return ['#001972ff', '#f892dbff'];
     }
@@ -38,14 +41,74 @@ const getCardBrandText = (cardType: CardType): string => {
     switch (cardType.toLowerCase()) {
         case 'visa':
             return 'VISA';
-        case 'mastercard':
-            return 'MASTERCARD';
-        case 'amex':
-            return 'AMEX';
-        case 'discover':
-            return 'DISCOVER';
+        case 'esewa':
+            return 'eSEWA';
+        case 'merchantpay':
+            return 'MERCHANT PAY';
+        case 'mobilebanking':
+            return 'MOBILE BANKING';
         default:
-            return 'CARD';
+            return 'PAYMENT';
+    }
+};
+
+const getCardDisplayFormat = (cardType: CardType, maskedCardNumber: string): string => {
+    switch (cardType.toLowerCase()) {
+        case 'visa':
+            return maskedCardNumber;
+        case 'esewa':
+            return maskedCardNumber.includes('98') ? maskedCardNumber : '98XXXXXXXX';
+        case 'merchantpay':
+            return maskedCardNumber.includes('01-') ? maskedCardNumber : '01-XXXXXXX';
+        case 'mobilebanking':
+            return 'Nepal Bank Ltd';
+        default:
+            return maskedCardNumber;
+    }
+};
+
+const shouldShowChip = (cardType: CardType): boolean => {
+    return cardType.toLowerCase() === 'visa';
+};
+
+const getCardholderLabel = (cardType: CardType): string => {
+    switch (cardType.toLowerCase()) {
+        case 'visa':
+            return 'CARDHOLDER';
+        case 'esewa':
+            return 'ACCOUNT NAME';
+        case 'merchantpay':
+            return 'MERCHANT NAME';
+        case 'mobilebanking':
+            return 'ACCOUNT HOLDER';
+        default:
+            return 'HOLDER NAME';
+    }
+};
+
+const getExpiryLabel = (cardType: CardType): string => {
+    switch (cardType.toLowerCase()) {
+        case 'visa':
+            return 'EXPIRES';
+        case 'esewa':
+        case 'merchantpay':
+        case 'mobilebanking':
+            return 'LINKED';
+        default:
+            return 'EXPIRES';
+    }
+};
+
+const getExpiryValue = (cardType: CardType, expiryDate: string): string => {
+    switch (cardType.toLowerCase()) {
+        case 'visa':
+            return expiryDate || 'MM/YY';
+        case 'esewa':
+        case 'merchantpay':
+        case 'mobilebanking':
+            return new Date().getFullYear().toString();
+        default:
+            return expiryDate || 'MM/YY';
     }
 };
 
@@ -78,24 +141,29 @@ const CardImage: React.FC<CardImageProps> = ({
             </View>
 
             <View style={styles.cardNumber}>
-                <Text style={styles.cardNumberText}>{maskedCardNumber}</Text>
+                <Text style={[
+                    styles.cardNumberText,
+                    cardType.toLowerCase() === 'mobilebanking' && styles.bankNameText
+                ]}>
+                    {getCardDisplayFormat(cardType, maskedCardNumber)}
+                </Text>
             </View>
 
             <View style={styles.cardFooter}>
                 <View style={styles.cardDetailItem}>
-                    <Text style={styles.cardDetailLabel}>CARDHOLDER</Text>
+                    <Text style={styles.cardDetailLabel}>{getCardholderLabel(cardType)}</Text>
                     <Text style={styles.cardDetailValue} numberOfLines={1}>
-                        {cardholderName || 'CARDHOLDER NAME'}
+                        {cardholderName || 'ACCOUNT HOLDER'}
                     </Text>
                 </View>
                 <View style={styles.cardDetailItemRight}>
-                    <Text style={styles.cardDetailLabel}>EXPIRES</Text>
-                    <Text style={styles.cardDetailValue}>{expiryDate || 'MM/YY'}</Text>
+                    <Text style={styles.cardDetailLabel}>{getExpiryLabel(cardType)}</Text>
+                    <Text style={styles.cardDetailValue}>{getExpiryValue(cardType, expiryDate)}</Text>
                 </View>
             </View>
 
-            {/* Chip simulation */}
-            <View style={styles.chip} />
+            {/* Chip simulation - only for credit cards */}
+            {shouldShowChip(cardType) && <View style={styles.chip} />}
         </View>
     );
 };
@@ -141,6 +209,13 @@ const styles = StyleSheet.create({
         textShadowColor: 'rgba(0,0,0,0.3)',
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 2,
+        textAlign: 'center',
+    },
+    bankNameText: {
+        fontSize: screenWidth * 0.045,
+        letterSpacing: 1,
+        fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
+        fontWeight: '600',
     },
     cardFooter: {
         flexDirection: 'row',

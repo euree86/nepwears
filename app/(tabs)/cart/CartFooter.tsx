@@ -23,7 +23,7 @@ const CartFooter: React.FC<Props> = ({ total, onCheckout }) => (
 const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: width * 0.05,
-    paddingVertical: 10,
+    paddingVertical: 4,
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
     backgroundColor: '#ffffff',

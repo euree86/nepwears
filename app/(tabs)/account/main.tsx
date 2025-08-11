@@ -79,7 +79,7 @@ const ProfileMenuScreen: React.FC<Props> = ({ navigation }) => {
             id: 'invite',
             title: 'Invite Friends',
             icon: 'person-add',
-            onPress: () => console.log('Navigate to Invite Friends'),
+            onPress: () => router.push('/invitefriends'),
         },
     ];
 

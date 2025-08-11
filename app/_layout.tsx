@@ -46,9 +46,9 @@ export default function RootLayout() {
           <Stack.Screen name="product" options={{ title: 'Product' }} />
           <Stack.Screen name="notificationdetail" options={{ headerShown: false }} />
           <Stack.Screen name="myorder" options={{ headerShown: false }} />
-          <Stack.Screen name="myprofile" options={{ title: 'My Profile', headerTitleAlign: 'center' }} />
+          <Stack.Screen name="myprofile" options={{ headerShown: false }} />
           <Stack.Screen name="paymentmethod" options={{ headerShown: false }} />
-          <Stack.Screen name="helpcenter" options={{ title: 'Help Center', headerTitleAlign: 'center' }} />
+          <Stack.Screen name="helpcenter" options={{ headerShown: false }} />
           <Stack.Screen name="newcard/main" options={{ headerShown: false }} />
           <Stack.Screen name="newaddress" options={{ title: 'New Address', headerTitleAlign: 'center' }} />
           <Stack.Screen name="emptycart" options={{ title: 'My Cart' }} />
@@ -60,6 +60,8 @@ export default function RootLayout() {
           <Stack.Screen name="categorydetail/main" options={{ headerShown: false }} />
           <Stack.Screen name="membership/main" options={{ headerShown: false }} />
           <Stack.Screen name="ordertrack/main" options={{ headerShown: false }} />
+          <Stack.Screen name="invitefriends" options={{ headerShown: false }} />
+
 
 
 

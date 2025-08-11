@@ -31,25 +31,25 @@ const PaymentMethod = () => {
             icon: <FontAwesome5 name="cc-visa" size={28} color="#1A1F71" />,
         },
         {
-            id: 'mastercard',
-            type: 'MasterCard',
+            id: 'esewa',
+            type: 'eSewa',
             label: '',
-            number: '**** **** **** 5678',
-            icon: <FontAwesome5 name="cc-mastercard" size={28} color="#eb001b" />,
+            number: '98XXXXXXXX',
+            icon: <MaterialIcons name="account-balance-wallet" size={28} color="#60B158" />,
         },
         {
-            id: 'amex',
-            type: 'Amex',
+            id: 'merchantpay',
+            type: 'Merchant Pay',
             label: '',
-            number: '**** **** **** 9012',
-            icon: <FontAwesome5 name="cc-amex" size={28} color="#2E77BC" />,
+            number: '01-XXXXXXX',
+            icon: <MaterialIcons name="store" size={28} color="#FF6B35" />,
         },
         {
-            id: 'paypal',
-            type: 'PayPal',
+            id: 'mobilebanking',
+            type: 'Mobile Banking',
             label: '',
-            number: 'eurika@example.com',
-            icon: <FontAwesome5 name="cc-paypal" size={28} color="#003087" />,
+            number: 'Nepal Bank Ltd',
+            icon: <MaterialIcons name="phone-android" size={28} color="#1976D2" />,
         },
     ];
 
@@ -76,7 +76,7 @@ const PaymentMethod = () => {
         <SafeAreaView style={styles.container}>
             <Header title="Payment Method" />
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-                <Text style={styles.headerTitle}>Saved Cards</Text>
+                <Text style={styles.headerTitle}>Saved Payment Methods</Text>
 
                 <View style={styles.cardList}>
                     {cards.map((card) => (
@@ -119,7 +119,7 @@ const PaymentMethod = () => {
                         color="#d63384"
                         style={styles.addButtonIcon}
                     />
-                    <Text style={styles.addButtonText}>Add New Card</Text>
+                    <Text style={styles.addButtonText}>Add New Payment Method</Text>
                 </TouchableOpacity>
 
                 <Button
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
         paddingBottom: 30,
     },
     headerTitle: {
-        fontSize: 18 * fontScale,
+        fontSize: 16 * fontScale,
         fontWeight: '600',
         color: '#333333',
         marginVertical: 16,

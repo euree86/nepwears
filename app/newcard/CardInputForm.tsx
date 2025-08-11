@@ -146,7 +146,7 @@ const CardInputForm: React.FC<CardInputFormProps> = ({
                         />
                         <TouchableOpacity onPress={onShowSecurityInfo}>
                             <MaterialIcons
-                                name="help-outline"le app
+                                name="help-outline" le app
                                 size={20}
                                 color="#FC0079"
                                 style={styles.iconRight}

@@ -12,6 +12,8 @@ import {
 import CustomInputWithValidation from './components/custominput';
 import GenderPickerModal from './components/genderpicker';
 import DatePickerModal from './components/datepicker';
+import Header from './components/header';
+import Button from './components/button';
 
 const ProfileEditScreen = () => {
     const [fullName, setFullName] = useState('');
@@ -110,9 +112,8 @@ const ProfileEditScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" />
+            <Header title="Edit Profile" />
             <ScrollView contentContainerStyle={styles.content}>
-                <Text style={styles.headerText}>Edit Profile</Text>
 
                 <CustomInputWithValidation
                     label="Full Name"
@@ -160,10 +161,8 @@ const ProfileEditScreen = () => {
                     isPicker
                     error={errors.dob}
                 />
+                <Button text="Save" onPress={handleSave} />
 
-                <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                    <Text style={styles.saveButtonText}>Save</Text>
-                </TouchableOpacity>
             </ScrollView>
 
             <GenderPickerModal
