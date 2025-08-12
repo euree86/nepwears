@@ -6,16 +6,21 @@ import { useRouter } from 'expo-router';
 
 interface HeaderProps {
     title: string;
+    showBackButton?: boolean;
 }
 
-export default function Header({ title }: HeaderProps) {
+export default function Header({ title, showBackButton = true }: HeaderProps) {
     const router = useRouter();
 
     return (
         <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.back()}>
-                <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
-            </TouchableOpacity>
+            {showBackButton ? (
+                <TouchableOpacity onPress={() => router.back()}>
+                    <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
+                </TouchableOpacity>
+            ) : (
+                <View style={{ width: 24 }} />
+            )}
             <Text style={styles.headerTitle}>{title}</Text>
             <TouchableOpacity onPress={() => router.push("/notification")}>
                 <Ionicons name="notifications-outline" size={24} color="#1a1a1a" />

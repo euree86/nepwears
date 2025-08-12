@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
-import Header from "./_header";
-import SearchBar from "./_searchbar";
+import Header from "../../components/header";
+import SearchBar from "../../scanner/_searchbar";
 import SectionHeader from "./_sectionheader";
 import Categories from "./_categories";
 import BannerSlider from "./_bannerslide";
@@ -20,14 +20,15 @@ const HomeScreen = () => {
         <SafeAreaView style={styles.container}>
             <View style={{ flex: 1, backgroundColor: "white", opacity: showNotificationPopup ? 0.3 : 1 }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <Header />
+                    <Header title="NEPWEARS" showBackButton={false} />
                     <SearchBar />
-                    <View style={styles.section}>
-                        <SectionHeader title="Categories" onPress={() => { }} />
-                        <Categories />
-                    </View>
 
                     <BannerSlider />
+
+                    <Categories />
+
+
+
 
                     <View style={styles.section}>
                         <SectionHeader title="Hot Deals" />
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "white",
-        paddingTop: 10,
+
     },
     section: {
         paddingHorizontal: 20,

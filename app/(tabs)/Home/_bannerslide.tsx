@@ -12,15 +12,15 @@ const { width } = Dimensions.get("window");
 const bannerSlides = [
   {
     id: 1,
-    image: "https://cdn.pixabay.com/photo/2016/11/14/04/25/bride-1822587_640.jpg",
+    image: "https://marketplace.canva.com/EAGHC5NUD-Q/1/0/1600w/canva-black-and-white-modern-fashion-sale-banner-landscape-n7GVeIDu0Tg.jpg",
   },
   {
     id: 2,
-    image: "https://cdn.pixabay.com/photo/2016/04/10/21/34/woman-1320810_640.jpg",
+    image: "https://img.freepik.com/premium-vector/summer-fashion-sale-banner-design-template_2239-1174.jpg",
   },
   {
     id: 3,
-    image: "https://cdn.pixabay.com/photo/2021/07/11/19/07/girl-6404712_640.jpg",
+    image: "https://img.freepik.com/premium-vector/fashion-banner-sale-with-text-effect_92715-89.jpg",
   },
 ];
 
@@ -84,11 +84,11 @@ const BannerSlider = () => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    marginBottom: 25,
+    marginVertical: 20,
   },
   sliderContainer: {
     overflow: "hidden",
-    borderRadius: 15,
+    borderRadius: 8,
   },
   sliderWrapper: {
     flexDirection: "row",
