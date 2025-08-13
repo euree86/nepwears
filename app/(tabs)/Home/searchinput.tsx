@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet ,Platform } from 'react-native';
+import { View, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { EvilIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS, SPACING, TYPOGRAPHY, getResponsiveSize, ScanMode } from '../../../utils/constant';
 
@@ -65,18 +65,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginHorizontal: getResponsiveSize(SPACING.xl),
         marginVertical: getResponsiveSize(SPACING.md),
-        backgroundColor: COLORS.white,
         borderRadius: getResponsiveSize(8),
         paddingHorizontal: getResponsiveSize(SPACING.md),
-        paddingVertical: Platform.OS === 'ios' ? getResponsiveSize(SPACING.md) : getResponsiveSize(SPACING.sm),
-        shadowColor: COLORS.shadow,
-        shadowOffset: { width: 0, height: 5 },
-        shadowOpacity: 0.2,
-        shadowRadius: 12,
-        elevation: 10,
-        borderWidth: 1,
-        borderColor: 'rgba(0,0,0,0.06)',
+        paddingVertical: Platform.OS === 'ios' ? getResponsiveSize(SPACING.md) : getResponsiveSize(SPACING.xs),
+        // shadowColor: COLORS.shadow,
+        // shadowOffset: { width: 0, height: 5 },
+        // shadowOpacity: 0.2,
+        // shadowRadius: 12,
+        // elevation: 10,
+        // backgroundColor: COLORS.white,
+        // borderWidth: 1,
+        // borderColor: 'rgba(0,0,0,0.06)',
         minHeight: getResponsiveSize(50),
+        backgroundColor: '#f3f4f6',
     },
     searchIcon: {
         marginRight: getResponsiveSize(SPACING.sm),

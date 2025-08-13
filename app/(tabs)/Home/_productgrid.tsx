@@ -13,7 +13,7 @@ const products = [
         originalPrice: 500,
         rating: 4.8,
         reviews: 700,
-        image: "https://cdn.pixabay.com/photo/2016/12/06/09/31/blank-1886008_640.png",
+        image: "https://cdn.pixabay.com/photo/2025/07/13/21/25/wedding-9712800_640.jpg",
     },
     {
         id: 2,
@@ -22,7 +22,7 @@ const products = [
         originalPrice: 500,
         rating: 4.8,
         reviews: 120,
-        image: "https://cdn.pixabay.com/photo/2016/12/06/09/30/blank-1886001_640.png",
+        image: "https://cdn.pixabay.com/photo/2025/07/31/20/00/woman-9747618_640.jpg",
     },
     {
         id: 3,
@@ -31,7 +31,7 @@ const products = [
         originalPrice: 500,
         rating: 4.8,
         reviews: 700,
-        image: "https://cdn.pixabay.com/photo/2015/08/04/21/23/dress-875247_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2021/03/22/16/07/woman-6115105_640.jpg",
     },
     {
         id: 4,
@@ -40,7 +40,7 @@ const products = [
         originalPrice: 500,
         rating: 4.8,
         reviews: 120,
-        image: "https://cdn.pixabay.com/photo/2023/10/24/02/01/women-8337216_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2016/11/21/11/29/close-up-1844786_640.jpg",
     },
 ];
 

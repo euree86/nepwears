@@ -55,12 +55,7 @@ const categories = [
 const Categories = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Category</Text>
-        <TouchableOpacity>
-          <Text style={styles.viewAllText}>View All</Text>
-        </TouchableOpacity>
-      </View>
+
 
       <ScrollView
         horizontal
@@ -95,23 +90,9 @@ const Categories = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333333',
-  },
-  viewAllText: {
-    fontSize: 14,
-    color: '#666666',
-  },
+
   scrollContainer: {
     paddingRight: 10,
   },

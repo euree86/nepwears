@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stack } from 'expo-router';
-import { StatusBar, View, Platform } from 'react-native';
+import { StatusBar, View, Platform, ActivityIndicator } from 'react-native';
 import Constants from 'expo-constants';
+import * as Font from 'expo-font';
 
 export default function RootLayout() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        // ✅ Use clear, consistent names for fonts
+        'Montserrat-Bold': require('../assets/fonts/Montserrat-Bold.ttf'),
+        'Poppins-Black': require('../assets/fonts/Poppins-Black.ttf'),
+      });
+      setFontsLoaded(true);
+    }
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
+  }
+
   return (
     <>
       <StatusBar
@@ -12,7 +35,6 @@ export default function RootLayout() {
         barStyle="dark-content"
       />
 
-      {/* Padding to avoid content under status bar */}
       <View
         style={{
           flex: 1,
@@ -22,13 +44,13 @@ export default function RootLayout() {
         <Stack
           initialRouteName="index"
           screenOptions={{
-            headerStyle: {
-              backgroundColor: 'white',
-            },
-            contentStyle: {
-              backgroundColor: 'white',
-            },
+            headerStyle: { backgroundColor: 'white' },
+            contentStyle: { backgroundColor: 'white' },
             headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontFamily: 'Montserrat-Bold', // ✅ Matches the loaded name
+              fontSize: 18,
+            },
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -61,19 +83,7 @@ export default function RootLayout() {
           <Stack.Screen name="membership/main" options={{ headerShown: false }} />
           <Stack.Screen name="ordertrack/main" options={{ headerShown: false }} />
           <Stack.Screen name="invitefriends" options={{ headerShown: false }} />
-
-
-
-
-
-
-
-
-
-
-
-
-
+          <Stack.Screen name="viewall/main" options={{ headerShown: false }} />
 
         </Stack>
       </View>
