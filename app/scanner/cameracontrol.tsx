@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: getResponsiveSize(SPACING.xl),
     paddingBottom: Platform.OS === 'ios' ? getResponsiveSize(SPACING.xxxl) : getResponsiveSize(SPACING.xl),
-    backgroundColor: COLORS.overlay,
   },
   sideButton: {
     alignItems: 'center',

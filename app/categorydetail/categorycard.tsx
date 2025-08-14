@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Category } from '../../utils/type'; 
+import { Category } from '../../utils/type';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width - 32;
@@ -13,35 +13,42 @@ interface Props {
 
 export default function CategoryCard({ category, onPress }: Props) {
     return (
-        <TouchableOpacity
-            onPress={() => onPress(category)}
-            style={styles.card}
-            activeOpacity={0.9}
-        >
-            <View style={styles.horizontalImageRow}>
-                <Image source={{ uri: category.images[0] }} style={[styles.sideImage, { marginTop: 20 }]} />
-                <Image source={{ uri: category.images[1] }} style={[styles.centerImage, { marginTop: 0 }]} />
-                <Image source={{ uri: category.images[2] }} style={[styles.sideImage, { marginTop: 20 }]} />
-            </View>
 
-            <View style={styles.bottomRow}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.title}>{category.title}</Text>
-                    <Text style={styles.subtitle}>{category.items} items</Text>
+        <View style={styles.container}>
+            <TouchableOpacity
+                onPress={() => onPress(category)}
+                style={styles.card}
+                activeOpacity={0.9}
+            >
+                <View style={styles.horizontalImageRow}>
+                    <Image source={{ uri: category.images[0] }} style={[styles.sideImage, { marginTop: 20 }]} />
+                    <Image source={{ uri: category.images[1] }} style={[styles.centerImage, { marginTop: 0 }]} />
+                    <Image source={{ uri: category.images[2] }} style={[styles.sideImage, { marginTop: 20 }]} />
                 </View>
-                <Ionicons name="chevron-forward" size={18} color="#666" />
-            </View>
-        </TouchableOpacity>
+
+                <View style={styles.bottomRow}>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.title}>{category.title}</Text>
+                        <Text style={styles.subtitle}>{category.items} items</Text>
+                    </View>
+                    <Ionicons name="chevron-forward" size={18} color="#666" />
+                </View>
+            </TouchableOpacity>
+        </View>
+
     );
 }
 
 const styles = StyleSheet.create({
+
+    container: {
+        paddingVertical: 16,
+    },
     card: {
-        marginBottom: 32,
         backgroundColor: '#fff',
-        paddingBottom: 10,
         borderBottomColor: "#e2e0e0ff",
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        paddingBottom: 10,
     },
     horizontalImageRow: {
         flexDirection: 'row',

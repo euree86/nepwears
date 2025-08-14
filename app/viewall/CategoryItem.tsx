@@ -9,7 +9,7 @@ type CategoryItemProps = {
 };
 const CategoryItem: React.FC<CategoryItemProps> = ({ category, isActive, onPress, style }) => (
     <TouchableOpacity
-        style={[styles.categoryButton, isActive && styles.activeCategoryButton, style]} // merge incoming style
+        style={[styles.categoryButton, isActive && styles.activeCategoryButton, style]} 
         onPress={onPress}
     >
         <Text style={[styles.categoryText, isActive && styles.activeCategoryText]}>

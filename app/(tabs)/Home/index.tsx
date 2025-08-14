@@ -14,6 +14,7 @@ import Categories from "./_categories";
 import BannerSlider from "./_bannerslide";
 import ProductGrid from "./_productgrid";
 import NotificationPopup from "../../homealert";
+import Design from "./design";
 import { useRouter } from "expo-router";
 const HomeScreen = () => {
     const [showNotificationPopup, setShowNotificationPopup] = useState(true);
@@ -41,7 +42,7 @@ const HomeScreen = () => {
 
                         <View style={styles.header}>
                             <Text style={styles.headerTitle}>CATEGORIES</Text>
-                            <TouchableOpacity onPress={() => console.log("View All pressed")}>
+                            <TouchableOpacity onPress={() => router.push("/categorydetail/main")}>
                                 <Text style={styles.viewAllText}>VIEW ALL</Text>
                             </TouchableOpacity>
                         </View>
@@ -61,6 +62,18 @@ const HomeScreen = () => {
 
                         <ProductGrid />
                     </View>
+
+                    <View style={styles.section}>
+                        <View style={styles.header}>
+                            <Text style={styles.headerTitle}>NEW COLLECTION</Text>
+                            <TouchableOpacity onPress={() => router.push("/viewall/main")}>
+                                <Text style={styles.viewAllText}>VIEW ALL</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Design />
+                    </View>
+
+
                 </ScrollView>
             </View>
 
@@ -86,16 +99,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 16,
+
     },
     headerTitle: {
         fontSize: 16,
         fontWeight: '700',
         color: '#333333',
-        fontFamily: "Poppins-Bold"
+        fontFamily: "Poppins-Bold",
     },
     viewAllText: {
-        fontSize: 14,
-        color: '#666666',
+        fontSize: 12,
+        fontWeight: '700',
+
+        color: '#D81B60',
         fontFamily: 'System'
     },
 

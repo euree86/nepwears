@@ -8,7 +8,7 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-
+import Button from '../components/button';
 const { width } = Dimensions.get('window');
 
 interface FilterModalProps {
@@ -142,12 +142,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
 
           {/* Footer Buttons */}
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.resetButton} onPress={onReset}>
-              <Text style={styles.resetButtonText}>Reset</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.applyButton} onPress={onApply}>
-              <Text style={styles.applyButtonText}>Apply Filter</Text>
-            </TouchableOpacity>
+
+            <Button text="Reset" onPress={onReset} style={styles.resetButton} textStyle={{ color: "#D81B60" }} />
+            <Button text="Apply Filter" onPress={onApply} style={styles.applyButton} />
           </View>
         </View>
       </View>
@@ -210,7 +207,7 @@ const styles = StyleSheet.create({
   option: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: '#e0e0e0',
     backgroundColor: '#fff',
@@ -239,28 +236,27 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
     alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  resetButtonText: {
-    color: '#666',
     fontSize: 16,
     fontWeight: '500',
+    color: "#D81B60",
+    backgroundColor: "white",
+    borderColor: "#D81B60",
+    borderWidth: 1,
+
   },
+
   applyButton: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#000',
+    backgroundColor: '#D81B60',
     alignItems: 'center',
-  },
-  applyButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
   },
+
 });
 
 export default FilterModal;

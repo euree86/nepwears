@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, ScrollView, FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import { SafeAreaView, ScrollView, FlatList, StyleSheet } from 'react-native';
 import Header from '../components/header';
 import CategoryItem from './CategoryItem';
-import ProductItem from './ProductItem';
-import FilterModal from './FilterModal';
-import SearchFilterRow from './SearchFilterRow';
+import ProductCard, { Product as ProductCardProduct } from '../components/_productcard';
+import FilterModal from '../searchmodal/FilterModal';
+import SearchFilter from '../components/searchfilter';
 
-// -------------------- TYPES --------------------
 type Product = {
     id: number;
     name: string;
@@ -15,87 +14,45 @@ type Product = {
     isFavorite: boolean;
     category: string;
 };
-// -----------------------------------------------
 
-const ShoppingApp: React.FC = () => {
-    const [activeCategory, setActiveCategory] = useState<string>('Dress');
-    const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
-    const [selectedPriceRange, setSelectedPriceRange] = useState<string>('All');
-    const [selectedSize, setSelectedSize] = useState<string>('All');
-    const [selectedColor, setSelectedColor] = useState<string>('All');
-    const [searchQuery, setSearchQuery] = useState("");
-    const [cart, setCart] = useState<Product[]>([]);
+const convertToProductCardFormat = (product: Product): ProductCardProduct => {
+    const numericPrice = parseFloat(product.price.replace(/[^0-9.]/g, ''));
+    return {
+        id: product.id,
+        name: product.name,
+        price: numericPrice,
+        originalPrice: numericPrice + 50,
+        image: product.image,
+        category: product.category,
+        isFavorite: product.isFavorite,
+        rating: 4.5,
+        reviews: Math.floor(Math.random() * 500) + 50,
+    };
+};
 
-    const categories: string[] = ['Dress', 'Pants', 'Blazers', 'Jackets', 'Accessories'];
+const ShoppingAppScreen: React.FC = () => {
+    const [activeCategory, setActiveCategory] = useState('Dress');
+    const [filterModalVisible, setFilterModalVisible] = useState(false);
+    const [selectedPriceRange, setSelectedPriceRange] = useState('All');
+    const [selectedSize, setSelectedSize] = useState('All');
+    const [selectedColor, setSelectedColor] = useState('All');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [favorites, setFavorites] = useState<Record<number, boolean>>({});
+
+    const categories = ['Dress', 'Pants', 'Blazers', 'Jackets', 'Accessories'];
 
     const allProducts: Record<string, Product[]> = {
         Dress: [
-            {
-                id: 1,
-                name: 'Cropped t-shirt  ',
-                price: '$240.00',
-                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROd2xMPwHkQCuaasHl6gjQKBKWAusYhOE0hg&s',
-                isFavorite: true,
-                category: 'Dress',
-            },
-            {
-                id: 2,
-                name: 'T-shirt optic white',
-                price: '$230.00',
-                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvJtQvKrCGxI9X3NgXRkWvwLyR0eSmirDp2A&s',
-                isFavorite: false,
-                category: 'Dress',
-            },
-            {
-                id: 3,
-                name: 'Summer Dress',
-                price: '$180.00',
-                image: 'https://images.unsplash.com/photo-1572804013427-4d7ca7268217?w=400&h=500&fit=crop&crop=top',
-                isFavorite: false,
-                category: 'Dress',
-            },
-            {
-                id: 4,
-                name: 'Evening Gown',
-                price: '$450.00',
-                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlUkf_BkfD1WyZ9FmrZ3kOh3bzLBaXQ-WFHA&s',
-                isFavorite: true,
-                category: 'Dress',
-            },
+            { id: 1, name: 'Cropped t-shirt', price: 'Rs 240.00', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROd2xMPwHkQCuaasHl6gjQKBKWAusYhOE0hg&s', isFavorite: true, category: 'Dress' },
+            { id: 2, name: 'T-shirt optic white', price: 'Rs 230.00', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvJtQvKrCGxI9X3NgXRkWvwLyR0eSmirDp2A&s', isFavorite: false, category: 'Dress' },
+            { id: 3, name: 'Summer Dress', price: 'Rs 180.00', image: 'https://images.unsplash.com/photo-1572804013427-4d7ca7268217?w=400&h=500&fit=crop&crop=top', isFavorite: false, category: 'Dress' },
+            { id: 4, name: 'Evening Gown', price: 'Rs 450.00', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlUkf_BkfD1WyZ9FmrZ3kOh3bzLBaXQ-WFHA&s', isFavorite: true, category: 'Dress' },
         ],
         Pants: [
-            {
-                id: 11,
-                name: 'High Waist Jeans',
-                price: '$120.00',
-                image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=500&fit=crop&crop=top',
-                isFavorite: false,
-                category: 'Pants',
-            },
-            {
-                id: 12,
-                name: 'Wide Leg Pants',
-                price: '$89.00',
-                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKEvZNH_VxHCsLjiVNyeFzMCtkzG26L5hruw&s',
-                isFavorite: true,
-                category: 'Pants',
-            },
-            {
-                id: 13,
-                name: 'Cargo Pants',
-                price: '$95.00',
-                image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=500&fit=crop&crop=top',
-                isFavorite: false,
-                category: 'Pants',
-            },
-            {
-                id: 14,
-                name: 'Black Trousers',
-                price: '$140.00',
-                image: 'https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=400&h=500&fit=crop&crop=top',
-                isFavorite: false,
-                category: 'Pants',
-            },
+            { id: 11, name: 'High Waist Jeans', price: 'Rs 120.00', image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=500&fit=crop&crop=top', isFavorite: false, category: 'Pants' },
+            { id: 12, name: 'Wide Leg Pants', price: 'Rs 89.00', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKEvZNH_VxHCsLjiVNyeFzMCtkzG26L5hruw&s', isFavorite: true, category: 'Pants' },
+            { id: 13, name: 'Cargo Pants', price: 'Rs 95.00', image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=500&fit=crop&crop=top', isFavorite: false, category: 'Pants' },
+            { id: 14, name: 'Black Trousers', price: 'Rs 140.00', image: 'https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=400&h=500&fit=crop&crop=top', isFavorite: false, category: 'Pants' },
         ],
         Blazers: [
             {
@@ -166,7 +123,7 @@ const ShoppingApp: React.FC = () => {
             },
         ],
 
-         Accessories: [
+        Accessories: [
             {
                 id: 31,
                 name: 'Denim Jacket',
@@ -200,61 +157,46 @@ const ShoppingApp: React.FC = () => {
                 category: 'Jackets',
             },
         ],
+
     };
 
-    const [favorites, setFavorites] = useState<Record<number, boolean>>(
-        Object.values(allProducts).flat().reduce(
-            (acc, product) => ({ ...acc, [product.id]: product.isFavorite }),
-            {} as Record<number, boolean>
-        )
-    );
+    const priceRanges = ['All', 'Under $100', '$100 - $200', '$200 - $300', 'Above $300'];
+    const sizes = ['All', 'XS', 'S', 'M', 'L', 'XL', 'XXL'];
+    const colors = ['All', 'Black', 'White', 'Blue', 'Brown', 'Gray', 'Beige'];
 
-    const priceRanges: string[] = ['All', 'Under $100', '$100 - $200', '$200 - $300', 'Above $300'];
-    const sizes: string[] = ['All', 'XS', 'S', 'M', 'L', 'XL', 'XXL'];
-    const colors: string[] = ['All', 'Black', 'White', 'Blue', 'Brown', 'Gray', 'Beige'];
+    const toggleFavorite = (id: string | number) => {
+        const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
+        setFavorites(prev => ({ ...prev, [numericId]: !prev[numericId] }));
+    };
 
-    const toggleFavorite = (id: number) =>
-        setFavorites(prev => ({ ...prev, [id]: !prev[id] }));
-
-    const addToCart = (product: Product) =>
-        setCart(prev => (prev.find(p => p.id === product.id) ? prev : [...prev, product]));
 
     const filteredProducts = allProducts[activeCategory]
         .filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
         .filter(p => {
-            // Price Filter
-            if (selectedPriceRange !== "All") {
-                const priceValue = parseFloat(p.price.replace(/[^0-9.]/g, ""));
-                if (selectedPriceRange === "Under $100" && priceValue >= 100) return false;
-                if (selectedPriceRange === "$100 - $200" && (priceValue < 100 || priceValue > 200)) return false;
-                if (selectedPriceRange === "$200 - $300" && (priceValue < 200 || priceValue > 300)) return false;
-                if (selectedPriceRange === "Above $300" && priceValue <= 300) return false;
+            if (selectedPriceRange !== 'All') {
+                const priceValue = parseFloat(p.price.replace(/[^0-9.]/g, ''));
+                if (selectedPriceRange === 'Under $100' && priceValue >= 100) return false;
+                if (selectedPriceRange === '$100 - $200' && (priceValue < 100 || priceValue > 200)) return false;
+                if (selectedPriceRange === '$200 - $300' && (priceValue < 200 || priceValue > 300)) return false;
+                if (selectedPriceRange === 'Above $300' && priceValue <= 300) return false;
             }
-            // Size & Color Filter (mock logic)
-            if (selectedSize !== "All" && !p.name.toLowerCase().includes(selectedSize.toLowerCase())) return false;
-            if (selectedColor !== "All" && !p.name.toLowerCase().includes(selectedColor.toLowerCase())) return false;
             return true;
-        });
+        })
+        .map(p => ({ ...convertToProductCardFormat(p), isFavorite: favorites[p.id] }));
 
     return (
         <SafeAreaView style={styles.container}>
             <Header title="Popular" />
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-                {/* Search + Filter */}
-                <SearchFilterRow
+            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                <SearchFilter
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
                     activeCategory={activeCategory}
                     onFilterPress={() => setFilterModalVisible(true)}
                 />
-                {/* category */}
-
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.categoryContentContainer}
-                >
+                {/* Categories */}
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryContentContainer}>
                     {categories.map((category, index) => (
                         <CategoryItem
                             key={category}
@@ -270,11 +212,14 @@ const ShoppingApp: React.FC = () => {
                 <FlatList
                     data={filteredProducts}
                     renderItem={({ item }) => (
-                        <ProductItem
-                            item={item}
-                            isFavorite={favorites[item.id]}
-                            toggleFavorite={toggleFavorite}
-                            addToCart={addToCart}
+                        <ProductCard
+                            product={item}
+                            onPress={() => console.log('Product pressed:', item.name)}
+                            onAddToCart={() => console.log('Add to cart:', item.name)}
+                            onToggleFavorite={toggleFavorite}
+                            currencySymbol="Rs"
+                            showOriginalPrice
+                            showFavorite
                         />
                     )}
                     numColumns={2}
@@ -305,27 +250,24 @@ const ShoppingApp: React.FC = () => {
                 }}
             />
         </SafeAreaView>
-
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fff'
     },
     scrollContent: {
-        paddingHorizontal: 16,
+        paddingHorizontal: 16
     },
     categoryContentContainer: {
-        paddingVertical: 20,
-        alignItems: 'center',
+        paddingVertical: 16,
+        alignItems: 'center'
     },
     productRow: {
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
     },
 });
 
-
-export default ShoppingApp;
+export default ShoppingAppScreen;

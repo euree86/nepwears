@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: getResponsiveSize(SPACING.xl),
     paddingVertical: getResponsiveSize(SPACING.md),
-    backgroundColor: COLORS.overlay,
   },
   button: {
     width: getResponsiveSize(44),

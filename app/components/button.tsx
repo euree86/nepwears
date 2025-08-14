@@ -8,6 +8,7 @@ type Props = {
     onPress: () => void;
     style?: ViewStyle;
     textStyle?: TextStyle;
+  
 
 };
 
@@ -21,16 +22,17 @@ const Button: React.FC<Props> = ({ text, onPress, style, textStyle }) => {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: "#FC0079",
+        backgroundColor: "#D81B60",
         paddingVertical: height * 0.016,
-        borderRadius: 10,
+        borderRadius: 8,
         alignItems: "center",
         marginTop: height * 0.01,
-        elevation: 3,
-        shadowColor: "#FC0079",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
+        color:"white",
+        // elevation: 3,
+        // shadowColor: "#D81B60",
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.3,
+        // shadowRadius: 3,
     },
     text: {
         color: "#fff",
